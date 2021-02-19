@@ -17,6 +17,7 @@
 		F0B2E21725D91617007DF20E /* CardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E21625D91617007DF20E /* CardLayout.swift */; };
 		F0B2E21C25D91652007DF20E /* AppEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E21B25D91652007DF20E /* AppEngine.swift */; };
 		F0B2E22A25D9505A007DF20E /* BottomButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E22925D9505A007DF20E /* BottomButtons.swift */; };
+		F0E7271725DFC7BF00403CDD /* TopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E7271625DFC7BF00403CDD /* TopBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		F0B2E21625D91617007DF20E /* CardLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardLayout.swift; sourceTree = "<group>"; };
 		F0B2E21B25D91652007DF20E /* AppEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEngine.swift; sourceTree = "<group>"; };
 		F0B2E22925D9505A007DF20E /* BottomButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomButtons.swift; sourceTree = "<group>"; };
+		F0E7271625DFC7BF00403CDD /* TopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */,
 				F0B2E21B25D91652007DF20E /* AppEngine.swift */,
 				F0B2E1D725D8D41D007DF20E /* ContentView.swift */,
+				F0E7271625DFC7BF00403CDD /* TopBar.swift */,
 				F0B2E22925D9505A007DF20E /* BottomButtons.swift */,
 				F0B2E21625D91617007DF20E /* CardLayout.swift */,
 				F0B2E20B25D8D496007DF20E /* Card.swift */,
@@ -271,6 +274,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0E7271725DFC7BF00403CDD /* TopBar.swift in Sources */,
 				F0B2E1D825D8D41D007DF20E /* ContentView.swift in Sources */,
 				F0B2E20C25D8D496007DF20E /* Card.swift in Sources */,
 				F0B2E1D625D8D41D007DF20E /* TwentyFourPointsApp.swift in Sources */,

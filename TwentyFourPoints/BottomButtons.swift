@@ -39,10 +39,10 @@ struct buttons: View {
     @ObservedObject var tfengine:TFEngine
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack {
+        VStack {
+            GeometryReader { geometry in
                 HStack {
-                    ZStack {
+                    ZStack(alignment: .leading) {
                         Button(action: {
                             tfengine.reset()
                         }, label: {
@@ -67,7 +67,7 @@ struct buttons: View {
                         if (tfengine.stored != nil) {
                             Text(String(round(tfengine.stored!*100)/100.0)) // important: This should and can only hold 2 decimal points
                                 .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
-                                .frame(width: CGFloat((1-textField)*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .center)
+                                .frame(height: CGFloat(textInpHei), alignment: .center)
                         } else {
                             Image(systemName: "chevron.down.circle.fill")
                                 .font(.system(size: CGFloat(textFontSize*textInpHei)))
@@ -75,37 +75,37 @@ struct buttons: View {
                         }
                     }
                 }
-                HStack(spacing:CGFloat(midSpace)) {
+            }.frame(width:.infinity, height: CGFloat(textInpHei))
+            HStack(spacing:CGFloat(midSpace)) {
+                Button(action: {
+                    tfengine.handleOprPress(Opr: .add)
+                }, label: {
+                    bottomButtonView(fillColor: Color.init(tfengine.oprButtonActive ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.oprButtonActive ? "TextColor" : "ButtonInactiveTextColor"), text: "+")
+                })
+                Button(action: {
+                    tfengine.handleOprPress(Opr: .sub)
+                }, label: {
+                    bottomButtonView(fillColor: Color.init("BottomButtonColorActive"), textColor: Color.init("TextColor"), text: "-")
+                })
+                Button(action: {
+                    tfengine.handleOprPress(Opr: .mul)
+                }, label: {
+                    bottomButtonView(fillColor: Color.init(tfengine.oprButtonActive ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.oprButtonActive ? "TextColor" : "ButtonInactiveTextColor"), text: "×")
+                })
+                Button(action: {
+                    tfengine.handleOprPress(Opr: .div)
+                }, label: {
+                    bottomButtonView(fillColor: Color.init(tfengine.expr=="" ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.oprButtonActive ? "TextColor" : "ButtonInactiveTextColor"), text: "÷")
+                })
+            }
+            
+            HStack(spacing:CGFloat(midSpace)) {
+                ForEach((0..<4), id:\.self) { index in
                     Button(action: {
-                        tfengine.handleOprPress(Opr: .add)
+                        tfengine.handleNumberPress(index: index)
                     }, label: {
-                        bottomButtonView(fillColor: Color.init(tfengine.oprButtonActive ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.oprButtonActive ? "TextColor" : "ButtonInactiveTextColor"), text: "+")
+                        bottomButtonView(fillColor: Color.init(tfengine.cA[index] ? "BottomButtonColorInactive" : "BottomButtonColorActive"), textColor: Color.init(tfengine.cA[index] ? "ButtonInactiveTextColor" : "TextColor"), text: String(tfengine.cs[index].numb))
                     })
-                    Button(action: {
-                        tfengine.handleOprPress(Opr: .sub)
-                    }, label: {
-                        bottomButtonView(fillColor: Color.init("BottomButtonColorActive"), textColor: Color.init("TextColor"), text: "-")
-                    })
-                    Button(action: {
-                        tfengine.handleOprPress(Opr: .mul)
-                    }, label: {
-                        bottomButtonView(fillColor: Color.init(tfengine.oprButtonActive ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.oprButtonActive ? "TextColor" : "ButtonInactiveTextColor"), text: "×")
-                    })
-                    Button(action: {
-                        tfengine.handleOprPress(Opr: .div)
-                    }, label: {
-                        bottomButtonView(fillColor: Color.init(tfengine.expr=="" ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.oprButtonActive ? "TextColor" : "ButtonInactiveTextColor"), text: "÷")
-                    })
-                }
-                
-                HStack(spacing:CGFloat(midSpace)) {
-                    ForEach((0..<4), id:\.self) { index in
-                        Button(action: {
-                            tfengine.handleNumberPress(index: index)
-                        }, label: {
-                            bottomButtonView(fillColor: Color.init(tfengine.cA[index] ? "BottomButtonColorInactive" : "BottomButtonColorActive"), textColor: Color.init(tfengine.cA[index] ? "ButtonInactiveTextColor" : "TextColor"), text: String(tfengine.cs[index].numb))
-                        })
-                    }
                 }
             }
         }

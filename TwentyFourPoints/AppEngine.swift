@@ -29,6 +29,7 @@ struct card {
 class TFEngine: ObservableObject {
     //TODO: Add konami code
     @Published var cs: [card]
+    @Published var dcs: [card]
     
     @Published var cA: [Bool]
     
@@ -37,12 +38,20 @@ class TFEngine: ObservableObject {
     
     @Published var stored: Double?
     
+    @Published var lvl: Int
+    
+    func getLvlName() -> String {
+        return "Level"
+    }
+    
     @Published var oprButtonActive: Bool = false // activate this when any number is pressed. and thus an opertor could be used.
     
     init() {
         cs=[card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)]
-        cA=Array.init(repeating: false, count: 4)
+        cA=[true, false, true, false]
         //persistent data: the current 24-points thing, how many questions you are on
+        dcs=[card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)]
+        lvl=12345
     }
     
     func handleOprPress(Opr:opr) {

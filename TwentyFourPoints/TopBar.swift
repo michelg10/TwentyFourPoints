@@ -16,17 +16,18 @@ struct TopBar: View {
                 ZStack {
                     Circle()
                         .foregroundColor(Color.init("TopButtonColor"))
-                        .frame(width:52,height:52)
-                    Image(systemName: "gear")
-                        .font(.system(size:32))
+                        .frame(width:45,height:45)
+                    Image(systemName: "questionmark")
+                        .font(.system(size:25))
                 }
                 Spacer()
                 ZStack {
                     Circle()
                         .foregroundColor(Color.init("TopButtonColor"))
-                        .frame(width:52,height:52)
+                        .frame(width:45,height:45)
                     Image(systemName: "chevron.forward.2")
-                        .font(.system(size:27))
+                        .font(.system(size:22))
+                        .padding(.leading,3)
                 }
             }
             VStack {
@@ -34,7 +35,7 @@ struct TopBar: View {
                     .font(.system(size: 36, weight: .bold, design: .rounded))
                 Text("\(lvlNm) • Question \(String(lvl))")
                     .font(.system(size: 18, weight: .regular, design: .rounded))
-            }.padding(.top,30)
+            }.padding(.top,25)
         }
     }
 }

@@ -15,18 +15,31 @@ struct bottomButtonView: View {
     var fillColor:Color
     var textColor:Color
     var text:String
+    var id:String
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: CGFloat(buttonHei/2.0*buttonRadius),style: .continuous)
                 .fill(fillColor)
+                .id(id+"-rect")
+                .animation(.easeInOut)
                 .frame(height:CGFloat(buttonHei))
             Text(text)
                 .font(.system(size: CGFloat(buttonHei*textSize), weight: .medium, design: .rounded))
                 .foregroundColor(textColor)
+                .id(id+"-text")
+                .animation(.easeInOut)
         }
     }
 }
 
+struct bottomButtonStyle: ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .saturation(configuration.isPressed ? 0.95 : 1)
+            .brightness(configuration.isPressed ? 0.03 : 0) //0.05
+            .animation(.easeInOut(duration: 0.07))
+    }
+}
 
 struct buttons: View {
     let textInpHei=49.0
@@ -34,7 +47,7 @@ struct buttons: View {
     let buttonRadius=0.4
     let textField=0.65
     let textFontSize=0.5
-    let textInset=0.05
+    let textInset=0.07
     
     @ObservedObject var tfengine:TFEngine
     
@@ -42,61 +55,68 @@ struct buttons: View {
         VStack {
             GeometryReader { geometry in
                 HStack {
-                    ZStack(alignment: .leading) {
-                        Button(action: {
-                            tfengine.reset()
-                        }, label: {
+                    Button(action: {
+                        tfengine.reset()
+                    }, label: {
+                        ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: CGFloat(textInpHei/2.0*buttonRadius),style: .continuous)
                                 .fill(Color.init("TopButtonColor"))
                                 .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .center)
-                        })
-                        Text(tfengine.expr)
-                            .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
-                            .padding(.leading, CGFloat(textInset*textField*Double(geometry.size.width-CGFloat(midSpace))))
-                            .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .leading)
-                    }
+                            Text(tfengine.expr)
+                                .foregroundColor(.init("TextColor"))
+                                .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
+                                .padding(.leading, CGFloat(textInset*textField*Double(geometry.size.width-CGFloat(midSpace))))
+                                .padding(.bottom,2)
+                                .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), alignment: .leading)
+                        }
+                    }).buttonStyle(bottomButtonStyle())
                     Spacer()
-                    ZStack {
-                        Button(action: {
-                            tfengine.doStore()
-                        }, label: {
+                    Button(action: {
+                        tfengine.doStore()
+                    }, label: {
+                        ZStack {
                             RoundedRectangle(cornerRadius: CGFloat(textInpHei/2.0*buttonRadius) ,style: .continuous)
                                 .fill(Color.init("TopButtonColor"))
                                 .frame(width: CGFloat((1-textField)*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .center)
-                        })
-                        if (tfengine.stored != nil) {
-                            Text(String(round(tfengine.stored!*100)/100.0)) // important: This should and can only hold 2 decimal points
-                                .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
-                                .frame(height: CGFloat(textInpHei), alignment: .center)
-                        } else {
-                            Image(systemName: "chevron.down.circle.fill")
-                                .font(.system(size: CGFloat(textFontSize*textInpHei)))
-                                .foregroundColor(Color.init(tfengine.oprButtonActive ? "TextColor" : "ButtonInactiveTextColor"))
+                            if (tfengine.storedExpr != nil) {
+                                Text(tfengine.storedExpr!) // important: This should and can only hold 2 decimal points
+                                    .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
+                                    .frame(height: CGFloat(textInpHei), alignment: .center)
+                            } else {
+                                Image(systemName: "chevron.down.circle.fill")
+                                    .font(.system(size: CGFloat(textFontSize*textInpHei)))
+                                    .foregroundColor(Color.init(tfengine.oprButtonActive ? "TextColor" : "ButtonInactiveTextColor"))
+                            }
                         }
-                    }
+                    })
+                    .id("StoreButton")
+                    .animation(.easeInOut)
+                    .buttonStyle(bottomButtonStyle())
                 }
-            }.frame(width:.infinity, height: CGFloat(textInpHei))
+            }.frame(height: CGFloat(textInpHei))
+            let bottomButtonFillColor=Color.init(tfengine.oprButtonActive ? "BottomButtonColorActive" : "BottomButtonColorInactive")
+            let bottomButtonTextColor=Color.init(tfengine.oprButtonActive ? "TextColor" : "ButtonInactiveTextColor")
             HStack(spacing:CGFloat(midSpace)) {
                 Button(action: {
                     tfengine.handleOprPress(Opr: .add)
                 }, label: {
-                    bottomButtonView(fillColor: Color.init(tfengine.oprButtonActive ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.oprButtonActive ? "TextColor" : "ButtonInactiveTextColor"), text: "+")
-                })
+                    bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "+", id: "BottomButtonAdd")
+                }).buttonStyle(bottomButtonStyle())
                 Button(action: {
                     tfengine.handleOprPress(Opr: .sub)
                 }, label: {
-                    bottomButtonView(fillColor: Color.init("BottomButtonColorActive"), textColor: Color.init("TextColor"), text: "-")
-                })
+                    bottomButtonView(fillColor: Color.init("BottomButtonColorActive"), textColor: Color.init("TextColor"), text: "-", id: "BottomButtonSub")
+                }).buttonStyle(bottomButtonStyle())
                 Button(action: {
                     tfengine.handleOprPress(Opr: .mul)
                 }, label: {
-                    bottomButtonView(fillColor: Color.init(tfengine.oprButtonActive ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.oprButtonActive ? "TextColor" : "ButtonInactiveTextColor"), text: "×")
-                })
+                    bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "×", id: "BottomButtonMul")
+                }).buttonStyle(bottomButtonStyle())
                 Button(action: {
                     tfengine.handleOprPress(Opr: .div)
                 }, label: {
-                    bottomButtonView(fillColor: Color.init(tfengine.expr=="" ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.oprButtonActive ? "TextColor" : "ButtonInactiveTextColor"), text: "÷")
-                })
+                    bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "÷", id: "BottomButtonDiv")
+                }).buttonStyle(bottomButtonStyle())
             }
             
             HStack(spacing:CGFloat(midSpace)) {
@@ -104,8 +124,8 @@ struct buttons: View {
                     Button(action: {
                         tfengine.handleNumberPress(index: index)
                     }, label: {
-                        bottomButtonView(fillColor: Color.init(tfengine.cA[index] ? "BottomButtonColorInactive" : "BottomButtonColorActive"), textColor: Color.init(tfengine.cA[index] ? "ButtonInactiveTextColor" : "TextColor"), text: String(tfengine.cs[index].numb))
-                    })
+                        bottomButtonView(fillColor: Color.init(tfengine.cA[index] ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.cA[index] ? "TextColor" : "ButtonInactiveTextColor"), text: String(tfengine.cs[tfengine.curActiveView][index].numb), id: "BottomButtonNum"+String(index))
+                    }).buttonStyle(bottomButtonStyle())
                 }
             }
         }

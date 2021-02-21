@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum cardIcon {
+enum cardIcon: CaseIterable {
     case heart
     case club
     case spade
@@ -22,6 +22,14 @@ enum opr {
     case div
 }
 
+enum ViewState {
+    case await // on the left
+    case onstage // in the middle
+    case mature // in the middle and done animating
+    case retired // about to go offstage
+    case offstage // to the right
+}
+
 struct card {
     var CardIcon:cardIcon
     var numb:Int
@@ -33,10 +41,9 @@ struct storedVal {
 }
 class TFEngine: ObservableObject {
     //TODO: Add konami code
-    @Published var viewOverride:Int?
     @Published var cs: [[card]] //card set
     
-    @Published var cA: [Bool] // which cards are being activated and which are not
+    @Published var cA: [[Bool]] // which cards are being activated and which are not
     
     var buttonsCanPress=false
     
@@ -72,6 +79,21 @@ class TFEngine: ObservableObject {
         }
     }
     
+    @Published var offset: [Double]
+    func updtOffset() {
+        for i in 0..<2 {
+            if viewState[i] == .onstage || viewState[i] == .mature || viewState[i] == .retired {
+                offset[i]=0
+            }
+            if viewState[i] == .await {
+                offset[i] = -1
+            }
+            if viewState[i] == .offstage {
+                offset[i] = 1
+            }
+        }
+    }
+    
     @Published var expr: String //update this from getExpr
     
     @Published var stored: storedVal?
@@ -88,9 +110,8 @@ class TFEngine: ObservableObject {
     var selectedOperator : opr?
     var storedExpr: String?
     
-    @Published var viewDoneAnimating: Bool
-    @Published var curActiveView:Int
-    @Published var curShownView:Int?
+    @Published var viewState: [ViewState]
+    var curActiveView: Int
     
     func updtStoredExpr() {
         if stored != nil {
@@ -105,32 +126,70 @@ class TFEngine: ObservableObject {
     @Published var oprButtonActive: Bool = false // activate this when any number is pressed. and thus an opertor could be used.
     
     init() {
+        // read from answer array
+        
+        
         //load from persistent store
         cs=[[card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)],[card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 2),card(CardIcon: .heart, numb: 3),card(CardIcon: .spade, numb: 4)]]
-        cA=[true, true, true,true]
+        cA=[[true, true, true,true],[true, true, true,true]]
         
         //persistent data: the current 24-points thing, how many questions you are on
-        lvl=12345
+        lvl=1
         expr=""
         lvlName=""
+        viewState=[.mature,.await]
         curActiveView=0
-        viewDoneAnimating=true
+        offset=[0,0]
+        inTransition=false
         
+        updtOffset()
         updtExpr()
         updtLvlName()
     }
     
-    let viewAnimationTime=4
+    let viewAnimationTime:Double=0.4 //0.5
+    
+    func nextCardView() {
+        if inTransition {
+            return
+        }
+        
+        // prepare next view
+        let nxtNum=Int.random(in: 0..<tfqs.count)
+        var crdSet=tfqs[nxtNum]
+        crdSet.shuffle()
+        var newCs:[card]=Array(repeating: card(CardIcon: .club, numb: 0), count: 4)
+        for i in 0..<4 {
+            newCs[i]=card(CardIcon: cardIcon.allCases.randomElement()!, numb: crdSet[i])
+        }
+        cs[1-curActiveView]=newCs;
+        
+        cA[1-curActiveView]=[true,true,true,true]
+        
+        selectedOperator=nil
+        nxtNumNeg=nil
+        mainVal=nil
+        updtExpr()
+        stored=nil
+        updtStoredExpr()
+        
+        viewState[curActiveView] = .retired
+        inTransition=true
+        withAnimation(.easeInOut(duration: viewAnimationTime)) {
+            viewState[curActiveView] = .offstage
+            viewState[1-curActiveView] = .onstage
+            updtOffset()
+        }
+        curActiveView=1-curActiveView
+        DispatchQueue.main.asyncAfter(deadline: .now()+viewAnimationTime, execute: { [self] in
+            inTransition=false
+            viewState[1-curActiveView] = .await
+            viewState[curActiveView] = .mature
+            updtOffset()
+        })
+    }
     
     func handleOprPress(Opr:opr) {
-        curActiveView=1-curActiveView
-        viewDoneAnimating=false
-        withAnimation(.easeInOut(duration: Double(viewAnimationTime))) {
-            curShownView=curActiveView
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now()+Double(viewAnimationTime)) { [self] in
-            viewDoneAnimating=true
-        }
         // replace whatever operator is currently in use. if there's nothing in the expression right now, turn the next number negative.
         
         if (mainVal == nil) {
@@ -147,17 +206,20 @@ class TFEngine: ObservableObject {
         updtExpr()
     }
     let cardAniDur=0.17
+    
+    var inTransition:Bool
+    
     func handleNumberPress(index: Int) {
         // push into konami list and check for konami
         
-        if !cA[index] {
+        if !cA[curActiveView][index] {
             return
         }
         
         if (selectedOperator == nil) {
             if (mainVal == nil) {
                 withAnimation(.easeInOut(duration: cardAniDur)) {
-                    cA[index]=false
+                    cA[curActiveView][index]=false
                     oprButtonActive=true
                 }
                 mainVal=storedVal(value: Double(cs[curActiveView][index].numb), source: index)
@@ -171,7 +233,7 @@ class TFEngine: ObservableObject {
                         precondition(stored!.source != 4)
                         
                         withAnimation(.easeInOut(duration: cardAniDur)) {
-                            cA[stored!.source]=true
+                            cA[curActiveView][stored!.source]=true
                         }
                         
                         stored=mainVal
@@ -186,8 +248,8 @@ class TFEngine: ObservableObject {
                 } else {
                     if mainVal!.source != index {
                         withAnimation(.easeInOut(duration: cardAniDur)) {
-                            cA[mainVal!.source]=true
-                            cA[index]=false
+                            cA[curActiveView][mainVal!.source]=true
+                            cA[curActiveView][index]=false
                         }
                         mainVal=storedVal(value: Double(cs[curActiveView][index].numb), source: index)
                     }
@@ -195,22 +257,17 @@ class TFEngine: ObservableObject {
             }
         } else {
             // do the math
-            let addendA = mainVal!.value * (nxtNumNeg == true ? -1 : 1)
             let addendB = Double(cs[curActiveView][index].numb)
             withAnimation(.easeInOut(duration: cardAniDur)) {
-                cA[index]=false
+                cA[curActiveView][index]=false
             }
-            doMath(addendA: addendA, addendB: addendB)
-            nxtNumNeg=nil
-            
-            // check for all empty and 24
-            var allEmpty: Bool = !cA.contains(true) && stored == nil
-            
+            doMath(addendB: addendB)
         }
         updtExpr()
     }
     
-    func doMath(addendA: Double, addendB: Double) {
+    func doMath(addendB: Double) {
+        let addendA = mainVal!.value * (nxtNumNeg == true ? -1 : 1)
         switch selectedOperator! {
         case .add:
             mainVal!.value=addendA+addendB
@@ -223,6 +280,18 @@ class TFEngine: ObservableObject {
         }
         mainVal!.source=4
         selectedOperator = nil
+        
+        nxtNumNeg=nil
+        
+        // check for all empty and 24
+        let allEmpty: Bool = !cA[curActiveView].contains(true) && stored == nil
+        if allEmpty {
+            if doubleEquality(a: mainVal!.value,b: 24) {
+                nextCardView()
+            } else {
+                reset()
+            }
+        }
     }
     
     func reset() { //deactivate everything and reset engine
@@ -230,7 +299,7 @@ class TFEngine: ObservableObject {
         nxtNumNeg=nil
         withAnimation(.easeInOut(duration: cardAniDur)) {
             for i in 0..<4 {
-                cA[i]=true
+                cA[curActiveView][i]=true
             }
             oprButtonActive=false
         }
@@ -239,6 +308,14 @@ class TFEngine: ObservableObject {
         stored=nil
         updtStoredExpr()
     }
+    
+    func doubleEquality(a:Double, b:Double) -> Bool {
+        if (abs(a-b)<0.00001) {
+            return true
+        }
+        return false
+    }
+    
     func doStore() {
         //store can only be called if there's something in store or in the expression
         
@@ -275,8 +352,9 @@ class TFEngine: ObservableObject {
                 if selectedOperator == nil {
                     swap(&mainVal,&stored)
                 } else {
-                    doMath(addendA: mainVal!.value * (nxtNumNeg == true ? -1 : 1), addendB: stored!.value)
+                    var tmp=stored!.value
                     stored=nil
+                    doMath(addendB: tmp)
                 }
             }
         }

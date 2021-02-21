@@ -22,22 +22,41 @@ struct myTransitionModifier: ViewModifier {
     }
 }
 
+
+
 struct ContentView: View {
     @ObservedObject var tfengine:TFEngine
+    @State var draggedAmt: CGSize = .zero
     var body: some View {
         VStack {
-            TopBar(lvl: tfengine.lvl, lvlNm: tfengine.lvlName)
+            TopBar(tfengine:tfengine)
                 .padding(.horizontal,20)
                 .padding(.bottom,20)
-            ForEach((0..<2), id:\.self) { index in
-                if tfengine.curActiveView==index {
+            ZStack {
+                ForEach((0..<2), id:\.self) { index in
                     CardLayout(tfengine: tfengine, index: index, primID: "CardLayout"+String(index))
                         .padding(.horizontal,30)
                         .id("MasterCardLayoutView"+String(index))
-                        .offset(x: tfengine.curShownView==index ? 0 : -UIScreen.main.bounds.width, y: 0)
-                        
+                        .offset(x: CGFloat(tfengine.offset[index])*UIScreen.main.bounds.width, y: 0)
+                        .offset(x: (draggedAmt.width < 0 ? -2*sqrt(-draggedAmt.width) : draggedAmt.width), y: 0)
                 }
-            }
+            }.background(Color.init("bgColor"))
+            .simultaneousGesture(DragGesture()
+                        .onChanged({ (value) in
+                            draggedAmt=value.translation
+                            tfengine.viewState[tfengine.curActiveView] = .retired
+                            print("gesture")
+                        }).onEnded({ (value) in
+                            if value.predictedEndTranslation.width > UIScreen.main.bounds.width*0.6 {
+                                withAnimation(.easeInOut(duration: 2)) {
+                                    draggedAmt = .zero
+                                    tfengine.nextCardView()
+                                }
+                            } else {
+                                tfengine.viewState[tfengine.curActiveView] = .mature
+                                draggedAmt = .zero
+                            }
+                        }))
             buttons(tfengine: tfengine)
                 .padding(.horizontal,15)
                 .padding(.bottom,50)

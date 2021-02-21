@@ -27,7 +27,7 @@ struct bottomButtonView: View {
                 .font(.system(size: CGFloat(buttonHei*textSize), weight: .medium, design: .rounded))
                 .foregroundColor(textColor)
                 .id(id+"-text")
-                .animation(.easeInOut)
+                .animation(nil)
         }
     }
 }
@@ -63,6 +63,7 @@ struct buttons: View {
                                 .fill(Color.init("TopButtonColor"))
                                 .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .center)
                             Text(tfengine.expr)
+                                .animation(nil)
                                 .foregroundColor(.init("TextColor"))
                                 .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
                                 .padding(.leading, CGFloat(textInset*textField*Double(geometry.size.width-CGFloat(midSpace))))
@@ -82,6 +83,7 @@ struct buttons: View {
                                 Text(tfengine.storedExpr!) // important: This should and can only hold 2 decimal points
                                     .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
                                     .frame(height: CGFloat(textInpHei), alignment: .center)
+                                    .animation(nil)
                             } else {
                                 Image(systemName: "chevron.down.circle.fill")
                                     .font(.system(size: CGFloat(textFontSize*textInpHei)))
@@ -124,8 +126,9 @@ struct buttons: View {
                     Button(action: {
                         tfengine.handleNumberPress(index: index)
                     }, label: {
-                        bottomButtonView(fillColor: Color.init(tfengine.cA[index] ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.cA[index] ? "TextColor" : "ButtonInactiveTextColor"), text: String(tfengine.cs[tfengine.curActiveView][index].numb), id: "BottomButtonNum"+String(index))
+                        bottomButtonView(fillColor: Color.init(tfengine.cA[tfengine.curActiveView][index] ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.cA[tfengine.curActiveView][index] ? "TextColor" : "ButtonInactiveTextColor"), text: String(tfengine.cs[tfengine.curActiveView][index].numb), id: "BottomButtonNum"+String(index))
                     }).buttonStyle(bottomButtonStyle())
+                    .disabled(!tfengine.cA[tfengine.curActiveView][index])
                 }
             }
         }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F00EAB1B25E1F6ED009F7702 /* answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00EAB1A25E1F6ED009F7702 /* answer.swift */; };
 		F0B2E1D625D8D41D007DF20E /* TwentyFourPointsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */; };
 		F0B2E1D825D8D41D007DF20E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E1D725D8D41D007DF20E /* ContentView.swift */; };
 		F0B2E1DA25D8D41E007DF20E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0B2E1D925D8D41E007DF20E /* Assets.xcassets */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F00EAB1A25E1F6ED009F7702 /* answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = answer.swift; sourceTree = "<group>"; };
 		F0B2E1D225D8D41D007DF20E /* TwentyFourPoints.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwentyFourPoints.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwentyFourPointsApp.swift; sourceTree = "<group>"; };
 		F0B2E1D725D8D41D007DF20E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */,
 				F0B2E21B25D91652007DF20E /* AppEngine.swift */,
 				F0B2E1D725D8D41D007DF20E /* ContentView.swift */,
+				F00EAB1A25E1F6ED009F7702 /* answer.swift */,
 				F0E7271625DFC7BF00403CDD /* TopBar.swift */,
 				F0B2E22925D9505A007DF20E /* BottomButtons.swift */,
 				F0B2E21625D91617007DF20E /* CardLayout.swift */,
@@ -281,6 +284,7 @@
 				F0B2E21725D91617007DF20E /* CardLayout.swift in Sources */,
 				F0B2E22A25D9505A007DF20E /* BottomButtons.swift in Sources */,
 				F0B2E21C25D91652007DF20E /* AppEngine.swift in Sources */,
+				F00EAB1B25E1F6ED009F7702 /* answer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

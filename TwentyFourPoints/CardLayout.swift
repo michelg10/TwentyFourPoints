@@ -15,15 +15,15 @@ struct CardLayout: View {
     var body: some View {
         VStack(alignment: .center,spacing: 40.0, content: {
             HStack(spacing: 30.0) {
-                cardView(card: tfengine.cs[index][0], active: index==tfengine.curActiveView ? tfengine.cA[0] : false, primID: primID+"cv0", tfengine: tfengine, index: 0)
+                cardView(card: tfengine.cs[index][0], active: tfengine.cA[index][0], primID: primID+"cv0", tfengine: tfengine, groupIndex:index, index: 0)
                     .id(primID+"-CardView0")
-                cardView(card: tfengine.cs[index][1], active: index==tfengine.curActiveView ? tfengine.cA[1] : false, primID: primID+"cv1", tfengine: tfengine, index: 1)
+                cardView(card: tfengine.cs[index][1], active: tfengine.cA[index][1], primID: primID+"cv1", tfengine: tfengine, groupIndex:index, index: 1)
                     .id(primID+"-CardView1")
             }
             HStack(spacing: 30.0) {
-                cardView(card: tfengine.cs[index][2], active: index==tfengine.curActiveView ? tfengine.cA[2] : false, primID: primID+"cv2", tfengine: tfengine, index: 2)
+                cardView(card: tfengine.cs[index][2], active: tfengine.cA[index][2], primID: primID+"cv2", tfengine: tfengine, groupIndex:index, index: 2)
                     .id(primID+"-CardView2")
-                cardView(card: tfengine.cs[index][3], active: index==tfengine.curActiveView ? tfengine.cA[3] : false, primID: primID+"cv3", tfengine: tfengine, index: 3)
+                cardView(card: tfengine.cs[index][3], active: tfengine.cA[index][3], primID: primID+"cv3", tfengine: tfengine, groupIndex:index, index: 3)
                     .id(primID+"-CardView3")
             }
         })

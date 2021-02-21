@@ -87,6 +87,7 @@ struct cardView: View {
     var primID: String
     
     @ObservedObject var tfengine:TFEngine
+    var groupIndex:Int
     var index:Int
     var body: some View {
         let foregroundColor:Color=Color.init("CardForeground" + (card.CardIcon == .diamond || card.CardIcon == .heart ? "Red" : "Black") + (active ? "Active" : "Inactive"))
@@ -117,18 +118,19 @@ struct cardView: View {
                         }
 
                     )
-            }).id(primID+"-mstrbtn")
-            .if (tfengine.viewDoneAnimating) { view in
+            })
+            .if (tfengine.viewState[groupIndex] == .mature) { view in
                 view.buttonStyle(cardButtonStyle())
             }
-            .disabled(!active)
+            .id(primID+"-mstrbtn")
+            .disabled(!active && tfengine.viewState[groupIndex] == .mature)
         }
     }
 }
 
 struct card_Previews: PreviewProvider {
     static var previews: some View {
-        cardView(card: card(CardIcon: .club, numb: 2), active: true, primID: "", tfengine: TFEngine(), index: 0)
+        cardView(card: card(CardIcon: .club, numb: 2), active: true, primID: "", tfengine: TFEngine(), groupIndex: 0, index: 0)
         CardLayout(tfengine: TFEngine(), index: 0, primID: "")
     }
 }

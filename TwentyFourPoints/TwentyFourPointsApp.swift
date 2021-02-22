@@ -11,7 +11,7 @@ import SwiftUI
 struct TwentyFourPointsApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(tfengine: TFEngine())
+            mainView(tfengine: TFEngine())
         }
     }
 }

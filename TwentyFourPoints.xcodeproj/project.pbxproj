@@ -8,8 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		F00EAB1B25E1F6ED009F7702 /* answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00EAB1A25E1F6ED009F7702 /* answer.swift */; };
+		F02AB9F525E39EA7008EBE91 /* SolverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F425E39EA7008EBE91 /* SolverView.swift */; };
+		F02AB9FA25E39EFD008EBE91 /* navBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F925E39EFD008EBE91 /* navBarButton.swift */; };
 		F0B2E1D625D8D41D007DF20E /* TwentyFourPointsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */; };
-		F0B2E1D825D8D41D007DF20E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E1D725D8D41D007DF20E /* ContentView.swift */; };
+		F0B2E1D825D8D41D007DF20E /* ProblemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E1D725D8D41D007DF20E /* ProblemView.swift */; };
 		F0B2E1DA25D8D41E007DF20E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0B2E1D925D8D41E007DF20E /* Assets.xcassets */; };
 		F0B2E1DD25D8D41E007DF20E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0B2E1DC25D8D41E007DF20E /* Preview Assets.xcassets */; };
 		F0B2E1E825D8D41F007DF20E /* TwentyFourPointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E1E725D8D41F007DF20E /* TwentyFourPointsTests.swift */; };
@@ -18,6 +20,7 @@
 		F0B2E21725D91617007DF20E /* CardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E21625D91617007DF20E /* CardLayout.swift */; };
 		F0B2E21C25D91652007DF20E /* AppEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E21B25D91652007DF20E /* AppEngine.swift */; };
 		F0B2E22A25D9505A007DF20E /* BottomButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E22925D9505A007DF20E /* BottomButtons.swift */; };
+		F0B5B44525E28FBE0073606E /* mainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B5B44425E28FBE0073606E /* mainView.swift */; };
 		F0E7271725DFC7BF00403CDD /* TopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E7271625DFC7BF00403CDD /* TopBar.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,9 +43,11 @@
 
 /* Begin PBXFileReference section */
 		F00EAB1A25E1F6ED009F7702 /* answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = answer.swift; sourceTree = "<group>"; };
-		F0B2E1D225D8D41D007DF20E /* TwentyFourPoints.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwentyFourPoints.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F02AB9F425E39EA7008EBE91 /* SolverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolverView.swift; sourceTree = "<group>"; };
+		F02AB9F925E39EFD008EBE91 /* navBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = navBarButton.swift; sourceTree = "<group>"; };
+		F0B2E1D225D8D41D007DF20E /* Twenty Four Points.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Twenty Four Points.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwentyFourPointsApp.swift; sourceTree = "<group>"; };
-		F0B2E1D725D8D41D007DF20E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F0B2E1D725D8D41D007DF20E /* ProblemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProblemView.swift; sourceTree = "<group>"; };
 		F0B2E1D925D8D41E007DF20E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F0B2E1DC25D8D41E007DF20E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F0B2E1DE25D8D41E007DF20E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -56,6 +61,7 @@
 		F0B2E21625D91617007DF20E /* CardLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardLayout.swift; sourceTree = "<group>"; };
 		F0B2E21B25D91652007DF20E /* AppEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEngine.swift; sourceTree = "<group>"; };
 		F0B2E22925D9505A007DF20E /* BottomButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomButtons.swift; sourceTree = "<group>"; };
+		F0B5B44425E28FBE0073606E /* mainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainView.swift; sourceTree = "<group>"; };
 		F0E7271625DFC7BF00403CDD /* TopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -97,7 +103,7 @@
 		F0B2E1D325D8D41D007DF20E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F0B2E1D225D8D41D007DF20E /* TwentyFourPoints.app */,
+				F0B2E1D225D8D41D007DF20E /* Twenty Four Points.app */,
 				F0B2E1E325D8D41F007DF20E /* TwentyFourPointsTests.xctest */,
 				F0B2E1EE25D8D41F007DF20E /* TwentyFourPointsUITests.xctest */,
 			);
@@ -109,9 +115,12 @@
 			children = (
 				F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */,
 				F0B2E21B25D91652007DF20E /* AppEngine.swift */,
-				F0B2E1D725D8D41D007DF20E /* ContentView.swift */,
+				F0B2E1D725D8D41D007DF20E /* ProblemView.swift */,
 				F00EAB1A25E1F6ED009F7702 /* answer.swift */,
 				F0E7271625DFC7BF00403CDD /* TopBar.swift */,
+				F02AB9F925E39EFD008EBE91 /* navBarButton.swift */,
+				F0B5B44425E28FBE0073606E /* mainView.swift */,
+				F02AB9F425E39EA7008EBE91 /* SolverView.swift */,
 				F0B2E22925D9505A007DF20E /* BottomButtons.swift */,
 				F0B2E21625D91617007DF20E /* CardLayout.swift */,
 				F0B2E20B25D8D496007DF20E /* Card.swift */,
@@ -165,7 +174,7 @@
 			);
 			name = TwentyFourPoints;
 			productName = TwentyFourPoints;
-			productReference = F0B2E1D225D8D41D007DF20E /* TwentyFourPoints.app */;
+			productReference = F0B2E1D225D8D41D007DF20E /* Twenty Four Points.app */;
 			productType = "com.apple.product-type.application";
 		};
 		F0B2E1E225D8D41F007DF20E /* TwentyFourPointsTests */ = {
@@ -233,6 +242,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = F0B2E1C925D8D41D007DF20E;
 			productRefGroup = F0B2E1D325D8D41D007DF20E /* Products */;
@@ -277,12 +287,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F02AB9FA25E39EFD008EBE91 /* navBarButton.swift in Sources */,
+				F0B5B44525E28FBE0073606E /* mainView.swift in Sources */,
 				F0E7271725DFC7BF00403CDD /* TopBar.swift in Sources */,
-				F0B2E1D825D8D41D007DF20E /* ContentView.swift in Sources */,
+				F0B2E1D825D8D41D007DF20E /* ProblemView.swift in Sources */,
 				F0B2E20C25D8D496007DF20E /* Card.swift in Sources */,
 				F0B2E1D625D8D41D007DF20E /* TwentyFourPointsApp.swift in Sources */,
 				F0B2E21725D91617007DF20E /* CardLayout.swift in Sources */,
 				F0B2E22A25D9505A007DF20E /* BottomButtons.swift in Sources */,
+				F02AB9F525E39EA7008EBE91 /* SolverView.swift in Sources */,
 				F0B2E21C25D91652007DF20E /* AppEngine.swift in Sources */,
 				F00EAB1B25E1F6ED009F7702 /* answer.swift in Sources */,
 			);
@@ -375,6 +388,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -429,6 +443,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -452,7 +467,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.TwentyFourPoints;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Twenty Four Points";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -474,7 +489,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.TwentyFourPoints;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Twenty Four Points";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

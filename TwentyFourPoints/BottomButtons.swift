@@ -71,6 +71,7 @@ struct buttons: View {
                                 .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), alignment: .leading)
                         }
                     }).buttonStyle(bottomButtonStyle())
+                    .disabled(tfengine.expr=="" && tfengine.storedExpr == nil)
                     Spacer()
                     Button(action: {
                         tfengine.doStore()
@@ -92,8 +93,8 @@ struct buttons: View {
                         }
                     })
                     .id("StoreButton")
-                    .animation(.easeInOut)
                     .buttonStyle(bottomButtonStyle())
+                    .disabled(tfengine.storedExpr == nil && !tfengine.oprButtonActive)
                 }
             }.frame(height: CGFloat(textInpHei))
             let bottomButtonFillColor=Color.init(tfengine.oprButtonActive ? "BottomButtonColorActive" : "BottomButtonColorInactive")
@@ -104,6 +105,7 @@ struct buttons: View {
                 }, label: {
                     bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "+", id: "BottomButtonAdd")
                 }).buttonStyle(bottomButtonStyle())
+                .disabled(!tfengine.oprButtonActive)
                 Button(action: {
                     tfengine.handleOprPress(Opr: .sub)
                 }, label: {
@@ -114,11 +116,13 @@ struct buttons: View {
                 }, label: {
                     bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "×", id: "BottomButtonMul")
                 }).buttonStyle(bottomButtonStyle())
+                .disabled(!tfengine.oprButtonActive)
                 Button(action: {
                     tfengine.handleOprPress(Opr: .div)
                 }, label: {
                     bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "÷", id: "BottomButtonDiv")
                 }).buttonStyle(bottomButtonStyle())
+                .disabled(!tfengine.oprButtonActive)
             }
             
             HStack(spacing:CGFloat(midSpace)) {
@@ -126,9 +130,9 @@ struct buttons: View {
                     Button(action: {
                         tfengine.handleNumberPress(index: index)
                     }, label: {
-                        bottomButtonView(fillColor: Color.init(tfengine.cA[tfengine.curActiveView][index] ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.cA[tfengine.curActiveView][index] ? "TextColor" : "ButtonInactiveTextColor"), text: String(tfengine.cs[tfengine.curActiveView][index].numb), id: "BottomButtonNum"+String(index))
+                        bottomButtonView(fillColor: Color.init(tfengine.cA[index] ? "BottomButtonColorActive" : "BottomButtonColorInactive"), textColor: Color.init(tfengine.cA[index] ? "TextColor" : "ButtonInactiveTextColor"), text: String(tfengine.cs[index].numb), id: "BottomButtonNum"+String(index))
                     }).buttonStyle(bottomButtonStyle())
-                    .disabled(!tfengine.cA[tfengine.curActiveView][index])
+                    .disabled(!tfengine.cA[index])
                 }
             }
         }

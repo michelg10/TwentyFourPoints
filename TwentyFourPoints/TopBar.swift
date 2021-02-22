@@ -18,39 +18,25 @@ struct topBarButtonStyle: ButtonStyle {
 
 struct TopBar: View {
     @ObservedObject var tfengine: TFEngine
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var body: some View {
         ZStack(alignment: .top) {
             HStack {
                 Button(action: {
-                    tfengine.nextCardView()
+                    presentationMode.wrappedValue.dismiss()
                 }, label: {
-                    ZStack {
-                        Circle()
-                            .foregroundColor(Color.init("TopButtonColor"))
-                            .frame(width:45,height:45)
-                        Image(systemName: "questionmark")
-                            .foregroundColor(.init("TextColor"))
-                            .font(.system(size:25))
-                    }
+                    navBarButton(symbolName: "chevron.backward")
                 }).buttonStyle(topBarButtonStyle())
                 Spacer()
                 Button(action: {
                     tfengine.nextCardView()
                 }, label: {
-                    ZStack {
-                        Circle()
-                            .foregroundColor(Color.init("TopButtonColor"))
-                            .frame(width:45,height:45)
-                        Image(systemName: "chevron.forward.2")
-                            .foregroundColor(.init("TextColor"))
-                            .font(.system(size:22))
-                            .padding(.leading,3)
-                    }
+                    navBarButton(symbolName: "chevron.forward.2")
                 }).buttonStyle(topBarButtonStyle())
             }
             VStack {
                 Text("24 Points")
-                    .font(.system(size: 36, weight: .bold, design: .rounded))
+                    .font(.system(size: 32, weight: .bold, design: .rounded))
                 Text("\(tfengine.lvlName) • Question \(String(tfengine.lvl))")
                     .font(.system(size: 18, weight: .regular, design: .rounded))
             }.padding(.top,25)

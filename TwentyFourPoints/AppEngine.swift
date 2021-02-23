@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CoreData
 
 enum cardIcon: CaseIterable {
     case heart
@@ -115,6 +116,8 @@ class TFEngine: ObservableObject {
     
     @Published var oprButtonActive: Bool = false // activate this when any number is pressed. and thus an opertor could be used.
     
+    var cachedSols: [String?]
+    
     init() {
         
         //load from persistent store
@@ -128,12 +131,15 @@ class TFEngine: ObservableObject {
         curQuestionID=UUID()
         cardsClickable=true
         
+        cachedSols=Array(repeating: nil, count: 13*13*13*13)
+        for i in 0..<tfqs.count {
+            cachedSols[(tfqs[i][0]-1)*13*13*13+(tfqs[i][1]-1)*13*13+(tfqs[i][2]-1)*13+tfqs[i][3]-1]=tfas[i]
+        }
+        
         updtExpr()
         updtLvlName()
     }
-    
-    let viewAnimationTime:Double=0.4 //0.4
-    
+        
     @Published var cardsClickable:Bool
     
     func nextCardView() {
@@ -158,6 +164,42 @@ class TFEngine: ObservableObject {
         updtStoredExpr()
     }
     
+    enum daBtn:CaseIterable {
+        case add
+        case sub
+        case mul
+        case div
+        case c1
+        case c2
+        case c3
+        case c4
+    }
+    
+    var konamiLog:[daBtn]=[]
+    ***REMOVED***
+    
+    func logButtonKonami(button:daBtn) {
+        konamiLog.append(button)
+        if konamiLog.count > 11 {
+            konamiLog.remove(at: 0)
+        }
+        if konamiLog == konamiCode {
+            konamiCheatVisible=true
+            cardsClickable=false
+        }
+    }
+    
+    @Published var konamiCheatVisible:Bool=false
+    
+    func konamiLvl(lvl: Int?) {
+        if (lvl != nil) {
+            //set the level
+        }
+        
+        cardsClickable=true
+        konamiCheatVisible=false
+    }
+    
     func handleOprPress(Opr:opr) {
         // replace whatever operator is currently in use. if there's nothing in the expression right now, turn the next number negative.
         
@@ -175,7 +217,7 @@ class TFEngine: ObservableObject {
         updtExpr()
     }
     let cardAniDur=0.17
-        
+            
     func handleNumberPress(index: Int) {
         // push into konami list and check for konami
         

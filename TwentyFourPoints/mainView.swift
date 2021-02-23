@@ -9,22 +9,59 @@ import SwiftUI
 
 struct borederedButton: View {
     let title:String
+    let clicked:Bool
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 11,style: .continuous)
                 .frame(width:182,height:53)
-                .foregroundColor(.init("HomeButton"))
+                .foregroundColor(.init(clicked ? "HomeButtonPressed" : "HomeButton"))
             RoundedRectangle(cornerRadius: 9,style: .continuous)
-                .stroke(Color.init("CardForegroundBlackActive"), style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                .stroke(Color.init(clicked ? "CardForegroundBlackInactive" : "CardForegroundBlackActive"), style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                 .frame(width:176,height:47)
             Text(title)
-                .foregroundColor(.init("CardForegroundBlackActive"))
+                .foregroundColor(.white)
+                .colorMultiply(.init(clicked ? "CardForegroundBlackInactive" : "CardForegroundBlackActive"))
                 .font(.system(size: 24, weight: .medium, design: .rounded))
-        }
+        }.animation(.easeInOut(duration: 0.17))
+    }
+}
+
+public enum ButtonState {
+    case pressed
+    case notPressed
+}
+
+public struct TouchDownUpEventModifier: ViewModifier {
+    @GestureState private var isPressed = false
+    
+    let changeState: (ButtonState) -> Void
+    
+    public func body(content: Content) -> some View {
+        let drag = DragGesture(minimumDistance: 0)
+            .updating($isPressed) { (value, gestureState, transaction) in
+                gestureState = true
+            }
+        
+        return content
+            .simultaneousGesture(drag)
+            .onChange(of: isPressed, perform: { (pressed) in
+                if pressed {
+                    self.changeState(.pressed)
+                } else {
+                    self.changeState(.notPressed)
+                }
+            })
+    }
+    
+    public init(changeState: @escaping (ButtonState) -> Void) {
+        self.changeState = changeState
     }
 }
 
 struct mainView: View {
+    @State var playClicked=false
+    @State var solverClicked=false
+    
     var tfengine: TFEngine
     var body: some View {
         NavigationView {
@@ -72,13 +109,31 @@ struct mainView: View {
                     NavigationLink(
                         destination: ProblemView(tfengine: tfengine),
                         label: {
-                            borederedButton(title: "Play")
-                        }).padding(.bottom,12)
+                            borederedButton(title: "Play", clicked: playClicked)
+                        })
+                        .buttonStyle(nilButtonStyle())
+                        .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
+                            if buttonState == .pressed {
+                                playClicked=true
+                            } else {
+                                playClicked=false
+                            }
+                        }))
+                        .padding(.bottom,12)
+                    
                     NavigationLink(
                         destination: SolverView(tfengine: tfengine),
                         label: {
-                            borederedButton(title: "Solver")
+                            borederedButton(title: "Solver", clicked: solverClicked)
                         })
+                        .buttonStyle(nilButtonStyle())
+                        .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
+                            if buttonState == .pressed {
+                                solverClicked=true
+                            } else {
+                                solverClicked=false
+                            }
+                        }))
                 }.padding(.bottom,80)
             }
         }

@@ -66,9 +66,22 @@ struct nilButtonStyle: ButtonStyle {
     }
 }
 
+extension View {
+    @ViewBuilder
+    func `if`<Content: View>(_ condition: Bool, content: (Self) -> Content) -> some View {
+        if condition {
+            content(self)
+        }
+        else {
+            self
+        }
+    }
+}
+
 struct cardView: View {
     var active: Bool
     var card: card
+    var isStationary: Bool
     var body: some View {
         let foregroundColor:Color=Color.init("CardForeground" + (card.CardIcon == .diamond || card.CardIcon == .heart ? "Red" : "Black") + (active ? "Active" : "Inactive"))
         Rectangle()
@@ -84,9 +97,18 @@ struct cardView: View {
                             .padding(geometry.size.width*0.025)
                         Text(String(card.numb)).font(.system(size:(geometry.size.width)*0.55, weight: .medium, design: .rounded))
                             .foregroundColor(foregroundColor)
+                            .if (isStationary) { view in
+                                view.animation(nil)
+                            }
                         numView(CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor)
+                            .if (isStationary) { view in
+                                view.animation(nil)
+                            }
                         numView(CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor)
                             .rotationEffect(.init(degrees: 180))
+                            .if (isStationary) { view in
+                                view.animation(nil)
+                            }
                     }
                 }
 
@@ -96,7 +118,7 @@ struct cardView: View {
 
 struct card_Previews: PreviewProvider {
     static var previews: some View {
-        cardView(active: true, card: card(CardIcon: .club, numb: 2))
+        cardView(active: true, card: card(CardIcon: .club, numb: 2), isStationary: false)
 //        CardLayout(tfengine: TFEngine(), index: 0, primID: "")
     }
 }

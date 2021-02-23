@@ -23,15 +23,26 @@ struct TopBar: View {
         ZStack(alignment: .top) {
             HStack {
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()
+                    if !tfengine.konamiCheatVisible {
+                        presentationMode.wrappedValue.dismiss()
+                        tfengine.reset()
+                    }
                 }, label: {
-                    navBarButton(symbolName: "chevron.backward")
+                    navBarButton(symbolName: "chevron.backward", active: !tfengine.konamiCheatVisible)
                 }).buttonStyle(topBarButtonStyle())
                 Spacer()
                 Button(action: {
-                    tfengine.nextCardView()
+                    if tfengine.konamiCheatVisible {
+                        tfengine.konamiLvl(lvl: nil)
+                    } else {
+                        tfengine.nextCardView()
+                    }
                 }, label: {
-                    navBarButton(symbolName: "chevron.forward.2")
+                    if tfengine.konamiCheatVisible {
+                        navBarButton(symbolName: "xmark", active: true)
+                    } else {
+                        navBarButton(symbolName: "chevron.forward.2", active: true)
+                    }
                 }).buttonStyle(topBarButtonStyle())
             }
             VStack {

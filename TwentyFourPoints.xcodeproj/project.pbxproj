@@ -10,6 +10,7 @@
 		F00EAB1B25E1F6ED009F7702 /* answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00EAB1A25E1F6ED009F7702 /* answer.swift */; };
 		F02AB9F525E39EA7008EBE91 /* SolverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F425E39EA7008EBE91 /* SolverView.swift */; };
 		F02AB9FA25E39EFD008EBE91 /* navBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F925E39EFD008EBE91 /* navBarButton.swift */; };
+		F02AB9FF25E4AF11008EBE91 /* konamiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9FE25E4AF11008EBE91 /* konamiView.swift */; };
 		F0B2E1D625D8D41D007DF20E /* TwentyFourPointsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */; };
 		F0B2E1D825D8D41D007DF20E /* ProblemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E1D725D8D41D007DF20E /* ProblemView.swift */; };
 		F0B2E1DA25D8D41E007DF20E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0B2E1D925D8D41E007DF20E /* Assets.xcassets */; };
@@ -45,6 +46,7 @@
 		F00EAB1A25E1F6ED009F7702 /* answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = answer.swift; sourceTree = "<group>"; };
 		F02AB9F425E39EA7008EBE91 /* SolverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolverView.swift; sourceTree = "<group>"; };
 		F02AB9F925E39EFD008EBE91 /* navBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = navBarButton.swift; sourceTree = "<group>"; };
+		F02AB9FE25E4AF11008EBE91 /* konamiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = konamiView.swift; sourceTree = "<group>"; };
 		F0B2E1D225D8D41D007DF20E /* Twenty Four Points.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Twenty Four Points.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwentyFourPointsApp.swift; sourceTree = "<group>"; };
 		F0B2E1D725D8D41D007DF20E /* ProblemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProblemView.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				F02AB9F925E39EFD008EBE91 /* navBarButton.swift */,
 				F0B5B44425E28FBE0073606E /* mainView.swift */,
 				F02AB9F425E39EA7008EBE91 /* SolverView.swift */,
+				F02AB9FE25E4AF11008EBE91 /* konamiView.swift */,
 				F0B2E22925D9505A007DF20E /* BottomButtons.swift */,
 				F0B2E21625D91617007DF20E /* CardLayout.swift */,
 				F0B2E20B25D8D496007DF20E /* Card.swift */,
@@ -292,6 +295,7 @@
 				F0E7271725DFC7BF00403CDD /* TopBar.swift in Sources */,
 				F0B2E1D825D8D41D007DF20E /* ProblemView.swift in Sources */,
 				F0B2E20C25D8D496007DF20E /* Card.swift in Sources */,
+				F02AB9FF25E4AF11008EBE91 /* konamiView.swift in Sources */,
 				F0B2E1D625D8D41D007DF20E /* TwentyFourPointsApp.swift in Sources */,
 				F0B2E21725D91617007DF20E /* CardLayout.swift in Sources */,
 				F0B2E22A25D9505A007DF20E /* BottomButtons.swift in Sources */,

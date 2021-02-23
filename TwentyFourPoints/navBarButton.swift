@@ -9,13 +9,16 @@ import SwiftUI
 
 struct navBarButton: View {
     var symbolName: String
+    var active: Bool
     var body: some View {
         ZStack {
             Circle()
-                .foregroundColor(Color.init("TopButtonColor"))
+                .foregroundColor(.white)
+                .colorMultiply(Color.init(active ? "ButtonColorActive" : "ButtonColorInactive"))
                 .frame(width:45,height:45)
             Image(systemName: symbolName)
-                .foregroundColor(.init("TextColor"))
+                .foregroundColor(.white)
+                .colorMultiply(.init(active ? "TextColor" : "ButtonInactiveTextColor"))
                 .font(.system(size:22,weight: .medium))
         }.padding(.horizontal,20)
     }
@@ -23,6 +26,6 @@ struct navBarButton: View {
 
 struct navBarButton_Previews: PreviewProvider {
     static var previews: some View {
-        navBarButton(symbolName: "chevron.backward")
+        navBarButton(symbolName: "chevron.backward", active: true)
     }
 }

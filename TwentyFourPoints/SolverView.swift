@@ -19,7 +19,7 @@ struct SolverView: View {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
-                    navBarButton(symbolName: "chevron.backward")
+                    navBarButton(symbolName: "chevron.backward", active: true)
                 }).buttonStyle(topBarButtonStyle())
                 Spacer()
             }
@@ -31,7 +31,11 @@ struct SolverView: View {
             
             HStack(spacing:12) {
                 ForEach((0..<4), id:\.self) { index in
-                    cardView(active: index != selectedCardIndex, card: card(CardIcon: cardIcon.allCases[index], numb: eachCardState[index]))
+                    Button(action: {
+                        selectedCardIndex=index
+                    }, label: {
+                        cardView(active: index != selectedCardIndex, card: card(CardIcon: cardIcon.allCases[index], numb: eachCardState[index]),isStationary: true)
+                    }).buttonStyle(cardButtonStyle())
                 }
             }.padding(.horizontal,23)
 
@@ -39,7 +43,14 @@ struct SolverView: View {
                 ForEach((1...13), id:\.self) { index in
                     Text(String(index)).tag(index)
                 }
-            })
+            }).padding(.bottom,10)
+            let arrSrted = eachCardState.sorted()
+            let solID=(arrSrted[0]-1)*13*13*13+(arrSrted[1]-1)*13*13+(arrSrted[2]-1)*13+arrSrted[3]-1
+            Text(tfengine.cachedSols[solID]==nil ? "No Solution" : "Solution")
+                .font(.system(size: 32, weight: .semibold, design: .rounded))
+            Text(tfengine.cachedSols[solID] == nil ? " " : tfengine.cachedSols[solID]!.replacingOccurrences(of: "/", with: "÷").replacingOccurrences(of: "*", with: "×"))
+                .font(.system(size: 24, weight: .medium, design: .rounded))
+            
             Spacer()
             
         }.navigationBarHidden(true)

@@ -20,7 +20,7 @@ struct cardButtonView: View {
             Button(action: {
                 tfengine.handleNumberPress(index: index)
             }, label: {
-                cardView(active: active, card: card)
+                cardView(active: active, card: card, isStationary: false)
             })
             .buttonStyle(cardButtonStyle())
             .disabled(!active || !operational)

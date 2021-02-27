@@ -392,6 +392,7 @@ class TFEngine: ObservableObject {
     
     func konamiLvl(setLvl: Int?) {
         cardsOnScreen=true
+        playCardsHaptic()
         if (setLvl != nil) {
             //set the level
             if setLvl! >= konamiLimitation() {

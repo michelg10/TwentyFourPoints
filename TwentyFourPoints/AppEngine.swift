@@ -169,8 +169,12 @@ class TFEngine: ObservableObject {
         
         let csGrab=icloudstore.object(forKey: "cards") as! Data
         let newcs:[card]=try! PropertyListDecoder().decode(Array<card>.self, from: csGrab)
-        if cs != newcs && isIncremental {
-            nextCardView(nxtCardSet: newcs)
+        if isIncremental {
+            if cs != newcs {
+                nextCardView(nxtCardSet: newcs)
+            }
+        } else {
+            cs=newcs
         }
     }
     

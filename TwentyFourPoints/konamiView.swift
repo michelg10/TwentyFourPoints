@@ -7,6 +7,16 @@
 
 import SwiftUI
 
+struct konamiButtonStyle: ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+            .saturation(configuration.isPressed ? 0.95 : 1)
+            .brightness(configuration.isPressed ? 0.03 : 0) //0.05
+            .animation(.easeInOut(duration: 0.07))
+    }
+}
+
 struct konamiView: View {
     let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -27,7 +37,7 @@ struct konamiView: View {
             HStack(spacing:14) {
                 TextField("Level", value: $levelInput, formatter: formatter)
                     .font(.system(size: 18, weight: .medium, design: .rounded))
-                    .keyboardType(.numberPad)
+                    .keyboardType(.numbersAndPunctuation)
                     .multilineTextAlignment(.center)
                     .padding(3)
                     .padding(.horizontal,15)
@@ -37,7 +47,8 @@ struct konamiView: View {
                             .foregroundColor(.init("ButtonColorActive"))
                     )
                 Button(action: {
-                    tfengine.konamiLvl(lvl: levelInput)
+                    tfengine.konamiLvl(setLvl: levelInput)
+                    tfengine.generateHaptic(hap: .medium)
                 }, label: {
                     Circle()
                         .frame(width:42,height:42)
@@ -48,12 +59,15 @@ struct konamiView: View {
                                 .font(.system(size: 18, weight: .medium, design: .rounded))
                         )
                 })
-                .buttonStyle(bottomButtonStyle())
+                .buttonStyle(konamiButtonStyle())
             }.padding(.horizontal,30)
             Spacer()
-            Text("Setting your level to a lower value may cause cloud sync issues")
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
+            if tfengine.konamiLimitation() != 1 {
+                Text("The level on this device must be at least \(tfengine.konamiLimitation()). If you want to further lower your level, change the level on your other devices.")
+                    .font(.system(size: 15, weight: .regular, design: .rounded))
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+            }
         }.padding(.horizontal,40)
     }
 }

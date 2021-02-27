@@ -53,7 +53,7 @@ struct numView: View {
 struct cardButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
-            .animation(.spring())
+            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
             .saturation(configuration.isPressed ? 0.95 : 1)
             .brightness(configuration.isPressed ? 0.03 : 0) //0.05
             .animation(.easeInOut(duration: 0.07))
@@ -75,6 +75,16 @@ extension View {
         else {
             self
         }
+    }
+}
+
+struct cardDummyView: View {
+    var isVisible: Bool
+    var body: some View {
+        Rectangle()
+            .fill(Color.white)
+            .aspectRatio(128/177, contentMode: .fit)
+            .opacity(isVisible ? 1 : 0.0001)
     }
 }
 

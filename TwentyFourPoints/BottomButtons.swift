@@ -35,7 +35,6 @@ struct bottomButtonView: View {
 struct bottomButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
-            .animation(.spring())
             .saturation(configuration.isPressed ? 0.95 : 1)
             .brightness(configuration.isPressed ? 0.03 : 0) //0.05
             .animation(.easeInOut(duration: 0.07))
@@ -72,6 +71,7 @@ struct buttons: View {
                 HStack {
                     Button(action: {
                         tfengine.reset()
+                        tfengine.generateHaptic(hap: .medium)
                     }, label: {
                         ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: CGFloat(textInpHei/2.0*buttonRadius),style: .continuous)
@@ -85,6 +85,14 @@ struct buttons: View {
                                 .padding(.leading, CGFloat(textInset*textField*Double(geometry.size.width-CGFloat(midSpace))))
                                 .padding(.bottom,2)
                                 .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), alignment: .leading)
+                            Text(tfengine.answerShow)
+                                .opacity(tfengine.answerShowOpacity)
+                                .animation(.easeInOut(duration: 0.3))
+                                .foregroundColor(Color.init("TextColor"))
+                                .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
+                                .padding(.leading, CGFloat(textInset*textField*Double(geometry.size.width-CGFloat(midSpace))))
+                                .padding(.bottom,2)
+                                .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height:CGFloat(textInpHei), alignment: .leading)
                         }
                     }).buttonStyle(bottomButtonStyle())
                     .disabled(tfengine.expr=="" && tfengine.storedExpr == nil || buttonsDisabled)

@@ -26,6 +26,7 @@ struct TopBar: View {
                     if !tfengine.konamiCheatVisible {
                         presentationMode.wrappedValue.dismiss()
                         tfengine.reset()
+                        tfengine.generateHaptic(hap: .medium)
                     }
                 }, label: {
                     navBarButton(symbolName: "chevron.backward", active: !tfengine.konamiCheatVisible)
@@ -33,9 +34,10 @@ struct TopBar: View {
                 Spacer()
                 Button(action: {
                     if tfengine.konamiCheatVisible {
-                        tfengine.konamiLvl(lvl: nil)
+                        tfengine.konamiLvl(setLvl: nil)
+                        tfengine.generateHaptic(hap: .medium)
                     } else {
-                        tfengine.nextCardView()
+                        tfengine.nxtButtonPressed()
                     }
                 }, label: {
                     if tfengine.konamiCheatVisible {

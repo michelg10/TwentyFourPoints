@@ -29,29 +29,78 @@ struct cardButtonView: View {
 }
 
 struct CardLayout: View {
-    var tfengine:TFEngine //tfengine should only serve as an interface
+    @ObservedObject var tfengine:TFEngine //tfengine should only serve as an interface
     var cA:[Bool]
     var cs:[card]
     var operational: Bool
+    var primID: String
+    let stackSpacing: CGFloat = 10 // how far away the virtual card stack is from the left edge of the view
     
     var body: some View {
-        VStack(alignment: .center,spacing: 40.0, content: {
-            HStack(spacing: 30.0) {
-                cardButtonView(card: cs[0], active: cA[0], tfengine: tfengine, operational: operational, index: 0)
-                cardButtonView(card: cs[1], active: cA[1], tfengine: tfengine, operational: operational, index: 1)
-            }
-            HStack(spacing: 30.0) {
-                cardButtonView(card: cs[2], active: cA[2], tfengine: tfengine, operational: operational, index: 2)
-                cardButtonView(card: cs[3], active: cA[3], tfengine: tfengine, operational: operational, index: 3)
-            }
-        })
+        GeometryReader { geometry in
+            VStack(alignment: .center,spacing: 40.0, content: {
+                HStack(spacing: 30.0) {
+                    GeometryReader {geometry2 in
+                        let viewWidth:CGFloat=min(geometry2.frame(in: .local).width,geometry2.frame(in: .local).height/177.0*128)
+                        VStack {
+                            cardButtonView(card: cs[0], active: cA[0], tfengine: tfengine, operational: operational, index: 0)
+                                .transition(.asymmetric(insertion: .identity, removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
+                                .animation(.spring())
+                                .position(x: tfengine.cardsShouldVisible[0] ? geometry2.frame(in: .local).width-viewWidth/2 : -geometry2.frame(in: .global).minX-viewWidth+stackSpacing,y:tfengine.cardsShouldVisible[0] ? geometry2.frame(in: .local).height/2 : -geometry2.frame(in: .global).minY+geometry.frame(in: .global).midY)
+                                .animation(.easeInOut(duration: 0.3))
+                                .id(primID+"-card1")
+                        }.frame(width: geometry2.frame(in: .local).width, height: geometry2.frame(in: .local).height, alignment: .trailing)
+                    }
+                    GeometryReader {geometry2 in
+                        let viewWidth:CGFloat=min(geometry2.frame(in: .local).width,geometry2.frame(in: .local).height/177.0*128)
+                        VStack {
+                            cardButtonView(card: cs[1], active: cA[1], tfengine: tfengine, operational: operational, index: 1)
+                                .transition(.asymmetric(insertion: .identity, removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
+                                .animation(.spring())
+                                .position(x: tfengine.cardsShouldVisible[1] ? viewWidth/2 : -geometry2.frame(in: .global).minX-viewWidth+stackSpacing,y:tfengine.cardsShouldVisible[1] ? geometry2.frame(in: .local).height/2 : -geometry2.frame(in: .global).minY+geometry.frame(in: .global).midY)
+                                .animation(.easeInOut(duration: 0.3))
+                                .id(primID+"-card2")
+                        }.frame(width: geometry2.frame(in: .local).width, height: geometry2.frame(in: .local).height, alignment: .leading)
+                    }
+                }
+                HStack(spacing: 30.0) {
+                    GeometryReader {geometry2 in
+                        let viewWidth:CGFloat=min(geometry2.frame(in: .local).width,geometry2.frame(in: .local).height/177.0*128)
+                        VStack {
+                            cardButtonView(card: cs[2], active: cA[2], tfengine: tfengine, operational: operational, index: 2)
+                                .transition(.asymmetric(insertion: .identity, removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
+                                .animation(.spring())
+                                .position(x: tfengine.cardsShouldVisible[2] ? geometry2.frame(in: .local).width-viewWidth/2 : -geometry2.frame(in: .global).minX-viewWidth+stackSpacing,y:tfengine.cardsShouldVisible[2] ? geometry2.frame(in: .local).height/2 : -geometry2.frame(in: .global).minY+geometry.frame(in: .global).midY)
+                                .animation(.easeInOut(duration: 0.3))
+                                .id(primID+"-card3")
+                        }.frame(width: geometry2.frame(in: .local).width, height: geometry2.frame(in: .local).height, alignment: .trailing)
+                    }
+                    GeometryReader {geometry2 in
+                        let viewWidth:CGFloat=min(geometry2.frame(in: .local).width,geometry2.frame(in: .local).height/177.0*128)
+                        VStack {
+                            cardButtonView(card: cs[3], active: cA[3], tfengine: tfengine, operational: operational, index: 3)
+                                .transition(.asymmetric(insertion: .identity, removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
+                                .animation(.spring())
+                                .position(x: tfengine.cardsShouldVisible[3] ? viewWidth/2 : -geometry2.frame(in: .global).minX-viewWidth+stackSpacing,y:tfengine.cardsShouldVisible[3] ? geometry2.frame(in: .local).height/2 : -geometry2.frame(in: .global).minY+geometry.frame(in: .global).midY)
+                                .animation(.easeInOut(duration: 0.3))
+                                .id(primID+"-card4")
+                        }.frame(width: geometry2.frame(in: .local).width, height: geometry2.frame(in: .local).height, alignment: .leading)
+                    }
+                }
+            }).frame(width: geometry.frame(in: .local).width,height:geometry.frame(in: .local).height)
+        }
     }
 }
 
 struct CardLayout_Previews: PreviewProvider {
     static var previews: some View {
         let tfengine=TFEngine()
-        CardLayout(tfengine: tfengine, cA:tfengine.cA,cs: tfengine.cs,operational: true)
-            .preferredColorScheme(.light)
+        Group {
+            CardLayout(tfengine: tfengine, cA:tfengine.cA,cs: tfengine.cs,operational: true, primID: "")
+                .preferredColorScheme(.light)
+            CardLayout(tfengine: tfengine, cA:tfengine.cA,cs: tfengine.cs,operational: true, primID: "")
+                .previewLayout(.fixed(width: 500, height: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/))
+                .preferredColorScheme(.light)
+        }
     }
 }

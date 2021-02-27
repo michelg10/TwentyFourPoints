@@ -7,13 +7,12 @@
 
 import Foundation
 import SwiftUI
-import CoreData
 
-enum cardIcon: CaseIterable {
-    case heart
-    case diamond
-    case club
-    case spade
+enum cardIcon: String, CaseIterable, Codable {
+    case heart = "heart"
+    case diamond = "diamond"
+    case club = "club"
+    case spade = "spade"
 }
 
 enum opr {
@@ -23,7 +22,7 @@ enum opr {
     case div
 }
 
-struct card {
+struct card:Codable, Equatable {
     var CardIcon:cardIcon
     var numb:Int
 }
@@ -54,14 +53,23 @@ enum mathResult {
     case cont
 }
 
+func randomString(length: Int) -> String {
+  let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+  return String((0..<length).map{ _ in letters.randomElement()! })
+}
+
 class TFEngine: ObservableObject {
-    //TODO: Add konami code
-    @Published var cs: [card] //card set
-    
-    @Published var cA: [Bool] // which cards are being activated and which are not
-    
-    var buttonsCanPress=false
-    
+    //MARK: Updaters and Updatees
+    @Published var storedExpr: String?
+    @Published var expr: String = "" //update this from getExpr
+    @Published var lvl: Int //the current level
+    func updtStoredExpr() {
+        if stored != nil {
+            storedExpr=dblToString3Precision(x: stored!.value)
+        } else {
+            storedExpr=nil
+        }
+    }
     func updtExpr() {
         expr=""
         if (nxtNumNeg==true) {
@@ -86,31 +94,51 @@ class TFEngine: ObservableObject {
         }
     }
     
-    @Published var expr: String //update this from getExpr
+    
+    @Published var cs: [card] //card set
+    
+    @Published var cA: [Bool] // which cards are being activated and which are not
+    
+    var buttonsCanPress=false
+    
+    var deviceData = [String: Int]()
+    
+    let defaults=UserDefaults.standard
+    
+    var deviceID: String
+        
+    func saveData() {
+        defaults.setValue(deviceData[deviceID], forKey: "myLvl")
+        defaults.setValue(deviceID, forKey: "deviceID")
+        let deviceList:[String]=Array(deviceData.keys)
+        print(deviceList)
+        icloudstore.set(deviceList, forKey: "devices")
+        for (itrDeviceID,itrDeviceLvl) in deviceData {
+            print("Saving \(itrDeviceID) as \(itrDeviceLvl)")
+            icloudstore.set(itrDeviceLvl, forKey: "dev"+itrDeviceID+"lvl")
+        }
+        icloudstore.set(try? PropertyListEncoder().encode(cs), forKey: "cards")
+        NSUbiquitousKeyValueStore.default.synchronize()
+        defaults.synchronize()
+    }
     
     @Published var stored: storedVal?
     
     var mainVal: storedVal? //put any calculation result into here
     
-    @Published var lvl: Int //the current level
-    
-    @Published var lvlName: String //update this from getLvlName
+    @Published var lvlName: String = "" //update this from getLvlName
     func updtLvlName() {
+        lvl=0
+        for i in deviceData.values {
+            lvl+=i-1
+        }
+        lvl+=1
         lvlName = "Level"
     }
     
     var selectedOperator : opr?
-    @Published var storedExpr: String?
     
     @Published var curQuestionID: UUID
-        
-    func updtStoredExpr() {
-        if stored != nil {
-            storedExpr=dblToString3Precision(x: stored!.value)
-        } else {
-            storedExpr=nil
-        }
-    }
     
     var nxtNumNeg:Bool? //set this as nil when its been applied
     
@@ -118,16 +146,47 @@ class TFEngine: ObservableObject {
     
     var cachedSols: [String?]
     
-    init() {
+    func loadData(isIncremental: Bool) {
+        let devices=icloudstore.array(forKey: "devices") as! [String]
+        for i in 0..<devices.count {
+            let deviceLevel = icloudstore.object(forKey: "dev"+devices[i]+"lvl") as! Int
+            deviceData[devices[i]]=deviceLevel
+            print("Set \(devices[i]) as \(deviceLevel)")
+        }
+        deviceData[deviceID]=(defaults.object(forKey: "myLvl") as! Int)
+        updtLvlName()
         
-        //load from persistent store
+        let csGrab=icloudstore.object(forKey: "cards") as! Data
+        let newcs:[card]=try! PropertyListDecoder().decode(Array<card>.self, from: csGrab)
+        if cs != newcs && isIncremental {
+            nextCardView(nxtCardSet: newcs)
+        }
+    }
+    
+    func resetStorage() {
+        let domain = Bundle.main.bundleIdentifier!
+        UserDefaults.standard.removePersistentDomain(forName: domain)
+        UserDefaults.standard.synchronize()
+        let allKeys = NSUbiquitousKeyValueStore.default.dictionaryRepresentation.keys
+        for key in allKeys {
+            NSUbiquitousKeyValueStore.default.removeObject(forKey: key)
+        }
+    }
+    
+    let icloudstore: NSUbiquitousKeyValueStore
+    
+    @objc func storeUpdated(notification: Notification) {
+        //deal with a store update
+        loadData(isIncremental: true)
+    }
+    
+    init() {
+        icloudstore=NSUbiquitousKeyValueStore.default
+        
         cs=[card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)]
         cA=[true, true, true,true]
         
-        //persistent data: the current 24-points thing, how many questions you are on
         lvl=1
-        expr=""
-        lvlName=""
         curQuestionID=UUID()
         cardsClickable=true
         
@@ -136,19 +195,104 @@ class TFEngine: ObservableObject {
             cachedSols[(tfqs[i][0]-1)*13*13*13+(tfqs[i][1]-1)*13*13+(tfqs[i][2]-1)*13+tfqs[i][3]-1]=tfas[i]
         }
         
+        deviceID="empty"
+                
+        // store locally: Device ID
+        // store in the cloud: All level information and card information
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(storeUpdated(notification:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: icloudstore)
+        icloudstore.synchronize()
+                
+        // fetch device ID from UserDefaults
+        let readDevID=defaults.string(forKey: "deviceID")
+        
+        if readDevID == nil {
+            deviceID=UUID().uuidString
+            deviceData[deviceID] = lvl
+            print("Init \(deviceID)")
+        } else {
+            deviceID=readDevID!
+        }
+        
+        if readDevID == nil {
+            let nxtNum=Int.random(in: 0..<tfqs.count)
+            var crdSet=tfqs[nxtNum]
+            crdSet.shuffle()
+            for i in 0..<4 {
+                cs[i]=card(CardIcon: cardIcon.allCases.randomElement()!, numb: crdSet[i])
+            }
+        } else {
+            loadData(isIncremental: false)
+            print("load")
+        }
+        print("My id is \(deviceID)")
+        saveData()
+        
         updtExpr()
-        updtLvlName()
     }
         
     @Published var cardsClickable:Bool
     
-    func nextCardView() {
+    let viewShowDelay = 0.15
+    let viewShowOrder=[1,3,0,2]
+    var inTransition=false
+    let softHapticsEngine=UIImpactFeedbackGenerator.init(style: .soft)
+    let lightHapticsEngine=UIImpactFeedbackGenerator.init(style: .light)
+    let mediumHapticsEngine=UIImpactFeedbackGenerator.init(style: .medium)
+    let heavyHapticsEngine=UIImpactFeedbackGenerator.init(style: .heavy)
+    let rigidHapticsEngine=UIImpactFeedbackGenerator.init(style: .rigid)
+    enum haptic {
+        case soft
+        case light
+        case medium
+        case heavy
+        case rigid
+    }
+    func generateHaptic(hap:haptic) {
+        switch hap {
+        case .soft:
+            softHapticsEngine.impactOccurred()
+        case .light:
+            lightHapticsEngine.impactOccurred()
+        case .medium:
+            mediumHapticsEngine.impactOccurred()
+        case .heavy:
+            heavyHapticsEngine.impactOccurred()
+        case .rigid:
+            rigidHapticsEngine.impactOccurred()
+        }
+    }
+    
+    func nextCardView(nxtCardSet:[card]?) {
+        if inTransition {
+            return
+        }
+        answerShow=""
+        nxtState = .ready
+        cardsShouldVisible=Array(repeating: false, count: 4)
         curQuestionID=UUID()
-        let nxtNum=Int.random(in: 0..<tfqs.count)
-        var crdSet=tfqs[nxtNum]
-        crdSet.shuffle()
-        for i in 0..<4 {
-            cs[i]=card(CardIcon: cardIcon.allCases.randomElement()!, numb: crdSet[i])
+        inTransition=true
+        for i in 0..<viewShowOrder.count {
+            DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
+                if i == viewShowOrder.count-1 {
+                    inTransition=false
+                }
+                cardsShouldVisible[viewShowOrder[i]]=true
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.4, execute: {
+                    rigidHapticsEngine.impactOccurred()
+                })
+            })
+        }
+        
+        if nxtCardSet == nil {
+            let nxtNum=Int.random(in: 0..<tfqs.count)
+            var crdSet=tfqs[nxtNum]
+            crdSet.shuffle()
+            for i in 0..<4 {
+                cs[i]=card(CardIcon: cardIcon.allCases.randomElement()!, numb: crdSet[i])
+            }
+        } else {
+            cs=nxtCardSet!
         }
 
         cA=[true,true,true,true]
@@ -162,6 +306,8 @@ class TFEngine: ObservableObject {
         updtExpr()
         stored=nil
         updtStoredExpr()
+        
+        saveData()
     }
     
     enum daBtn:CaseIterable {
@@ -178,29 +324,61 @@ class TFEngine: ObservableObject {
     var konamiLog:[daBtn]=[]
     ***REMOVED***
     
+    func konamiLimitation() -> Int {
+        var rturn = 0
+        for (itrDeviceID,itrLvl) in deviceData {
+            if itrDeviceID != deviceID {
+                rturn+=itrLvl-1
+            }
+        }
+        rturn+=1
+        return rturn
+    }
+    
     func logButtonKonami(button:daBtn) {
         konamiLog.append(button)
         if konamiLog.count > 11 {
             konamiLog.remove(at: 0)
         }
         if konamiLog == konamiCode {
-            konamiCheatVisible=true
             cardsClickable=false
+            konamiCheatVisible=true
+            cardsShouldVisible=Array(repeating: false, count: 4)
+            curQuestionID=UUID()
         }
     }
     
     @Published var konamiCheatVisible:Bool=false
     
-    func konamiLvl(lvl: Int?) {
-        if (lvl != nil) {
+    @Published var cardsShouldVisible:[Bool]=[true,true,true,true]
+    
+    func konamiLvl(setLvl: Int?) {
+        if (setLvl != nil) {
             //set the level
+            if setLvl! >= konamiLimitation() {
+                deviceData[deviceID]=setLvl!-konamiLimitation()+1
+                updtLvlName()
+                saveData()
+            }
         }
         
+        reset()
+        cardsShouldVisible=Array(repeating: false, count: 4)
         cardsClickable=true
+        inTransition=true
         konamiCheatVisible=false
+        for i in 0..<viewShowOrder.count {
+            DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay+0.1, execute: { [self] in
+                if i == viewShowOrder.count-1 {
+                    inTransition=false
+                }
+                cardsShouldVisible[viewShowOrder[i]]=true
+            })
+        }
     }
     
     func handleOprPress(Opr:opr) {
+        mediumHapticsEngine.impactOccurred()
         // replace whatever operator is currently in use. if there's nothing in the expression right now, turn the next number negative.
         
         if (mainVal == nil) {
@@ -219,7 +397,7 @@ class TFEngine: ObservableObject {
     let cardAniDur=0.17
             
     func handleNumberPress(index: Int) {
-        // push into konami list and check for konami
+        mediumHapticsEngine.impactOccurred()
         
         if !cA[index] {
             return
@@ -272,7 +450,8 @@ class TFEngine: ObservableObject {
             let mathRes:mathResult=doMath(addendB: addendB, noCardsActive: !pretendcA.contains(true))
             if mathRes == .success {
                 cA[index]=false
-                nextCardView()
+                nextCardView(nxtCardSet: nil)
+                incrementLvl()
             } else if mathRes == .cont {
                 withAnimation(.easeInOut(duration: cardAniDur)) {
                     cA[index]=false
@@ -280,6 +459,12 @@ class TFEngine: ObservableObject {
             }
         }
         updtExpr()
+    }
+    
+    func incrementLvl() {
+        deviceData[deviceID]!+=1
+        updtLvlName()
+        saveData()
     }
     
     func doMath(addendB: Double, noCardsActive: Bool) -> mathResult {
@@ -328,6 +513,7 @@ class TFEngine: ObservableObject {
     }
     
     func doStore() {
+        mediumHapticsEngine.impactOccurred()
         //store can only be called if there's something in store or in the expression
         
         //handle operator selected
@@ -366,7 +552,8 @@ class TFEngine: ObservableObject {
                     let tmp=stored!.value
                     stored=nil
                     if doMath(addendB: tmp, noCardsActive: !cA.contains(true)) == .success {
-                        nextCardView()
+                        nextCardView(nxtCardSet: nil)
+                        incrementLvl()
                     }
                 }
             }
@@ -374,5 +561,61 @@ class TFEngine: ObservableObject {
         
         updtStoredExpr()
         updtExpr()
+    }
+    
+    @Published var answerShow:String = "888"
+    @Published var answerShowOpacity:Double=0
+    enum NxtState {
+        case showingAnswer
+        case inTransition
+        case ready
+    }
+    var nxtState:NxtState = .ready
+    let ansBrightenTime=0.4
+    let ansBlinkTime=0.3
+    func nxtButtonPressed() {
+        if nxtState == .inTransition {
+            if !inTransition {
+                nxtState = .showingAnswer
+                answerShow=""
+            } else {
+                return
+            }
+        }
+        if nxtState == .ready {
+            softHapticsEngine.impactOccurred()
+            // show the answer
+            nxtState = .inTransition
+            var ansCs=Array(repeating: 0, count: 4)
+            for i in 0..<4 {
+                ansCs[i]=cs[i].numb-1
+            }
+            ansCs=ansCs.sorted()
+            answerShowOpacity=0
+            answerShow = cachedSols[13*13*13*ansCs[0]+13*13*ansCs[1]+13*ansCs[2]+ansCs[3]]!
+            withAnimation(.easeInOut(duration:ansBrightenTime)) {
+                answerShowOpacity = 1.0
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now()+ansBrightenTime, execute: { [self] in
+                withAnimation(.easeInOut(duration:ansBlinkTime)) {
+                    answerShowOpacity = 0.7
+                }
+            })
+            DispatchQueue.main.asyncAfter(deadline: .now()+ansBrightenTime+ansBlinkTime, execute: { [self] in
+                withAnimation(.easeInOut(duration:ansBlinkTime)) {
+                    answerShowOpacity = 1.0
+                }
+            })
+            DispatchQueue.main.asyncAfter(deadline: .now()+ansBlinkTime*2+ansBrightenTime, execute: { [self] in
+                if nxtState == .inTransition {
+                    nxtState = .showingAnswer
+                }
+            })
+        }
+        if nxtState == .showingAnswer && !inTransition {
+            mediumHapticsEngine.impactOccurred()
+            nxtState = .ready
+            nextCardView(nxtCardSet: nil)
+        }
     }
 }

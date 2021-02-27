@@ -31,14 +31,14 @@ struct TopBar: View {
         ZStack(alignment: .top) {
             HStack {
                 Button(action: {
-                    if !tfengine.konamiCheatVisible {
-                        presentationMode.wrappedValue.dismiss()
-                        tfengine.reset()
-                        tfengine.generateHaptic(hap: .medium)
-                    }
+                    presentationMode.wrappedValue.dismiss()
+                    tfengine.cardsOnScreen=false
+                    tfengine.reset()
+                    tfengine.generateHaptic(hap: .medium)
                 }, label: {
                     navBarButton(symbolName: "chevron.backward", active: !tfengine.konamiCheatVisible)
                 }).buttonStyle(topBarButtonStyle())
+                .disabled(tfengine.konamiCheatVisible)
                 Spacer()
                 Button(action: {
                     if tfengine.konamiCheatVisible {
@@ -61,12 +61,15 @@ struct TopBar: View {
                 Button(action: {
                     tfengine.generateHaptic(hap: .medium)
                     achPresented=true
+                    tfengine.cardsOnScreen=false
                 }, label: {
                     Text("\(tfengine.lvlName) • Question \(String(tfengine.lvl))")
                         .font(.system(size: 18, weight: .regular, design: .rounded))
                         .foregroundColor(.init("TextColor"))
                 }).buttonStyle(textButtonStyle())
-                .sheet(isPresented: $achPresented, content: {
+                .sheet(isPresented: $achPresented,onDismiss: {
+                    tfengine.cardsOnScreen=true
+                }, content: {
                     achievementView()
                 })
             }.padding(.top,25)

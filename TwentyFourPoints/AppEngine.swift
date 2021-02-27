@@ -101,6 +101,8 @@ class TFEngine: ObservableObject {
     
     var buttonsCanPress=false
     
+    var cardsOnScreen = false
+    
     var deviceData = [String: Int]()
     
     let defaults=UserDefaults.standard
@@ -277,6 +279,14 @@ class TFEngine: ObservableObject {
         }
     }
     
+    func playCardsHaptic() {
+        for i in 0..<viewShowOrder.count {
+            DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
+                softHapticsEngine.impactOccurred()
+            })
+        }
+    }
+    
     func nextCardView(nxtCardSet:[card]?) {
         if inTransition {
             return
@@ -286,14 +296,21 @@ class TFEngine: ObservableObject {
         cardsShouldVisible=Array(repeating: false, count: 4)
         curQuestionID=UUID()
         inTransition=true
+        if cardsOnScreen {
+            playCardsHaptic()
+        }
         for i in 0..<viewShowOrder.count {
-            DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
-                if i == viewShowOrder.count-1 {
-                    inTransition=false
-                }
+            if cardsOnScreen {
+                DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
+                    if i == viewShowOrder.count-1 {
+                        inTransition=false
+                    }
+                    cardsShouldVisible[viewShowOrder[i]]=true
+                })
+            } else {
+                inTransition=false
                 cardsShouldVisible[viewShowOrder[i]]=true
-                softHapticsEngine.impactOccurred()
-            })
+            }
         }
         
         if nxtCardSet == nil {
@@ -310,7 +327,11 @@ class TFEngine: ObservableObject {
         cA=[true,true,true,true]
 
         selectedOperator=nil
-        withAnimation(.easeInOut(duration: cardAniDur)) {
+        if cardsOnScreen {
+            withAnimation(.easeInOut(duration: cardAniDur)) {
+                oprButtonActive=false
+            }
+        } else {
             oprButtonActive=false
         }
         nxtNumNeg=nil
@@ -353,6 +374,7 @@ class TFEngine: ObservableObject {
             konamiLog.remove(at: 0)
         }
         if konamiLog == konamiCode {
+            cardsOnScreen=false
             cardsClickable=false
             konamiCheatVisible=true
             cardsShouldVisible=Array(repeating: false, count: 4)
@@ -365,6 +387,7 @@ class TFEngine: ObservableObject {
     @Published var cardsShouldVisible:[Bool]=[true,true,true,true]
     
     func konamiLvl(setLvl: Int?) {
+        cardsOnScreen=true
         if (setLvl != nil) {
             //set the level
             if setLvl! >= konamiLimitation() {

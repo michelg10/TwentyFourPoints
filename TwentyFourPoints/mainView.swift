@@ -141,6 +141,7 @@ struct mainView: View {
                     Button(action: {
                         tfengine.generateHaptic(hap: .medium)
                         navAction=1
+                        tfengine.cardsOnScreen=true
                     }, label: {
                         borederedButton(title: "Play", clicked: playClicked)
                     }).buttonStyle(nilButtonStyle())

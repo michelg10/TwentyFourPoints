@@ -95,7 +95,7 @@ struct buttons: View {
                                 .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height:CGFloat(textInpHei), alignment: .leading)
                         }
                     }).buttonStyle(bottomButtonStyle())
-                    .disabled(tfengine.expr=="" && tfengine.storedExpr == nil || buttonsDisabled)
+                    .disabled(tfengine.expr=="" && tfengine.storedExpr == nil || buttonsDisabled || tfengine.nxtState != .ready)
                     Spacer()
                     Button(action: {
                         tfengine.doStore()
@@ -121,7 +121,7 @@ struct buttons: View {
                     })
                     .id("StoreButton")
                     .buttonStyle(bottomButtonStyle())
-                    .disabled(tfengine.storedExpr == nil && !tfengine.oprButtonActive || buttonsDisabled)
+                    .disabled(tfengine.storedExpr == nil && !tfengine.oprButtonActive || buttonsDisabled || tfengine.nxtState != .ready)
                 }
             }.frame(height: CGFloat(textInpHei))
             let bottomButtonFillColor=Color.init(tfengine.oprButtonActive && !buttonsDisabled ? "ButtonColorActive" : "ButtonColorInactive")
@@ -132,28 +132,28 @@ struct buttons: View {
                 }, label: {
                     bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "+", id: "BottomButtonAdd")
                 }).buttonStyle(bottomButtonStyle())
-                .disabled(!tfengine.oprButtonActive || buttonsDisabled)
+                .disabled(!tfengine.oprButtonActive || buttonsDisabled || tfengine.nxtState != .ready)
                 .modifier(konamiLog(tfengine: tfengine,daBtn: .add))
                 Button(action: {
                     tfengine.handleOprPress(Opr: .sub)
                 }, label: {
                     bottomButtonView(fillColor: Color.init(buttonsDisabled ? "ButtonColorInactive" : "ButtonColorActive"), textColor: Color.init(buttonsDisabled ? "ButtonInactiveTextColor" : "TextColor"), text: "-", id: "BottomButtonSub")
                 }).buttonStyle(bottomButtonStyle())
-                .disabled(buttonsDisabled)
+                .disabled(buttonsDisabled || tfengine.nxtState != .ready)
                 .modifier(konamiLog(tfengine: tfengine,daBtn: .sub))
                 Button(action: {
                     tfengine.handleOprPress(Opr: .mul)
                 }, label: {
                     bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "×", id: "BottomButtonMul")
                 }).buttonStyle(bottomButtonStyle())
-                .disabled(!tfengine.oprButtonActive || buttonsDisabled)
+                .disabled(!tfengine.oprButtonActive || buttonsDisabled || tfengine.nxtState != .ready)
                 .modifier(konamiLog(tfengine: tfengine,daBtn: .mul))
                 Button(action: {
                     tfengine.handleOprPress(Opr: .div)
                 }, label: {
                     bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "÷", id: "BottomButtonDiv")
                 }).buttonStyle(bottomButtonStyle())
-                .disabled(!tfengine.oprButtonActive || buttonsDisabled)
+                .disabled(!tfengine.oprButtonActive || buttonsDisabled || tfengine.nxtState != .ready)
                 .modifier(konamiLog(tfengine: tfengine,daBtn: .div))
             }
             
@@ -164,7 +164,7 @@ struct buttons: View {
                     }, label: {
                         bottomButtonView(fillColor: Color.init(tfengine.cA[index] && !buttonsDisabled ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(tfengine.cA[index] && !buttonsDisabled ? "TextColor" : "ButtonInactiveTextColor"), text: String(tfengine.cs[index].numb), id: "BottomButtonNum"+String(index))
                     }).buttonStyle(bottomButtonStyle())
-                    .disabled(!tfengine.cA[index] || buttonsDisabled)
+                    .disabled(!tfengine.cA[index] || buttonsDisabled || tfengine.nxtState != .ready)
                     .modifier(konamiLog(tfengine: tfengine,daBtn: TFEngine.daBtn.allCases[4+index]))
                 }
             }

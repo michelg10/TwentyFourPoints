@@ -16,18 +16,18 @@ struct borederedButton: View {
                 .frame(width:182,height:53)
                 .animation(nil)
                 .foregroundColor(.init(clicked ? "HomeButtonPressed" : "HomeButton"))
-                .animation(.easeInOut(duration: 0.17))
+                .animation(.easeInOut(duration: 0.14))
             RoundedRectangle(cornerRadius: 9,style: .continuous)
                 .stroke(Color.white, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                 .animation(nil)
                 .colorMultiply(Color.init(clicked ? "CardForegroundBlackInactive" : "CardForegroundBlackActive"))
-                .animation(.easeInOut(duration: 0.17))
+                .animation(.easeInOut(duration: 0.14))
                 .frame(width:176,height:47)
             Text(title)
                 .foregroundColor(.white)
                 .animation(nil)
                 .colorMultiply(.init(clicked ? "CardForegroundBlackInactive" : "CardForegroundBlackActive"))
-                .animation(.easeInOut(duration: 0.17))
+                .animation(.easeInOut(duration: 0.14))
                 .font(.system(size: 24, weight: .medium, design: .rounded))
         }
     }
@@ -69,6 +69,7 @@ struct mainView: View {
     @State var playClicked=false
     @State var solverClicked=false
     @State var navAction: Int? = 0
+    @State var achPresented: Bool = false
     
     var tfengine: TFEngine
     var body: some View {
@@ -94,26 +95,35 @@ struct mainView: View {
                     Text("Achievements")
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
                         .offset(x: 0, y: 5)
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 9)
-                            .frame(width:266,height:53)
-                            .foregroundColor(.init("AchievementColor"))
-                        HStack {
-                            Image("ProfilePlaceholder")
-                                .resizable()
-                                .frame(width:42,height:42)
-                                .clipShape(Circle())
-                                .padding(.leading,8)
-                                .padding(.trailing,2)
-                            VStack(alignment: .leading) {
-                                Text("Placeholder")
-                                    .font(.system(size: 18, weight: .medium, design: .rounded))
-                                Text("420 questions to next rank")
-                                    .font(.system(size: 12, weight: .regular, design: .rounded))
-                                    .foregroundColor(.secondary)
+                    Button(action: {
+                        tfengine.generateHaptic(hap: .medium)
+                        achPresented=true
+                    }, label: {
+                        ZStack(alignment: .leading) {
+                            RoundedRectangle(cornerRadius: 9)
+                                .frame(width:266,height:53)
+                                .foregroundColor(.init("AchievementColor"))
+                            HStack {
+                                Image("ProfilePlaceholder")
+                                    .resizable()
+                                    .frame(width:42,height:42)
+                                    .clipShape(Circle())
+                                    .padding(.leading,8)
+                                    .padding(.trailing,2)
+                                VStack(alignment: .leading) {
+                                    Text("Placeholder")
+                                        .foregroundColor(.init("TextColor"))
+                                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                                    Text("420 questions to next rank")
+                                        .font(.system(size: 12, weight: .regular, design: .rounded))
+                                        .foregroundColor(.secondary)
+                                }
                             }
                         }
-                    }
+                    }).buttonStyle(topBarButtonStyle())
+                    .sheet(isPresented: $achPresented, content: {
+                        achievementView()
+                    })
                 }
                 Spacer()
                 VStack {

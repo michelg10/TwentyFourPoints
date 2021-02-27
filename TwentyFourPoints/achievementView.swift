@@ -9,7 +9,7 @@ import SwiftUI
 
 struct achievementView: View {
     var body: some View {
-        Text("Achievements")
+        Text("Achievements in development")
     }
 }
 

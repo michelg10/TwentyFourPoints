@@ -108,8 +108,11 @@ class TFEngine: ObservableObject {
     var deviceID: String
         
     func saveData() {
+        icloudstore.removeObject(forKey: "devemptylvl")
+        precondition(deviceID != "empty")
         defaults.setValue(deviceData[deviceID], forKey: "myLvl")
         defaults.setValue(deviceID, forKey: "deviceID")
+        deviceData.removeValue(forKey: "empty")
         let deviceList:[String]=Array(deviceData.keys)
         print(deviceList)
         icloudstore.set(deviceList, forKey: "devices")
@@ -149,9 +152,15 @@ class TFEngine: ObservableObject {
     func loadData(isIncremental: Bool) {
         let devices=icloudstore.array(forKey: "devices") as! [String]
         for i in 0..<devices.count {
-            let deviceLevel = icloudstore.object(forKey: "dev"+devices[i]+"lvl") as! Int
-            deviceData[devices[i]]=deviceLevel
-            print("Set \(devices[i]) as \(deviceLevel)")
+            if devices[i] == "empty" {
+                continue
+            }
+            let tryDeviceLevel = icloudstore.object(forKey: "dev"+devices[i]+"lvl")
+            if tryDeviceLevel != nil {
+                let deviceLevel=tryDeviceLevel as! Int
+                deviceData[devices[i]]=deviceLevel
+                print("Set \(devices[i]) as \(deviceLevel)")
+            }
         }
         deviceData[deviceID]=(defaults.object(forKey: "myLvl") as! Int)
         updtLvlName()
@@ -171,6 +180,8 @@ class TFEngine: ObservableObject {
         for key in allKeys {
             NSUbiquitousKeyValueStore.default.removeObject(forKey: key)
         }
+        UserDefaults.standard.synchronize()
+        icloudstore.synchronize()
     }
     
     let icloudstore: NSUbiquitousKeyValueStore
@@ -201,10 +212,10 @@ class TFEngine: ObservableObject {
         // store in the cloud: All level information and card information
         
         NotificationCenter.default.addObserver(self, selector: #selector(storeUpdated(notification:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: icloudstore)
-        icloudstore.synchronize()
                 
         // fetch device ID from UserDefaults
         let readDevID=defaults.string(forKey: "deviceID")
+//        readDevID="C1CF3B9C-CD47-4CB6-BC45-06303F6F1613"
         
         if readDevID == nil {
             deviceID=UUID().uuidString
@@ -213,6 +224,8 @@ class TFEngine: ObservableObject {
         } else {
             deviceID=readDevID!
         }
+        
+        icloudstore.synchronize()
         
         if readDevID == nil {
             let nxtNum=Int.random(in: 0..<tfqs.count)
@@ -229,6 +242,7 @@ class TFEngine: ObservableObject {
         saveData()
         
         updtExpr()
+        updtLvlName()
     }
         
     @Published var cardsClickable:Bool
@@ -278,9 +292,7 @@ class TFEngine: ObservableObject {
                     inTransition=false
                 }
                 cardsShouldVisible[viewShowOrder[i]]=true
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.4, execute: {
-                    rigidHapticsEngine.impactOccurred()
-                })
+                softHapticsEngine.impactOccurred()
             })
         }
         
@@ -570,7 +582,7 @@ class TFEngine: ObservableObject {
         case inTransition
         case ready
     }
-    var nxtState:NxtState = .ready
+    @Published var nxtState:NxtState = .ready
     let ansBrightenTime=0.4
     let ansBlinkTime=0.3
     func nxtButtonPressed() {
@@ -584,6 +596,7 @@ class TFEngine: ObservableObject {
         }
         if nxtState == .ready {
             softHapticsEngine.impactOccurred()
+            expr=""
             // show the answer
             nxtState = .inTransition
             var ansCs=Array(repeating: 0, count: 4)

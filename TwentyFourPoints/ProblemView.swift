@@ -20,31 +20,32 @@ struct ProblemView: View {
                 TopBar(tfengine:tfengine)
                     .padding(.bottom,20)
                 ZStack {
-                    HStack {
-                        CardLayout(tfengine: tfengine, cA: tfengine.cA, cs: tfengine.cs, operational: tfengine.cardsClickable, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString)
-                            .padding(.horizontal,30)
-                            .id("MasterCardLayoutView")
-                            .animation(.spring())
-                            .offset(x: (draggedAmt.width < 0 ? -2*sqrt(-draggedAmt.width) : draggedAmt.width) + displaceDrag, y: 0)
-                            .background(Color.init(white: 0,opacity: 0.0001))
-                            .simultaneousGesture(DragGesture()
-                                                    .onChanged({ (value) in
-                                                        draggedAmt=value.translation
-                                                        tfengine.cardsClickable=false
-                                                    }).onEnded({ (value) in
-                                                        if value.predictedEndTranslation.width > UIScreen.main.bounds.width*0.4 {
-                                                            draggedAmt = .zero
-                                                            tfengine.nextCardView(nxtCardSet: nil)
-                                                        } else {
-                                                            draggedAmt = .zero
-                                                        }
-                                                        tfengine.cardsClickable=true
-                                                    }))
-                    }
                     if tfengine.konamiCheatVisible {
                         konamiView(tfengine: tfengine, levelInput: tfengine.lvl)
                             .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width, y: 0), removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
                             .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                    } else {
+                        HStack {
+                            CardLayout(tfengine: tfengine, cA: tfengine.cA, cs: tfengine.cs, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString)
+                                .padding(.horizontal,30)
+                                .id("MasterCardLayoutView")
+                                .animation(.spring())
+                                .offset(x: (draggedAmt.width < 0 ? -2*sqrt(-draggedAmt.width) : draggedAmt.width) + displaceDrag, y: 0)
+                                .background(Color.init(white: 0,opacity: 0.0001))
+                                .simultaneousGesture(DragGesture()
+                                                        .onChanged({ (value) in
+                                                            draggedAmt=value.translation
+                                                            tfengine.cardsClickable=false
+                                                        }).onEnded({ (value) in
+                                                            if value.predictedEndTranslation.width > UIScreen.main.bounds.width*0.4 {
+                                                                draggedAmt = .zero
+                                                                tfengine.nextCardView(nxtCardSet: nil)
+                                                            } else {
+                                                                draggedAmt = .zero
+                                                            }
+                                                            tfengine.cardsClickable=true
+                                                        }))
+                        }
                     }
                 }
                 buttons(tfengine: tfengine, buttonsDisabled: tfengine.konamiCheatVisible)

@@ -12,11 +12,19 @@ struct topBarButtonStyle: ButtonStyle {
         configuration.label
             .saturation(configuration.isPressed ? 0.95 : 1)
             .brightness(configuration.isPressed ? 0.03 : 0) //0.05
-            .animation(.easeInOut(duration: 0.07))
+            .animation(.easeInOut(duration: 0.14))
+    }
+}
+struct textButtonStyle: ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.6 : 1.0)
+            .animation(.easeInOut(duration: 0.14))
     }
 }
 
 struct TopBar: View {
+    @State var achPresented: Bool = false
     @ObservedObject var tfengine: TFEngine
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var body: some View {
@@ -50,8 +58,17 @@ struct TopBar: View {
             VStack {
                 Text("24 Points")
                     .font(.system(size: 32, weight: .bold, design: .rounded))
-                Text("\(tfengine.lvlName) • Question \(String(tfengine.lvl))")
-                    .font(.system(size: 18, weight: .regular, design: .rounded))
+                Button(action: {
+                    tfengine.generateHaptic(hap: .medium)
+                    achPresented=true
+                }, label: {
+                    Text("\(tfengine.lvlName) • Question \(String(tfengine.lvl))")
+                        .font(.system(size: 18, weight: .regular, design: .rounded))
+                        .foregroundColor(.init("TextColor"))
+                }).buttonStyle(textButtonStyle())
+                .sheet(isPresented: $achPresented, content: {
+                    achievementView()
+                })
             }.padding(.top,25)
         }
     }

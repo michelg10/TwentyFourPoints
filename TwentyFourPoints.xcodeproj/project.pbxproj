@@ -124,11 +124,11 @@
 				F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */,
 				F0B2E21B25D91652007DF20E /* AppEngine.swift */,
 				F0B2E1D725D8D41D007DF20E /* ProblemView.swift */,
-				F00EAB1A25E1F6ED009F7702 /* answer.swift */,
-				F055927F25E8694400688D2C /* AchievementData.swift */,
 				F0E7271625DFC7BF00403CDD /* TopBar.swift */,
 				F02AB9F925E39EFD008EBE91 /* navBarButton.swift */,
 				F0B5B44425E28FBE0073606E /* mainView.swift */,
+				F00EAB1A25E1F6ED009F7702 /* answer.swift */,
+				F055927F25E8694400688D2C /* AchievementData.swift */,
 				F0A16D8F25E76C5600C46C62 /* achievementView.swift */,
 				F02AB9F425E39EA7008EBE91 /* SolverView.swift */,
 				F02AB9FE25E4AF11008EBE91 /* konamiView.swift */,
@@ -472,6 +472,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;
@@ -485,7 +486,7 @@
 				PRODUCT_MODULE_NAME = TwentyFourPoints;
 				PRODUCT_NAME = TwentyFourPoints;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -496,6 +497,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;
@@ -509,7 +511,7 @@
 				PRODUCT_MODULE_NAME = TwentyFourPoints;
 				PRODUCT_NAME = "24 Points";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

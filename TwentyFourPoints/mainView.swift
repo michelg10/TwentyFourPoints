@@ -92,41 +92,50 @@ struct mainView: View {
                         .font(.system(size: 24, weight: .medium, design: .rounded))
                 }
                 Spacer()
-                VStack {
-                    Text("Achievements")
-                        .font(.system(size: 24, weight: .semibold, design: .rounded))
-                        .offset(x: 0, y: 5)
-                    Button(action: {
-                        tfengine.generateHaptic(hap: .medium)
-                        achPresented=true
-                    }, label: {
-                        ZStack(alignment: .leading) {
-                            HStack {
-                                Image("ProfilePlaceholder")
-                                    .resizable()
-                                    .frame(width:42,height:42)
-                                    .clipShape(Circle())
-                                    .padding(.leading,8)
-                                    .padding(.trailing,2)
-                                VStack(alignment: .leading) {
-                                    Text("Placeholder")
-                                        .foregroundColor(.init("TextColor"))
-                                        .font(.system(size: 18, weight: .medium, design: .rounded))
-                                    Text("8888 questions to next rank")
-                                        .font(.system(size: 12, weight: .regular, design: .rounded))
-                                        .foregroundColor(.secondary)
-                                }
-                            }.padding(.trailing,25)
-                        }.background(
-                            RoundedRectangle(cornerRadius: 9)
-                                .frame(height:53)
-                                .foregroundColor(.init("AchievementColor"))
-                        )
-                    }).animation(nil)
-                    .buttonStyle(topBarButtonStyle())
-                    .sheet(isPresented: $achPresented, content: {
-                        achievementView()
-                    })
+                if tfengine.getLvlIndex(getLvl: tfengine.lvl) == -1 {
+                    Text("Reach Question \(String(achievement[0].lvlReq)) to unlock achievements")
+                        .font(.system(size: 20, weight: .semibold, design: .rounded))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal,30)
+                } else {
+                    VStack {
+                        Text("Achievements")
+                            .font(.system(size: 24, weight: .semibold, design: .rounded))
+                            .offset(x: 0, y: 5)
+                        Button(action: {
+                            tfengine.generateHaptic(hap: .medium)
+                            achPresented=true
+                        }, label: {
+                            ZStack(alignment: .leading) {
+                                HStack {
+                                    AchievementPropic(imageName: achievement[tfengine.getLvlIndex(getLvl: tfengine.lvl)].name, active: true)
+                                        .animation(nil)
+                                        .frame(width:42,height:42)
+                                        .padding(.leading,8)
+                                        .padding(.trailing,2)
+                                    VStack(alignment: .leading) {
+                                        Text(achievement[tfengine.getLvlIndex(getLvl: tfengine.lvl)].name)
+                                            .animation(nil)
+                                            .foregroundColor(.init("TextColor"))
+                                            .font(.system(size: 18, weight: .medium, design: .rounded))
+                                        Text(tfengine.getLvlIndex(getLvl: tfengine.lvl) == achievement.count-1 ? "You've reached the final rank 😎" : "\(String(achievement[tfengine.getLvlIndex(getLvl: tfengine.lvl)+1].lvlReq-tfengine.lvl)) questions to next rank")
+                                            .animation(nil)
+                                            .font(.system(size: 12, weight: .regular, design: .rounded))
+                                            .foregroundColor(.secondary)
+                                    }
+                                }.padding(.trailing,25)
+                            }.background(
+                                RoundedRectangle(cornerRadius: 9)
+                                    .animation(nil)
+                                    .frame(height:53)
+                                    .foregroundColor(.init("AchievementColor"))
+                            )
+                        })
+                        .buttonStyle(topBarButtonStyle())
+                        .sheet(isPresented: $achPresented, content: {
+                            achievementView(tfengine: tfengine)
+                        })
+                    }
                 }
                 Spacer()
                 VStack {
@@ -179,6 +188,6 @@ struct mainView: View {
 
 struct mainView_Previews: PreviewProvider {
     static var previews: some View {
-        mainView(tfengine: TFEngine())
+        mainView(tfengine: TFEngine(isPreview: true))
     }
 }

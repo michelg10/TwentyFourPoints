@@ -63,6 +63,6 @@ struct SolverView: View {
 
 struct SolverView_Previews: PreviewProvider {
     static var previews: some View {
-        SolverView(tfengine: TFEngine())
+        SolverView(tfengine: TFEngine(isPreview: true))
     }
 }

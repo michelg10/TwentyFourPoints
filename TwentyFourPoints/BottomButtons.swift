@@ -177,7 +177,7 @@ struct buttons: View {
 
 struct BottomButtons_Previews: PreviewProvider {
     static var previews: some View {
-        buttons(tfengine: TFEngine(), buttonsDisabled: false)
+        buttons(tfengine: TFEngine(isPreview: true), buttonsDisabled: false)
             .preferredColorScheme(.light)
     }
 }

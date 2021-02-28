@@ -94,7 +94,7 @@ struct CardLayout: View {
 
 struct CardLayout_Previews: PreviewProvider {
     static var previews: some View {
-        let tfengine=TFEngine()
+        let tfengine=TFEngine(isPreview: true)
         Group {
             CardLayout(tfengine: tfengine, cA:tfengine.cA,cs: tfengine.cs,operational: true, primID: "")
                 .preferredColorScheme(.light)

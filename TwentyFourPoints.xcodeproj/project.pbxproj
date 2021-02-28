@@ -8,11 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		F00EAB1B25E1F6ED009F7702 /* answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00EAB1A25E1F6ED009F7702 /* answer.swift */; };
+		F01DAD3D25EBEFBC0096740B /* AchievementList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DAD3C25EBEFBC0096740B /* AchievementList.swift */; };
+		F01DAD4925EBF2D00096740B /* personaFocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DAD4825EBF2D00096740B /* personaFocusView.swift */; };
 		F02AB9F525E39EA7008EBE91 /* SolverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F425E39EA7008EBE91 /* SolverView.swift */; };
 		F02AB9FA25E39EFD008EBE91 /* navBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F925E39EFD008EBE91 /* navBarButton.swift */; };
 		F02AB9FF25E4AF11008EBE91 /* konamiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9FE25E4AF11008EBE91 /* konamiView.swift */; };
 		F055928025E8694400688D2C /* AchievementData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F055927F25E8694400688D2C /* AchievementData.swift */; };
 		F0A16D9025E76C5600C46C62 /* achievementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A16D8F25E76C5600C46C62 /* achievementView.swift */; };
+		F0AB4EF825EBDAAE009F53CB /* AchievementPropic.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AB4EF725EBDAAE009F53CB /* AchievementPropic.swift */; };
+		F0AB4EFD25EBE422009F53CB /* PersonaDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AB4EFC25EBE422009F53CB /* PersonaDetail.swift */; };
 		F0B2E1D625D8D41D007DF20E /* TwentyFourPointsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */; };
 		F0B2E1D825D8D41D007DF20E /* ProblemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E1D725D8D41D007DF20E /* ProblemView.swift */; };
 		F0B2E1DA25D8D41E007DF20E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0B2E1D925D8D41E007DF20E /* Assets.xcassets */; };
@@ -46,12 +50,16 @@
 
 /* Begin PBXFileReference section */
 		F00EAB1A25E1F6ED009F7702 /* answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = answer.swift; sourceTree = "<group>"; };
+		F01DAD3C25EBEFBC0096740B /* AchievementList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementList.swift; sourceTree = "<group>"; };
+		F01DAD4825EBF2D00096740B /* personaFocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = personaFocusView.swift; sourceTree = "<group>"; };
 		F02AB9F425E39EA7008EBE91 /* SolverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolverView.swift; sourceTree = "<group>"; };
 		F02AB9F925E39EFD008EBE91 /* navBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = navBarButton.swift; sourceTree = "<group>"; };
 		F02AB9FE25E4AF11008EBE91 /* konamiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = konamiView.swift; sourceTree = "<group>"; };
 		F055927F25E8694400688D2C /* AchievementData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementData.swift; sourceTree = "<group>"; };
 		F0A16D8F25E76C5600C46C62 /* achievementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = achievementView.swift; sourceTree = "<group>"; };
 		F0A16D9425E76E6A00C46C62 /* Twenty Four Points.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Twenty Four Points.entitlements"; sourceTree = "<group>"; };
+		F0AB4EF725EBDAAE009F53CB /* AchievementPropic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementPropic.swift; sourceTree = "<group>"; };
+		F0AB4EFC25EBE422009F53CB /* PersonaDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonaDetail.swift; sourceTree = "<group>"; };
 		F0B2E1D225D8D41D007DF20E /* TwentyFourPoints.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwentyFourPoints.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwentyFourPointsApp.swift; sourceTree = "<group>"; };
 		F0B2E1D725D8D41D007DF20E /* ProblemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProblemView.swift; sourceTree = "<group>"; };
@@ -127,9 +135,13 @@
 				F0E7271625DFC7BF00403CDD /* TopBar.swift */,
 				F02AB9F925E39EFD008EBE91 /* navBarButton.swift */,
 				F0B5B44425E28FBE0073606E /* mainView.swift */,
+				F0A16D8F25E76C5600C46C62 /* achievementView.swift */,
+				F01DAD4825EBF2D00096740B /* personaFocusView.swift */,
+				F0AB4EFC25EBE422009F53CB /* PersonaDetail.swift */,
+				F0AB4EF725EBDAAE009F53CB /* AchievementPropic.swift */,
+				F01DAD3C25EBEFBC0096740B /* AchievementList.swift */,
 				F00EAB1A25E1F6ED009F7702 /* answer.swift */,
 				F055927F25E8694400688D2C /* AchievementData.swift */,
-				F0A16D8F25E76C5600C46C62 /* achievementView.swift */,
 				F02AB9F425E39EA7008EBE91 /* SolverView.swift */,
 				F02AB9FE25E4AF11008EBE91 /* konamiView.swift */,
 				F0B2E22925D9505A007DF20E /* BottomButtons.swift */,
@@ -298,6 +310,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F01DAD4925EBF2D00096740B /* personaFocusView.swift in Sources */,
 				F02AB9FA25E39EFD008EBE91 /* navBarButton.swift in Sources */,
 				F0B5B44525E28FBE0073606E /* mainView.swift in Sources */,
 				F0E7271725DFC7BF00403CDD /* TopBar.swift in Sources */,
@@ -306,12 +319,15 @@
 				F0B2E20C25D8D496007DF20E /* Card.swift in Sources */,
 				F0A16D9025E76C5600C46C62 /* achievementView.swift in Sources */,
 				F02AB9FF25E4AF11008EBE91 /* konamiView.swift in Sources */,
+				F0AB4EF825EBDAAE009F53CB /* AchievementPropic.swift in Sources */,
+				F0AB4EFD25EBE422009F53CB /* PersonaDetail.swift in Sources */,
 				F0B2E1D625D8D41D007DF20E /* TwentyFourPointsApp.swift in Sources */,
 				F0B2E21725D91617007DF20E /* CardLayout.swift in Sources */,
 				F0B2E22A25D9505A007DF20E /* BottomButtons.swift in Sources */,
 				F02AB9F525E39EA7008EBE91 /* SolverView.swift in Sources */,
 				F0B2E21C25D91652007DF20E /* AppEngine.swift in Sources */,
 				F00EAB1B25E1F6ED009F7702 /* answer.swift in Sources */,
+				F01DAD3D25EBEFBC0096740B /* AchievementList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,7 +488,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;
@@ -497,7 +513,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;

@@ -63,7 +63,7 @@ struct ProblemView_Previews: PreviewProvider {
     static var previews: some View {
 //        ProblemView(tfengine: TFEngine())
 //            .previewDevice("iPhone 8")
-        ProblemView(tfengine: TFEngine())
+        ProblemView(tfengine: TFEngine(isPreview: true))
             .previewDevice("iPhone 12")
 //        ProblemView(tfengine: TFEngine())
 //            .previewDevice("iPhone 12 Pro Max")

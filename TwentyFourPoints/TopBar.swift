@@ -63,14 +63,20 @@ struct TopBar: View {
                     achPresented=true
                     tfengine.cardsOnScreen=false
                 }, label: {
-                    Text("\(tfengine.lvlName) • Question \(String(tfengine.lvl))")
-                        .font(.system(size: 18, weight: .regular, design: .rounded))
-                        .foregroundColor(.init("TextColor"))
+                    if tfengine.lvlName == nil {
+                        Text("Question \(String(tfengine.lvl))")
+                            .font(.system(size: 18, weight: .regular, design: .rounded))
+                            .foregroundColor(.init("TextColor"))
+                    } else {
+                        Text("\(tfengine.lvlName!) • Question \(String(tfengine.lvl))")
+                            .font(.system(size: 18, weight: .regular, design: .rounded))
+                            .foregroundColor(.init("TextColor"))
+                    }
                 }).buttonStyle(textButtonStyle())
                 .sheet(isPresented: $achPresented,onDismiss: {
                     tfengine.cardsOnScreen=true
                 }, content: {
-                    achievementView()
+                    achievementView(tfengine: tfengine)
                 })
             }.padding(.top,25)
         }
@@ -79,6 +85,6 @@ struct TopBar: View {
 
 struct TopBar_Previews: PreviewProvider {
     static var previews: some View {
-        TopBar(tfengine: TFEngine())
+        TopBar(tfengine: TFEngine(isPreview: true))
     }
 }

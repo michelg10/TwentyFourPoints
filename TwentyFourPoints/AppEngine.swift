@@ -131,14 +131,31 @@ class TFEngine: ObservableObject {
     
     var mainVal: storedVal? //put any calculation result into here
     
-    @Published var lvlName: String = "" //update this from getLvlName
+    @Published var lvlName: String? = nil //update this from getLvlName
+    func getLvlIndex(getLvl:Int) -> Int {
+        if getLvl < achievement[0].lvlReq {
+            return -1
+        }
+        for i in 0..<achievement.count {
+            if getLvl >= achievement[achievement.count-i-1].lvlReq {
+                return achievement.count-i-1
+            }
+        }
+        return -1
+    }
     func updtLvlName() {
         lvl=0
         for i in deviceData.values {
             lvl+=i-1
         }
         lvl+=1
-        lvlName = "Level"
+        let myRank=getLvlIndex(getLvl: lvl)
+        print("Rank for \(lvl) -> \(myRank)")
+        if myRank == -1 {
+            lvlName=nil
+        } else {
+            lvlName = achievement[myRank].name
+        }
     }
     
     var selectedOperator : opr?
@@ -197,23 +214,25 @@ class TFEngine: ObservableObject {
         loadData(isIncremental: true)
     }
     
-    init() {
+    init(isPreview: Bool) {
         icloudstore=NSUbiquitousKeyValueStore.default
         
         cs=[card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)]
         cA=[true, true, true,true]
         
-        lvl=1
+        lvl=696
         curQuestionID=UUID()
         cardsClickable=true
         
         cachedSols=Array(repeating: nil, count: 13*13*13*13)
+        deviceID="empty"
+        if isPreview {
+            return
+        }
         for i in 0..<tfqs.count {
             cachedSols[(tfqs[i][0]-1)*13*13*13+(tfqs[i][1]-1)*13*13+(tfqs[i][2]-1)*13+tfqs[i][3]-1]=tfas[i]
         }
-        
-        deviceID="empty"
-                
+
         // store locally: Device ID
         // store in the cloud: All level information and card information
         
@@ -502,6 +521,7 @@ class TFEngine: ObservableObject {
     }
     
     func incrementLvl() {
+        print("Increment Level")
         deviceData[deviceID]!+=1
         updtLvlName()
         saveData()

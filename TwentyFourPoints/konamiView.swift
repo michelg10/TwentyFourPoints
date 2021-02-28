@@ -74,6 +74,6 @@ struct konamiView: View {
 
 struct konamiView_Previews: PreviewProvider {
     static var previews: some View {
-        konamiView(tfengine: TFEngine(), levelInput: TFEngine().lvl)
+        konamiView(tfengine: TFEngine(isPreview: true), levelInput: TFEngine(isPreview: true).lvl)
     }
 }

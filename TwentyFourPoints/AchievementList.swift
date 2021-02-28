@@ -22,19 +22,22 @@ struct AchievementList: View {
                     .font(.system(size: 24, weight: .semibold, design: .rounded))
                 Spacer()
             }.padding(.horizontal,20)
+            
             ForEach((listType == .upNext ? (curLvl+1..<achievement.count) : (0..<curLvl+1)), id: \.self) { index in
                 if listType == .complete {
-                    NavigationLink(
-                        destination: personaFocusView(tfengine: tfengine, focusIndex: index),tag: index,selection: $navTag,
-                        label: {
-                            EmptyView()
-                        })
-                    Button(action: {
-                        tfengine.generateHaptic(hap: .medium)
-                        navTag=index
-                    }, label: {
-                        achievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)
-                    }).buttonStyle(topBarButtonStyle())
+                    ZStack {
+                        NavigationLink(
+                            destination: personaFocusView(tfengine: tfengine, focusIndex: index),tag: index,selection: $navTag,
+                            label: {
+                                EmptyView()
+                            })
+                        Button(action: {
+                            tfengine.generateHaptic(hap: .medium)
+                            navTag=index
+                        }, label: {
+                            achievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)
+                        }).buttonStyle(topBarButtonStyle())
+                    }
                 } else {
                     achievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)
                 }
@@ -62,6 +65,7 @@ struct achievementListItem: View {
                     .fill(Color.init("HiddenPictureBg"))
                     .overlay(
                         Text("?")
+                            .foregroundColor(.init("TextColor"))
                             .font(.system(size: 28, weight: .medium, design: .rounded))
                     )
                     .frame(width: 54, height: 54, alignment: .center)

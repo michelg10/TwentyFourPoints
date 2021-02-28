@@ -14,20 +14,21 @@ struct borederedButton: View {
         ZStack {
             RoundedRectangle(cornerRadius: 11,style: .continuous)
                 .frame(width:182,height:53)
+                .foregroundColor(.white)
                 .animation(nil)
-                .foregroundColor(.init(clicked ? "HomeButtonPressed" : "HomeButton"))
-                .animation(.easeInOut(duration: 0.14))
+                .colorMultiply(.init(clicked ? "HomeButtonPressed" : "HomeButton"))
+                .animation(.easeInOut(duration: 0.1))
             RoundedRectangle(cornerRadius: 9,style: .continuous)
                 .stroke(Color.white, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                 .animation(nil)
-                .colorMultiply(Color.init(clicked ? "CardForegroundBlackInactive" : "CardForegroundBlackActive"))
-                .animation(.easeInOut(duration: 0.14))
+                .colorMultiply(Color.init(clicked ? "HomeButtonForegroundActive" : "HomeButtonForegroundInactive"))
+                .animation(.easeInOut(duration: 0.1))
                 .frame(width:176,height:47)
             Text(title)
                 .foregroundColor(.white)
                 .animation(nil)
-                .colorMultiply(.init(clicked ? "CardForegroundBlackInactive" : "CardForegroundBlackActive"))
-                .animation(.easeInOut(duration: 0.14))
+                .colorMultiply(.init(clicked ? "HomeButtonForegroundActive" : "HomeButtonForegroundInactive"))
+                .animation(.easeInOut(duration: 0.1))
                 .font(.system(size: 24, weight: .medium, design: .rounded))
         }
     }
@@ -100,9 +101,6 @@ struct mainView: View {
                         achPresented=true
                     }, label: {
                         ZStack(alignment: .leading) {
-                            RoundedRectangle(cornerRadius: 9)
-                                .frame(width:266,height:53)
-                                .foregroundColor(.init("AchievementColor"))
                             HStack {
                                 Image("ProfilePlaceholder")
                                     .resizable()
@@ -114,13 +112,18 @@ struct mainView: View {
                                     Text("Placeholder")
                                         .foregroundColor(.init("TextColor"))
                                         .font(.system(size: 18, weight: .medium, design: .rounded))
-                                    Text("420 questions to next rank")
+                                    Text("8888 questions to next rank")
                                         .font(.system(size: 12, weight: .regular, design: .rounded))
                                         .foregroundColor(.secondary)
                                 }
-                            }
-                        }
-                    }).buttonStyle(topBarButtonStyle())
+                            }.padding(.trailing,25)
+                        }.background(
+                            RoundedRectangle(cornerRadius: 9)
+                                .frame(height:53)
+                                .foregroundColor(.init("AchievementColor"))
+                        )
+                    }).animation(nil)
+                    .buttonStyle(topBarButtonStyle())
                     .sheet(isPresented: $achPresented, content: {
                         achievementView()
                     })

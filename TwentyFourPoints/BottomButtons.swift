@@ -20,14 +20,16 @@ struct bottomButtonView: View {
         ZStack {
             RoundedRectangle(cornerRadius: CGFloat(buttonHei/2.0*buttonRadius),style: .continuous)
                 .fill(fillColor)
+                .animation(.easeInOut(duration:0.1))
                 .id(id+"-rect")
-                .animation(.easeInOut)
                 .frame(height:CGFloat(buttonHei))
             Text(text)
                 .font(.system(size: CGFloat(buttonHei*textSize), weight: .medium, design: .rounded))
-                .foregroundColor(textColor)
-                .id(id+"-text")
                 .animation(nil)
+                .foregroundColor(.white)
+                .colorMultiply(textColor)
+                .animation(.easeInOut(duration:0.1))
+                .id(id+"-text")
         }
     }
 }
@@ -37,7 +39,7 @@ struct bottomButtonStyle: ButtonStyle {
         configuration.label
             .saturation(configuration.isPressed ? 0.95 : 1)
             .brightness(configuration.isPressed ? 0.03 : 0) //0.05
-            .animation(.easeInOut(duration: 0.07))
+            .animation(.easeInOut(duration: 0.1))
     }
 }
 
@@ -76,6 +78,7 @@ struct buttons: View {
                         ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: CGFloat(textInpHei/2.0*buttonRadius),style: .continuous)
                                 .fill(Color.init(buttonsDisabled ? "ButtonColorInactive" : "ButtonColorActive"))
+                                .animation(.easeInOut(duration:0.1))
                                 .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .center)
                             Text(tfengine.expr)
                                 .animation(nil)
@@ -85,7 +88,7 @@ struct buttons: View {
                                 .padding(.leading, CGFloat(textInset*textField*Double(geometry.size.width-CGFloat(midSpace))))
                                 .padding(.bottom,2)
                                 .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), alignment: .leading)
-                            Text(tfengine.answerShow)
+                            Text(tfengine.answerShow.replacingOccurrences(of: "/", with: "÷").replacingOccurrences(of: "*", with: "×"))
                                 .opacity(tfengine.answerShowOpacity)
                                 .animation(.easeInOut(duration: 0.3))
                                 .foregroundColor(Color.init("TextColor"))

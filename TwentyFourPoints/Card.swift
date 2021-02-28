@@ -33,16 +33,58 @@ func getImageNameOfIcon(icn:cardIcon) -> String {
     return "suit.spade.fill"
 }
 struct numView: View {
+    var isStationary: Bool
     var CardIcon: cardIcon
     var numberString:String
     var foregroundColor:Color
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .center, spacing: 0, content: {
-                Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
-                    .foregroundColor(foregroundColor)
-                Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
-                    .foregroundColor(foregroundColor)
+                HStack {
+                    VStack {
+                        Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
+                            .if (isStationary) { view in
+                                view.animation(nil)
+                            }
+                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .foregroundColor(Color.white)
+                            .colorMultiply(foregroundColor)
+                            .animation(.easeInOut(duration:0.1))
+                        Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
+                            .if (isStationary) { view in
+                                view.animation(nil)
+                            }
+                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .foregroundColor(Color.white)
+                            .colorMultiply(foregroundColor)
+                            .animation(.easeInOut(duration:0.1))
+                    }
+                    Spacer()
+                }
+                Spacer()
+                HStack {
+                    Spacer()
+                    VStack {
+                        Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
+                            .if (isStationary) { view in
+                                view.animation(nil)
+                            }
+                            .rotationEffect(.init(degrees: 180))
+                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .foregroundColor(Color.white)
+                            .colorMultiply(foregroundColor)
+                            .animation(.easeInOut(duration:0.1))
+                        Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
+                            .if (isStationary) { view in
+                                view.animation(nil)
+                            }
+                            .rotationEffect(.init(degrees: 180))
+                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .foregroundColor(Color.white)
+                            .colorMultiply(foregroundColor)
+                            .animation(.easeInOut(duration:0.1))
+                    }
+                }
             }).frame(minWidth: 0,maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
             .padding(.vertical,geometry.size.width*0.07)
             .padding(.horizontal, geometry.size.width*0.06)
@@ -53,7 +95,6 @@ struct numView: View {
 struct cardButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
-            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
             .saturation(configuration.isPressed ? 0.95 : 1)
             .brightness(configuration.isPressed ? 0.03 : 0) //0.05
             .animation(.easeInOut(duration: 0.07))
@@ -101,24 +142,25 @@ struct cardView: View {
                 GeometryReader { geometry in
                     ZStack {
                         RoundedRectangle(cornerRadius: geometry.size.width*0.1,style: .continuous)
-                            .foregroundColor(Color(active ? "Card-Active-Bg" : "Card-Inactive-Bg"))
+                            .foregroundColor(Color.white)
+                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .colorMultiply(Color(active ? "Card-Active-Bg" : "Card-Inactive-Bg"))
+                            .animation(.easeInOut(duration:0.1))
                         RoundedRectangle(cornerRadius: geometry.size.width*0.07,style: .continuous)
-                            .stroke(foregroundColor, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
+                            .stroke(Color.white, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
+                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .colorMultiply(foregroundColor)
+                            .animation(.easeInOut(duration:0.1))
                             .padding(geometry.size.width*0.025)
                         Text(String(card.numb)).font(.system(size:(geometry.size.width)*0.55, weight: .medium, design: .rounded))
-                            .foregroundColor(foregroundColor)
                             .if (isStationary) { view in
                                 view.animation(nil)
                             }
-                        numView(CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor)
-                            .if (isStationary) { view in
-                                view.animation(nil)
-                            }
-                        numView(CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor)
-                            .rotationEffect(.init(degrees: 180))
-                            .if (isStationary) { view in
-                                view.animation(nil)
-                            }
+                            .foregroundColor(Color.white)
+                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .colorMultiply(foregroundColor)
+                            .animation(.easeInOut(duration:0.1))
+                        numView(isStationary: isStationary, CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor)
                     }
                 }
 

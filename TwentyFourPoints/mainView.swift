@@ -92,7 +92,7 @@ struct mainView: View {
                         .font(.system(size: 24, weight: .medium, design: .rounded))
                 }
                 Spacer()
-                if tfengine.getLvlIndex(getLvl: tfengine.lvl) == -1 {
+                if tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl) == -1 {
                     Text("Reach Question \(String(achievement[0].lvlReq)) to unlock achievements")
                         .font(.system(size: 20, weight: .semibold, design: .rounded))
                         .multilineTextAlignment(.center)
@@ -108,17 +108,17 @@ struct mainView: View {
                         }, label: {
                             ZStack(alignment: .leading) {
                                 HStack {
-                                    AchievementPropic(imageName: achievement[tfengine.getLvlIndex(getLvl: tfengine.lvl)].name, active: true)
+                                    AchievementPropic(imageName:tfengine.levelInfo.lvlName!, active: true)
                                         .animation(nil)
                                         .frame(width:42,height:42)
                                         .padding(.leading,8)
                                         .padding(.trailing,2)
                                     VStack(alignment: .leading) {
-                                        Text(achievement[tfengine.getLvlIndex(getLvl: tfengine.lvl)].name)
+                                        Text(tfengine.levelInfo.lvlName!)
                                             .animation(nil)
                                             .foregroundColor(.init("TextColor"))
                                             .font(.system(size: 18, weight: .medium, design: .rounded))
-                                        Text(tfengine.getLvlIndex(getLvl: tfengine.lvl) == achievement.count-1 ? "You've reached the final rank 😎" : "\(String(achievement[tfengine.getLvlIndex(getLvl: tfengine.lvl)+1].lvlReq-tfengine.lvl)) questions to next rank")
+                                        Text(tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl) == achievement.count-1 ? "You've reached the final rank 😎" : "\(String(achievement[tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl)+1].lvlReq-tfengine.levelInfo.lvl)) questions to next rank")
                                             .animation(nil)
                                             .font(.system(size: 12, weight: .regular, design: .rounded))
                                             .foregroundColor(.secondary)

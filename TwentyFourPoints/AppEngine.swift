@@ -62,7 +62,6 @@ class TFEngine: ObservableObject {
     //MARK: Updaters and Updatees
     @Published var storedExpr: String?
     @Published var expr: String = "" //update this from getExpr
-    @Published var lvl: Int //the current level
     func updtStoredExpr() {
         if stored != nil {
             storedExpr=dblToString3Precision(x: stored!.value)
@@ -131,7 +130,6 @@ class TFEngine: ObservableObject {
     
     var mainVal: storedVal? //put any calculation result into here
     
-    @Published var lvlName: String? = nil //update this from getLvlName
     func getLvlIndex(getLvl:Int) -> Int {
         if getLvl < achievement[0].lvlReq {
             return -1
@@ -143,19 +141,29 @@ class TFEngine: ObservableObject {
         }
         return -1
     }
+    
+    struct LevelInfo {
+        var lvl: Int
+        var lvlName: String?
+    }
+    @Published var levelInfo: LevelInfo
+    
     func updtLvlName() {
-        lvl=0
+        var newLvl=0 //this gaurentees an atomic lvl update
+        var nxtLvlName: String?
+        newLvl=0
         for i in deviceData.values {
-            lvl+=i-1
+            newLvl+=i-1
         }
-        lvl+=1
-        let myRank=getLvlIndex(getLvl: lvl)
-        print("Rank for \(lvl) -> \(myRank)")
+        newLvl+=1
+        let myRank=getLvlIndex(getLvl: newLvl)
+        print("Rank for \(newLvl) -> \(myRank)")
         if myRank == -1 {
-            lvlName=nil
+            nxtLvlName=nil
         } else {
-            lvlName = achievement[myRank].name
+            nxtLvlName = achievement[myRank].name
         }
+        levelInfo=LevelInfo(lvl: newLvl, lvlName: nxtLvlName)
     }
     
     var selectedOperator : opr?
@@ -221,9 +229,9 @@ class TFEngine: ObservableObject {
         cA=[true, true, true,true]
         
         if isPreview {
-            lvl=696
+            levelInfo=LevelInfo(lvl: 696, lvlName: nil)
         } else {
-            lvl=1
+            levelInfo=LevelInfo(lvl: 1, lvlName: nil)
         }
         curQuestionID=UUID()
         cardsClickable=true
@@ -248,7 +256,7 @@ class TFEngine: ObservableObject {
         
         if readDevID == nil {
             deviceID=UUID().uuidString
-            deviceData[deviceID] = lvl
+            deviceData[deviceID] = levelInfo.lvl
             print("Init \(deviceID)")
         } else {
             deviceID=readDevID!
@@ -345,9 +353,11 @@ class TFEngine: ObservableObject {
             let nxtNum=Int.random(in: 0..<tfqs.count)
             var crdSet=tfqs[nxtNum]
             crdSet.shuffle()
+            var newCs=Array(repeating:card(CardIcon: .club, numb: 0),count:4)
             for i in 0..<4 {
-                cs[i]=card(CardIcon: cardIcon.allCases.randomElement()!, numb: crdSet[i])
+                newCs[i]=card(CardIcon: cardIcon.allCases.randomElement()!, numb: crdSet[i])
             }
+            cs=newCs
         } else {
             cs=nxtCardSet!
         }
@@ -526,6 +536,8 @@ class TFEngine: ObservableObject {
                 withAnimation(.easeInOut(duration: cardAniDur)) {
                     cA[index]=false
                 }
+            } else if mathRes == .failure {
+                reset()
             }
         }
         updtExpr()
@@ -561,7 +573,6 @@ class TFEngine: ObservableObject {
             if doubleEquality(a: mainVal!.value,b: 24) {
                 return .success
             } else {
-                reset()
                 return .failure
             }
         }
@@ -572,9 +583,7 @@ class TFEngine: ObservableObject {
         selectedOperator=nil
         nxtNumNeg=nil
         withAnimation(.easeInOut(duration: cardAniDur)) {
-            for i in 0..<4 {
-                cA[i]=true
-            }
+            cA=Array(repeating: true, count: 4)
             oprButtonActive=false
         }
         mainVal=nil
@@ -622,9 +631,12 @@ class TFEngine: ObservableObject {
                 } else {
                     let tmp=stored!.value
                     stored=nil
-                    if doMath(addendB: tmp, noCardsActive: !cA.contains(true)) == .success {
+                    let mathRturn=doMath(addendB: tmp, noCardsActive: !cA.contains(true))
+                    if mathRturn == .success {
                         nextCardView(nxtCardSet: nil)
                         incrementLvl()
+                    } else if mathRturn == .failure {
+                        reset()
                     }
                 }
             }

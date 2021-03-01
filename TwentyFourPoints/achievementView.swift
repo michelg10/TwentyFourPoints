@@ -36,7 +36,7 @@ struct achievementView: View {
                     .font(.system(size: 36, weight: .semibold, design: .rounded))
                     .padding(.top, 13)
                     .padding(.bottom,17)
-                let curLvl=tfengine.getLvlIndex(getLvl: tfengine.lvl)
+                let curLvl=tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl)
                 if curLvl != -1 {
                     PersonaDetail(curLvl: curLvl)
                         .padding(.bottom,20)

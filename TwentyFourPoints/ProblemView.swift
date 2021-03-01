@@ -17,12 +17,12 @@ struct ProblemView: View {
         GeometryReader { _ in
             VStack {
                 Spacer()
-                TopBar(lvl: tfengine.lvl, lvlName: tfengine.lvlName, konamiCheatVisible: tfengine.konamiCheatVisible, tfengine:tfengine)
+                TopBar(lvl: tfengine.levelInfo.lvl, lvlName: tfengine.levelInfo.lvlName, konamiCheatVisible: tfengine.konamiCheatVisible, tfengine:tfengine)
                     .equatable()
                     .padding(.bottom,20)
                 ZStack {
                     if tfengine.konamiCheatVisible {
-                        konamiView(tfengine: tfengine, levelInput: tfengine.lvl)
+                        konamiView(tfengine: tfengine, levelInput: tfengine.levelInfo.lvl)
                             .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width, y: 0), removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
                             .animation(springAnimation)
                     } else {

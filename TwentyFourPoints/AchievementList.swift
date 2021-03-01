@@ -88,7 +88,7 @@ struct achievementListItem: View {
                 Text(achievement[index].secret && listType == .upNext ? "???" : achievement[index].name)
                     .font(.system(size: 18, weight: .medium, design: .rounded))
                     .foregroundColor(.init("TextColor"))
-                Text("Reach \(String(achievement[index].lvlReq)) levels"+(listType == .complete ? "" : " • \(String(achievement[index].lvlReq-tfengine.lvl)) left"))
+                Text("Reach \(String(achievement[index].lvlReq)) levels"+(listType == .complete ? "" : " • \(String(achievement[index].lvlReq-tfengine.levelInfo.lvl)) left"))
                     .foregroundColor(.secondary)
             }.padding(.leading,8)
             Spacer()

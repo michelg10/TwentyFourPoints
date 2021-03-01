@@ -53,6 +53,17 @@ struct AchievementList_Previews: PreviewProvider {
     }
 }
 
+extension UINavigationController: UIGestureRecognizerDelegate {
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+        interactivePopGestureRecognizer?.delegate = self
+    }
+
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return viewControllers.count > 1
+    }
+}
+
 struct achievementListItem: View {
     var index: Int
     var curLvl: Int

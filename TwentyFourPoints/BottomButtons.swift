@@ -120,6 +120,7 @@ struct TopButtonsRow: View {
                                 Spacer()
                             }.background(Color.white.opacity(0.001))
                         }).buttonStyle(contrastBottomButtonStyle())
+                        .disabled(!resetActionEnabled)
                     }
                 }
                 Spacer()

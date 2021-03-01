@@ -17,7 +17,7 @@ struct ProblemView: View {
         GeometryReader { _ in
             VStack {
                 Spacer()
-                TopBar(lvl: tfengine.lvl, lvlName: tfengine.lvlName, tfengine:tfengine)
+                TopBar(lvl: tfengine.lvl, lvlName: tfengine.lvlName, konamiCheatVisible: tfengine.konamiCheatVisible, tfengine:tfengine)
                     .equatable()
                     .padding(.bottom,20)
                 ZStack {

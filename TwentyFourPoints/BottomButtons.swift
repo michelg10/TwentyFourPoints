@@ -43,6 +43,14 @@ struct bottomButtonStyle: ButtonStyle {
     }
 }
 
+struct contrastBottomButtonStyle: ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .brightness(configuration.isPressed ? 0.1 : 0) //0.05
+            .animation(.easeInOut(duration: 0.07))
+    }
+}
+
 struct konamiLog: ViewModifier {
     let tfengine:TFEngine
     let daBtn: TFEngine.daBtn
@@ -73,35 +81,47 @@ struct TopButtonsRow: View {
     var body: some View {
         GeometryReader { geometry in
             HStack {
-                Button(action: {
-                    tfengine.reset()
-                    tfengine.generateHaptic(hap: .medium)
-                }, label: {
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: CGFloat(textInpHei/2.0*buttonRadius),style: .continuous)
-                            .fill(Color.init(resetColorEnabled ? "ButtonColorActive" : "ButtonColorInactive"))
-                            .animation(.easeInOut(duration:competitiveTime))
-                            .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .center)
-                        Text(expr)
-                            .animation(nil)
-                            .foregroundColor(.white)
-                            .colorMultiply(Color.init(resetColorEnabled ? "TextColor" : "ButtonInactiveTextColor"))
-                            .animation(.easeInOut(duration:competitiveTime))
-                            .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
-                            .padding(.leading, CGFloat(textInset*textField*Double(geometry.size.width-CGFloat(midSpace))))
-                            .padding(.bottom,2)
-                            .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), alignment: .leading)
-                        Text(answerText)
-                            .opacity(answerShowOpacity)
-                            .animation(.easeInOut(duration: 0.3))
-                            .foregroundColor(Color.init("TextColor"))
-                            .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
-                            .padding(.leading, CGFloat(textInset*textField*Double(geometry.size.width-CGFloat(midSpace))))
-                            .padding(.bottom,2)
-                            .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height:CGFloat(textInpHei), alignment: .leading)
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: CGFloat(textInpHei/2.0*buttonRadius),style: .continuous)
+                        .fill(Color.init(resetColorEnabled ? "ButtonColorActive" : "ButtonColorInactive"))
+                        .animation(.easeInOut(duration:competitiveTime))
+                        .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .center)
+                    Text(expr)
+                        .animation(nil)
+                        .foregroundColor(.white)
+                        .colorMultiply(Color.init(resetColorEnabled ? "TextColor" : "ButtonInactiveTextColor"))
+                        .animation(.easeInOut(duration:competitiveTime))
+                        .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
+                        .padding(.leading, CGFloat(textInset*textField*Double(geometry.size.width-CGFloat(midSpace))))
+                        .padding(.bottom,2)
+                        .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), alignment: .leading)
+                    Text(answerText)
+                        .opacity(answerShowOpacity)
+                        .animation(.easeInOut(duration: 0.3))
+                        .foregroundColor(Color.init("TextColor"))
+                        .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
+                        .padding(.leading, CGFloat(textInset*textField*Double(geometry.size.width-CGFloat(midSpace))))
+                        .padding(.bottom,2)
+                        .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height:CGFloat(textInpHei), alignment: .leading)
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            tfengine.reset()
+                            tfengine.generateHaptic(hap: .medium)
+                        }, label: {
+                            VStack {
+                                Spacer()
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.init("ResetButtonColor"))
+                                    .font(.system(size: CGFloat(textFontSize*textInpHei*0.9)))
+                                    .padding(.trailing,13)
+                                    .opacity(resetActionEnabled ? 1.0 : 0)
+                                    .animation(.easeInOut(duration: competitiveTime))
+                                Spacer()
+                            }.background(Color.white.opacity(0.001))
+                        }).buttonStyle(contrastBottomButtonStyle())
                     }
-                }).buttonStyle(bottomButtonStyle())
-                .disabled(!resetActionEnabled)
+                }
                 Spacer()
                 Button(action: {
                     tfengine.doStore()
@@ -186,14 +206,14 @@ struct BottomButtonRow: View {
             }, label: {
                 bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "×", id: "BottomButtonMul")
             }).buttonStyle(bottomButtonStyle())
-            .disabled(!subOprActionActive)
+            .disabled(!generalOprActionActive)
             .modifier(konamiLog(tfengine: tfengine,daBtn: .mul))
             Button(action: {
                 tfengine.handleOprPress(Opr: .div)
             }, label: {
                 bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "÷", id: "BottomButtonDiv")
             }).buttonStyle(bottomButtonStyle())
-            .disabled(!subOprActionActive)
+            .disabled(!generalOprActionActive)
             .modifier(konamiLog(tfengine: tfengine,daBtn: .div))
         }
     }

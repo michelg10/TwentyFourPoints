@@ -220,7 +220,11 @@ class TFEngine: ObservableObject {
         cs=[card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)]
         cA=[true, true, true,true]
         
-        lvl=696
+        if isPreview {
+            lvl=696
+        } else {
+            lvl=1
+        }
         curQuestionID=UUID()
         cardsClickable=true
         

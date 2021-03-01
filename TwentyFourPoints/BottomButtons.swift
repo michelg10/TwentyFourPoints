@@ -111,7 +111,7 @@ struct TopButtonsRow: View {
                             .fill(Color.init(storeRectColorEnabled ? "ButtonColorActive" : "ButtonColorInactive"))
                             .animation(.easeIn(duration: competitiveTime))
                             .frame(width: CGFloat((1-textField)*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .center)
-                        if (tfengine.storedExpr != nil) {
+                        if (storedExpr != nil) {
                             Text(storedExpr!) // important: This should and can only hold 2 decimal points
                                 .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
                                 .frame(height: CGFloat(textInpHei), alignment: .center)
@@ -138,6 +138,7 @@ struct TopButtonsRow: View {
 struct MiddleButtonRow: View {
     var colorActive: [Bool]
     var actionActive: [Bool]
+    var cards: [card]
     var tfengine: TFEngine
     
     var body: some View {
@@ -146,7 +147,7 @@ struct MiddleButtonRow: View {
                 Button(action: {
                     tfengine.handleNumberPress(index: index)
                 }, label: {
-                    bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(colorActive[index] ? "TextColor" : "ButtonInactiveTextColor"), text: String(tfengine.cs[index].numb), id: "BottomButtonNum"+String(index))
+                    bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(colorActive[index] ? "TextColor" : "ButtonInactiveTextColor"), text: String(cards[index].numb), id: "BottomButtonNum"+String(index))
                 }).buttonStyle(bottomButtonStyle())
                 .disabled(!actionActive[index])
                 .modifier(konamiLog(tfengine: tfengine,daBtn: TFEngine.daBtn.allCases[4+index]))
@@ -222,6 +223,7 @@ struct bottomButtons: View {
             
             MiddleButtonRow(colorActive: buttonsDisabled ? Array(repeating: false,count: 4) : tfengine.cA,
                             actionActive: allButtonsDisableSwitch ? Array(repeating: false,count:4) : tfengine.cA,
+                            cards: tfengine.cs,
                             tfengine: tfengine
             )
             

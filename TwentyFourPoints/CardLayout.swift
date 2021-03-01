@@ -7,11 +7,7 @@
 
 import SwiftUI
 
-struct cardButtonView: View, Equatable {
-    static func == (lhs: cardButtonView, rhs: cardButtonView) -> Bool {
-        return lhs.active == rhs.active && lhs.card == rhs.card
-    }
-    
+struct cardButtonView: View {
     
     var card: card
     var active: Bool
@@ -49,7 +45,6 @@ struct CardLayout: View {
                         let viewWidth:CGFloat=min(geometry2.frame(in: .local).width,geometry2.frame(in: .local).height/177.0*128)
                         VStack {
                             cardButtonView(card: cs[0], active: cA[0], tfengine: tfengine, operational: operational, index: 0)
-                                .equatable()
                                 .transition(.asymmetric(insertion: .identity, removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
                                 .animation(.spring())
                                 .position(x: cardsShouldVisible[0] ? geometry2.frame(in: .local).width-viewWidth/2 : -geometry2.frame(in: .global).minX-viewWidth+stackSpacing,y:tfengine.cardsShouldVisible[0] ? geometry2.frame(in: .local).height/2 : -geometry2.frame(in: .global).minY+geometry.frame(in: .global).midY)
@@ -61,7 +56,6 @@ struct CardLayout: View {
                         let viewWidth:CGFloat=min(geometry2.frame(in: .local).width,geometry2.frame(in: .local).height/177.0*128)
                         VStack {
                             cardButtonView(card: cs[1], active: cA[1], tfengine: tfengine, operational: operational, index: 1)
-                                .equatable()
                                 .transition(.asymmetric(insertion: .identity, removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
                                 .animation(.spring())
                                 .position(x: cardsShouldVisible[1] ? viewWidth/2 : -geometry2.frame(in: .global).minX-viewWidth+stackSpacing,y:tfengine.cardsShouldVisible[1] ? geometry2.frame(in: .local).height/2 : -geometry2.frame(in: .global).minY+geometry.frame(in: .global).midY)
@@ -75,7 +69,6 @@ struct CardLayout: View {
                         let viewWidth:CGFloat=min(geometry2.frame(in: .local).width,geometry2.frame(in: .local).height/177.0*128)
                         VStack {
                             cardButtonView(card: cs[2], active: cA[2], tfengine: tfengine, operational: operational, index: 2)
-                                .equatable()
                                 .transition(.asymmetric(insertion: .identity, removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
                                 .animation(.spring())
                                 .position(x: cardsShouldVisible[2] ? geometry2.frame(in: .local).width-viewWidth/2 : -geometry2.frame(in: .global).minX-viewWidth+stackSpacing,y:tfengine.cardsShouldVisible[2] ? geometry2.frame(in: .local).height/2 : -geometry2.frame(in: .global).minY+geometry.frame(in: .global).midY)
@@ -87,7 +80,6 @@ struct CardLayout: View {
                         let viewWidth:CGFloat=min(geometry2.frame(in: .local).width,geometry2.frame(in: .local).height/177.0*128)
                         VStack {
                             cardButtonView(card: cs[3], active: cA[3], tfengine: tfengine, operational: operational, index: 3)
-                                .equatable()
                                 .transition(.asymmetric(insertion: .identity, removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
                                 .animation(.spring())
                                 .position(x: cardsShouldVisible[3] ? viewWidth/2 : -geometry2.frame(in: .global).minX-viewWidth+stackSpacing,y:tfengine.cardsShouldVisible[3] ? geometry2.frame(in: .local).height/2 : -geometry2.frame(in: .global).minY+geometry.frame(in: .global).midY)

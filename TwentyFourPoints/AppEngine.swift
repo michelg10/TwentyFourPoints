@@ -54,8 +54,8 @@ enum mathResult {
 }
 
 func randomString(length: Int) -> String {
-  let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-  return String((0..<length).map{ _ in letters.randomElement()! })
+    let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    return String((0..<length).map{ _ in letters.randomElement()! })
 }
 
 class TFEngine: ObservableObject {
@@ -127,7 +127,7 @@ class TFEngine: ObservableObject {
         defaults.synchronize()
     }
     
-    @Published var stored: storedVal?
+    var stored: storedVal?
     
     var mainVal: storedVal? //put any calculation result into here
     
@@ -303,9 +303,10 @@ class TFEngine: ObservableObject {
     }
     
     func playCardsHaptic() {
+        softHapticsEngine.prepare()
         for i in 0..<viewShowOrder.count {
             DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
-                softHapticsEngine.impactOccurred()
+                generateHaptic(hap: .soft)
             })
         }
     }
@@ -437,7 +438,7 @@ class TFEngine: ObservableObject {
     }
     
     func handleOprPress(Opr:opr) {
-        lightHapticsEngine.impactOccurred()
+        generateHaptic(hap: .light)
         // replace whatever operator is currently in use. if there's nothing in the expression right now, turn the next number negative.
         
         if (mainVal == nil) {
@@ -456,7 +457,7 @@ class TFEngine: ObservableObject {
     let cardAniDur=0.07
             
     func handleNumberPress(index: Int) {
-        lightHapticsEngine.impactOccurred()
+        generateHaptic(hap: .light)
         
         if !cA[index] {
             return
@@ -579,7 +580,7 @@ class TFEngine: ObservableObject {
     }
     
     func doStore() {
-        mediumHapticsEngine.impactOccurred()
+        generateHaptic(hap: .medium)
         //store can only be called if there's something in store or in the expression
         
         //handle operator selected
@@ -649,7 +650,7 @@ class TFEngine: ObservableObject {
             }
         }
         if nxtState == .ready {
-            softHapticsEngine.impactOccurred()
+            generateHaptic(hap: .soft)
             expr=""
             // show the answer
             nxtState = .inTransition
@@ -680,7 +681,7 @@ class TFEngine: ObservableObject {
             })
         }
         if nxtState == .showingAnswer && !inTransition {
-            mediumHapticsEngine.impactOccurred()
+            generateHaptic(hap: .medium)
             nxtState = .ready
             nextCardView(nxtCardSet: nil)
         }

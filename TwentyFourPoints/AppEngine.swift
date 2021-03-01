@@ -437,7 +437,7 @@ class TFEngine: ObservableObject {
     }
     
     func handleOprPress(Opr:opr) {
-        softHapticsEngine.impactOccurred()
+        lightHapticsEngine.impactOccurred()
         // replace whatever operator is currently in use. if there's nothing in the expression right now, turn the next number negative.
         
         if (mainVal == nil) {
@@ -456,7 +456,7 @@ class TFEngine: ObservableObject {
     let cardAniDur=0.07
             
     func handleNumberPress(index: Int) {
-        softHapticsEngine.impactOccurred()
+        lightHapticsEngine.impactOccurred()
         
         if !cA[index] {
             return
@@ -485,19 +485,25 @@ class TFEngine: ObservableObject {
                         stored=mainVal
                         
                         mainVal=nil
-                        
-                        //push out what is currently in storage back to the cards
                     }
                     
                     updtStoredExpr()
                     handleNumberPress(index: index)
                 } else {
-                    if mainVal!.source != index {
-                        withAnimation(.easeInOut(duration: cardAniDur)) {
-                            cA[mainVal!.source]=true
-                            cA[index]=false
+                    if stored == nil {
+                        // push into storage
+                        stored=mainVal
+                        mainVal=nil
+                        updtStoredExpr()
+                        handleNumberPress(index: index)
+                    } else {
+                        if mainVal!.source != index {
+                            withAnimation(.easeInOut(duration: cardAniDur)) {
+                                cA[mainVal!.source]=true
+                                cA[index]=false
+                            }
+                            mainVal=storedVal(value: Double(cs[index].numb), source: index)
                         }
-                        mainVal=storedVal(value: Double(cs[index].numb), source: index)
                     }
                 }
             }

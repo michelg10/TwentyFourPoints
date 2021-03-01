@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F00EAB1B25E1F6ED009F7702 /* answer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00EAB1A25E1F6ED009F7702 /* answer.swift */; };
+		F019984725EC5E5800946AD8 /* noobView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F019984625EC5E5800946AD8 /* noobView.swift */; };
 		F01DAD3D25EBEFBC0096740B /* AchievementList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DAD3C25EBEFBC0096740B /* AchievementList.swift */; };
 		F01DAD4925EBF2D00096740B /* personaFocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DAD4825EBF2D00096740B /* personaFocusView.swift */; };
 		F02AB9F525E39EA7008EBE91 /* SolverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F425E39EA7008EBE91 /* SolverView.swift */; };
@@ -29,6 +30,7 @@
 		F0B2E22A25D9505A007DF20E /* BottomButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B2E22925D9505A007DF20E /* BottomButtons.swift */; };
 		F0B5B44525E28FBE0073606E /* mainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B5B44425E28FBE0073606E /* mainView.swift */; };
 		F0E7271725DFC7BF00403CDD /* TopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E7271625DFC7BF00403CDD /* TopBar.swift */; };
+		F0FFF9B425ECB40000E90620 /* animationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FFF9B325ECB40000E90620 /* animationConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +52,7 @@
 
 /* Begin PBXFileReference section */
 		F00EAB1A25E1F6ED009F7702 /* answer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = answer.swift; sourceTree = "<group>"; };
+		F019984625EC5E5800946AD8 /* noobView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noobView.swift; sourceTree = "<group>"; };
 		F01DAD3C25EBEFBC0096740B /* AchievementList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementList.swift; sourceTree = "<group>"; };
 		F01DAD4825EBF2D00096740B /* personaFocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = personaFocusView.swift; sourceTree = "<group>"; };
 		F02AB9F425E39EA7008EBE91 /* SolverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolverView.swift; sourceTree = "<group>"; };
@@ -78,6 +81,7 @@
 		F0B2E22925D9505A007DF20E /* BottomButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomButtons.swift; sourceTree = "<group>"; };
 		F0B5B44425E28FBE0073606E /* mainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainView.swift; sourceTree = "<group>"; };
 		F0E7271625DFC7BF00403CDD /* TopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBar.swift; sourceTree = "<group>"; };
+		F0FFF9B325ECB40000E90620 /* animationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = animationConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,8 +149,10 @@
 				F02AB9F425E39EA7008EBE91 /* SolverView.swift */,
 				F02AB9FE25E4AF11008EBE91 /* konamiView.swift */,
 				F0B2E22925D9505A007DF20E /* BottomButtons.swift */,
+				F019984625EC5E5800946AD8 /* noobView.swift */,
 				F0B2E21625D91617007DF20E /* CardLayout.swift */,
 				F0B2E20B25D8D496007DF20E /* Card.swift */,
+				F0FFF9B325ECB40000E90620 /* animationConstants.swift */,
 				F0B2E1D925D8D41E007DF20E /* Assets.xcassets */,
 				F0B2E1DE25D8D41E007DF20E /* Info.plist */,
 				F0B2E1DB25D8D41E007DF20E /* Preview Content */,
@@ -318,6 +324,7 @@
 				F0B2E1D825D8D41D007DF20E /* ProblemView.swift in Sources */,
 				F0B2E20C25D8D496007DF20E /* Card.swift in Sources */,
 				F0A16D9025E76C5600C46C62 /* achievementView.swift in Sources */,
+				F0FFF9B425ECB40000E90620 /* animationConstants.swift in Sources */,
 				F02AB9FF25E4AF11008EBE91 /* konamiView.swift in Sources */,
 				F0AB4EF825EBDAAE009F53CB /* AchievementPropic.swift in Sources */,
 				F0AB4EFD25EBE422009F53CB /* PersonaDetail.swift in Sources */,
@@ -326,6 +333,7 @@
 				F0B2E22A25D9505A007DF20E /* BottomButtons.swift in Sources */,
 				F02AB9F525E39EA7008EBE91 /* SolverView.swift in Sources */,
 				F0B2E21C25D91652007DF20E /* AppEngine.swift in Sources */,
+				F019984725EC5E5800946AD8 /* noobView.swift in Sources */,
 				F00EAB1B25E1F6ED009F7702 /* answer.swift in Sources */,
 				F01DAD3D25EBEFBC0096740B /* AchievementList.swift in Sources */,
 			);
@@ -488,7 +496,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;
@@ -513,7 +521,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;

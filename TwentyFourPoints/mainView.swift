@@ -182,7 +182,7 @@ struct mainView: View {
                 }.padding(.bottom,80)
                 Spacer()
             }
-        }
+        }.navigationBarHidden(true)
     }
 }
 

@@ -437,7 +437,7 @@ class TFEngine: ObservableObject {
     }
     
     func handleOprPress(Opr:opr) {
-        mediumHapticsEngine.impactOccurred()
+        softHapticsEngine.impactOccurred()
         // replace whatever operator is currently in use. if there's nothing in the expression right now, turn the next number negative.
         
         if (mainVal == nil) {
@@ -453,10 +453,10 @@ class TFEngine: ObservableObject {
         
         updtExpr()
     }
-    let cardAniDur=0.17
+    let cardAniDur=0.07
             
     func handleNumberPress(index: Int) {
-        mediumHapticsEngine.impactOccurred()
+        softHapticsEngine.impactOccurred()
         
         if !cA[index] {
             return

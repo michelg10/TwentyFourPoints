@@ -46,7 +46,7 @@ struct numView: View {
                             .if (isStationary) { view in
                                 view.animation(nil)
                             }
-                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .animation(springAnimation)
                             .foregroundColor(Color.white)
                             .colorMultiply(foregroundColor)
                             .animation(.easeInOut(duration:0.1))
@@ -54,7 +54,7 @@ struct numView: View {
                             .if (isStationary) { view in
                                 view.animation(nil)
                             }
-                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .animation(springAnimation)
                             .foregroundColor(Color.white)
                             .colorMultiply(foregroundColor)
                             .animation(.easeInOut(duration:0.1))
@@ -70,7 +70,7 @@ struct numView: View {
                                 view.animation(nil)
                             }
                             .rotationEffect(.init(degrees: 180))
-                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .animation(springAnimation)
                             .foregroundColor(Color.white)
                             .colorMultiply(foregroundColor)
                             .animation(.easeInOut(duration:0.1))
@@ -79,7 +79,7 @@ struct numView: View {
                                 view.animation(nil)
                             }
                             .rotationEffect(.init(degrees: 180))
-                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .animation(springAnimation)
                             .foregroundColor(Color.white)
                             .colorMultiply(foregroundColor)
                             .animation(.easeInOut(duration:0.1))
@@ -143,23 +143,23 @@ struct cardView: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: geometry.size.width*0.1,style: .continuous)
                             .foregroundColor(Color.white)
-                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .animation(springAnimation)
                             .colorMultiply(Color(active ? "Card-Active-Bg" : "Card-Inactive-Bg"))
-                            .animation(.easeInOut(duration:0.1))
+                            .animation(.easeInOut(duration:competitiveTime))
                         RoundedRectangle(cornerRadius: geometry.size.width*0.07,style: .continuous)
                             .stroke(Color.white, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
-                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .animation(springAnimation)
                             .colorMultiply(foregroundColor)
-                            .animation(.easeInOut(duration:0.1))
+                            .animation(.easeInOut(duration:competitiveTime))
                             .padding(geometry.size.width*0.025)
                         Text(String(card.numb)).font(.system(size:(geometry.size.width)*0.55, weight: .medium, design: .rounded))
                             .if (isStationary) { view in
                                 view.animation(nil)
                             }
                             .foregroundColor(Color.white)
-                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .animation(springAnimation)
                             .colorMultiply(foregroundColor)
-                            .animation(.easeInOut(duration:0.1))
+                            .animation(.easeInOut(duration:competitiveTime))
                         numView(isStationary: isStationary, CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor)
                     }
                 }

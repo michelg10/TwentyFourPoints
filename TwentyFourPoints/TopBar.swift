@@ -23,9 +23,15 @@ struct textButtonStyle: ButtonStyle {
     }
 }
 
-struct TopBar: View {
+struct TopBar: View, Equatable {
+    static func == (lhs: TopBar, rhs: TopBar) -> Bool {
+        return lhs.lvl == rhs.lvl
+    }
+    
+    var lvl: Int
+    var lvlName: String?
+    var tfengine: TFEngine
     @State var achPresented: Bool = false
-    @ObservedObject var tfengine: TFEngine
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var body: some View {
         ZStack(alignment: .top) {
@@ -63,12 +69,12 @@ struct TopBar: View {
                     achPresented=true
                     tfengine.cardsOnScreen=false
                 }, label: {
-                    if tfengine.lvlName == nil {
-                        Text("Question \(String(tfengine.lvl))")
+                    if lvlName == nil {
+                        Text("Question \(String(lvl))")
                             .font(.system(size: 18, weight: .regular, design: .rounded))
                             .foregroundColor(.init("TextColor"))
                     } else {
-                        Text("\(tfengine.lvlName!) • Question \(String(tfengine.lvl))")
+                        Text("\(lvlName!) • Question \(String(lvl))")
                             .font(.system(size: 18, weight: .regular, design: .rounded))
                             .foregroundColor(.init("TextColor"))
                     }
@@ -85,6 +91,6 @@ struct TopBar: View {
 
 struct TopBar_Previews: PreviewProvider {
     static var previews: some View {
-        TopBar(tfengine: TFEngine(isPreview: true))
+        TopBar(lvl:10,lvlName:"Jonathan",tfengine: TFEngine(isPreview: true))
     }
 }

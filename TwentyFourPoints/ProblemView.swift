@@ -17,16 +17,17 @@ struct ProblemView: View {
         GeometryReader { _ in
             VStack {
                 Spacer()
-                TopBar(tfengine:tfengine)
+                TopBar(lvl: tfengine.lvl, lvlName: tfengine.lvlName, tfengine:tfengine)
+                    .equatable()
                     .padding(.bottom,20)
                 ZStack {
                     if tfengine.konamiCheatVisible {
                         konamiView(tfengine: tfengine, levelInput: tfengine.lvl)
                             .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width, y: 0), removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
-                            .animation(.spring(response: 0.45, dampingFraction: 0.825, blendDuration: 0))
+                            .animation(springAnimation)
                     } else {
                         HStack {
-                            CardLayout(tfengine: tfengine, cA: tfengine.cA, cs: tfengine.cs, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString)
+                            CardLayout(tfengine: tfengine, cA: tfengine.cA, cs: tfengine.cs, cardsShouldVisible: tfengine.cardsShouldVisible, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString)
                                 .padding(.horizontal,30)
                                 .id("MasterCardLayoutView")
                                 .animation(.spring())
@@ -48,7 +49,7 @@ struct ProblemView: View {
                         }
                     }
                 }
-                buttons(tfengine: tfengine, buttonsDisabled: tfengine.konamiCheatVisible)
+                bottomButtons(tfengine: tfengine, buttonsDisabled: tfengine.konamiCheatVisible)
                     .padding(.horizontal,15)
                     .padding(.bottom,50)
                     .padding(.top,23)

@@ -238,6 +238,10 @@ class TFEngine: ObservableObject {
         
         cachedSols=Array(repeating: nil, count: 13*13*13*13)
         deviceID="empty"
+        
+        incorText=""
+        incorShowOpacity=1
+        
         if isPreview {
             return
         }
@@ -292,6 +296,10 @@ class TFEngine: ObservableObject {
     let mediumHapticsEngine=UIImpactFeedbackGenerator.init(style: .medium)
     let heavyHapticsEngine=UIImpactFeedbackGenerator.init(style: .heavy)
     let rigidHapticsEngine=UIImpactFeedbackGenerator.init(style: .rigid)
+    
+    @Published var incorShowOpacity: Double
+    @Published var incorText:String
+    
     enum haptic {
         case soft
         case light
@@ -327,6 +335,7 @@ class TFEngine: ObservableObject {
         if inTransition {
             return
         }
+        incorText=""
         answerShow=""
         nxtState = .ready
         cardsShouldVisible=Array(repeating: false, count: 4)
@@ -452,6 +461,7 @@ class TFEngine: ObservableObject {
     }
     
     func handleOprPress(Opr:opr) {
+        incorText=""
         generateHaptic(hap: .light)
         // replace whatever operator is currently in use. if there's nothing in the expression right now, turn the next number negative.
         
@@ -471,6 +481,7 @@ class TFEngine: ObservableObject {
     let cardAniDur=0.07
             
     func handleNumberPress(index: Int) {
+        incorText=""
         generateHaptic(hap: .light)
         
         if !cA[index] {
@@ -537,10 +548,22 @@ class TFEngine: ObservableObject {
                     cA[index]=false
                 }
             } else if mathRes == .failure {
-                reset()
+                respondToFailure()
             }
         }
         updtExpr()
+    }
+    
+    func respondToFailure() {
+        updtExpr()
+        incorText=expr
+        let flashDuration=0.2
+        incorShowOpacity=0.6
+        DispatchQueue.main.asyncAfter(deadline: .now()+flashDuration) { [self] in
+            
+            incorShowOpacity=1.0
+        }
+        reset()
     }
     
     func incrementLvl() {
@@ -636,7 +659,7 @@ class TFEngine: ObservableObject {
                         nextCardView(nxtCardSet: nil)
                         incrementLvl()
                     } else if mathRturn == .failure {
-                        reset()
+                        respondToFailure()
                     }
                 }
             }
@@ -657,6 +680,7 @@ class TFEngine: ObservableObject {
     let ansBrightenTime=0.4
     let ansBlinkTime=0.3
     func nxtButtonPressed() {
+        incorText=""
         if nxtState == .inTransition {
             if !inTransition {
                 nxtState = .showingAnswer

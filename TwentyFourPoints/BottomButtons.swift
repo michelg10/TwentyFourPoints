@@ -72,10 +72,14 @@ struct TopButtonsRow: View {
     var storeRectColorEnabled: Bool
     var expr: String
     
-    var resetActionEnabled: Bool
-    var answerText: String
-    var resetColorEnabled: Bool
     var answerShowOpacity: Double
+    var answerText: String
+    
+    var incorShowOpacity: Double
+    var incorText: String
+    
+    var resetActionEnabled: Bool
+    var resetColorEnabled: Bool
     var storedExpr: String?
     
     var body: some View {
@@ -99,6 +103,15 @@ struct TopButtonsRow: View {
                         .opacity(answerShowOpacity)
                         .animation(.easeInOut(duration: 0.3))
                         .foregroundColor(Color.init("TextColor"))
+                        .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
+                        .padding(.leading, CGFloat(textInset*textField*Double(geometry.size.width-CGFloat(midSpace))))
+                        .padding(.bottom,2)
+                        .frame(width: CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height:CGFloat(textInpHei), alignment: .leading)
+                    Text(incorText)
+                        .animation(nil)
+                        .opacity(incorShowOpacity)
+                        .animation(.easeInOut(duration: 0.2))
+                        .foregroundColor(Color.init("WrongNumber"))
                         .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
                         .padding(.leading, CGFloat(textInset*textField*Double(geometry.size.width-CGFloat(midSpace))))
                         .padding(.bottom,2)
@@ -235,10 +248,12 @@ struct bottomButtons: View {
                           storeTextColorEnabled: !buttonsDisabled,
                           storeRectColorEnabled: !buttonsDisabled && !(tfengine.storedExpr == nil && !tfengine.oprButtonActive),
                           expr: tfengine.expr,
-                          resetActionEnabled: !(tfengine.expr=="" && tfengine.storedExpr == nil || allButtonsDisableSwitch),
-                          answerText: tfengine.answerShow.replacingOccurrences(of: "/", with: "÷").replacingOccurrences(of: "*", with: "×"),
-                          resetColorEnabled: !buttonsDisabled,
                           answerShowOpacity: tfengine.answerShowOpacity,
+                          answerText: tfengine.answerShow.replacingOccurrences(of: "/", with: "÷").replacingOccurrences(of: "*", with: "×"),
+                          incorShowOpacity: tfengine.incorShowOpacity,
+                          incorText: tfengine.incorText,
+                          resetActionEnabled: !(tfengine.expr=="" && tfengine.storedExpr == nil || allButtonsDisableSwitch),
+                          resetColorEnabled: !buttonsDisabled,
                           storedExpr: tfengine.storedExpr
             )
             

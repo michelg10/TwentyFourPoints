@@ -17,7 +17,7 @@ struct SolverView: View {
         VStack() {
             HStack {
                 Button(action: {
-                    tfengine.generateHaptic(hap: .medium)
+                    generateHaptic(hap: .medium)
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
                     navBarButton(symbolName: "chevron.backward", active: true)
@@ -34,7 +34,7 @@ struct SolverView: View {
                 ForEach((0..<4), id:\.self) { index in
                     Button(action: {
                         if selectedCardIndex != index {
-                            tfengine.generateHaptic(hap: .medium)
+                            generateHaptic(hap: .medium)
                             selectedCardIndex=index
                         }
                     }, label: {
@@ -58,6 +58,13 @@ struct SolverView: View {
             Spacer()
             
         }.navigationBarHidden(true)
+        .onAppear {
+            print("Nav back")
+            canNavBack=true
+        }.onDisappear {
+            print("No nav back")
+            canNavBack=false
+        }
     }
 }
 

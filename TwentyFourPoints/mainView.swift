@@ -103,8 +103,10 @@ struct mainView: View {
                             .font(.system(size: 24, weight: .semibold, design: .rounded))
                             .offset(x: 0, y: 5)
                         Button(action: {
-                            tfengine.generateHaptic(hap: .medium)
+                            generateHaptic(hap: .medium)
                             achPresented=true
+                            canNavBack=true
+                            print("Nav back")
                         }, label: {
                             ZStack(alignment: .leading) {
                                 HStack {
@@ -133,7 +135,10 @@ struct mainView: View {
                             )
                         })
                         .buttonStyle(topBarButtonStyle())
-                        .sheet(isPresented: $achPresented, content: {
+                        .sheet(isPresented: $achPresented,onDismiss: {
+                            canNavBack=false
+                            print("No nav back")
+                        }, content: {
                             achievementView(tfengine: tfengine)
                         })
                     }
@@ -152,7 +157,7 @@ struct mainView: View {
                         })
                     
                     Button(action: {
-                        tfengine.generateHaptic(hap: .medium)
+                        generateHaptic(hap: .medium)
                         navAction=1
                         tfengine.cardsOnScreen=true
                     }, label: {
@@ -168,7 +173,7 @@ struct mainView: View {
                     .padding(.bottom,12)
                     
                     Button(action: {
-                        tfengine.generateHaptic(hap: .medium)
+                        generateHaptic(hap: .medium)
                         navAction=2
                     }, label: {
                         borederedButton(title: "Solver", clicked: solverClicked)
@@ -184,6 +189,10 @@ struct mainView: View {
                 Spacer()
             }
         }.navigationBarHidden(true)
+        .onAppear {
+            canNavBack=false
+            print("No nav back")
+        }
     }
 }
 

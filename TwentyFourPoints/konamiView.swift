@@ -48,7 +48,7 @@ struct konamiView: View {
                     )
                 Button(action: {
                     tfengine.konamiLvl(setLvl: levelInput)
-                    tfengine.generateHaptic(hap: .medium)
+                    generateHaptic(hap: .medium)
                 }, label: {
                     Circle()
                         .frame(width:42,height:42)

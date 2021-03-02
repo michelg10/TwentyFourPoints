@@ -32,7 +32,7 @@ struct AchievementList: View {
                                 EmptyView()
                             })
                         Button(action: {
-                            tfengine.generateHaptic(hap: .medium)
+                            generateHaptic(hap: .medium)
                             navTag=index
                         }, label: {
                             achievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)
@@ -50,17 +50,6 @@ struct AchievementList_Previews: PreviewProvider {
     static var previews: some View {
         AchievementList(curLvl: 7, tfengine: TFEngine(isPreview: true), listType: .upNext)
         AchievementList(curLvl: 7, tfengine: TFEngine(isPreview: true), listType: .complete)
-    }
-}
-
-extension UINavigationController: UIGestureRecognizerDelegate {
-    override open func viewDidLoad() {
-        super.viewDidLoad()
-        interactivePopGestureRecognizer?.delegate = self
-    }
-
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return viewControllers.count > 1
     }
 }
 

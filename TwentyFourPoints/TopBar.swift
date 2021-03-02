@@ -41,7 +41,7 @@ struct TopBar: View, Equatable {
                     presentationMode.wrappedValue.dismiss()
                     tfengine.cardsOnScreen=false
                     tfengine.reset()
-                    tfengine.generateHaptic(hap: .medium)
+                    generateHaptic(hap: .medium)
                 }, label: {
                     navBarButton(symbolName: "chevron.backward", active: !konamiCheatVisible)
                 }).buttonStyle(topBarButtonStyle())
@@ -50,7 +50,7 @@ struct TopBar: View, Equatable {
                 Button(action: {
                     if konamiCheatVisible {
                         tfengine.konamiLvl(setLvl: nil)
-                        tfengine.generateHaptic(hap: .medium)
+                        generateHaptic(hap: .medium)
                     } else {
                         tfengine.nxtButtonPressed()
                     }
@@ -66,7 +66,7 @@ struct TopBar: View, Equatable {
                 Text("24 Points")
                     .font(.system(size: 32, weight: .bold, design: .rounded))
                 Button(action: {
-                    tfengine.generateHaptic(hap: .medium)
+                    generateHaptic(hap: .medium)
                     achPresented=true
                     tfengine.cardsOnScreen=false
                 }, label: {

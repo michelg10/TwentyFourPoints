@@ -15,7 +15,7 @@ struct achievementView: View {
             ScrollView {
                 HStack {
                     Button(action: {
-                        tfengine.generateHaptic(hap: .medium)
+                        generateHaptic(hap: .medium)
                         presentationMode.wrappedValue.dismiss()
                     }, label: {
                         ZStack {

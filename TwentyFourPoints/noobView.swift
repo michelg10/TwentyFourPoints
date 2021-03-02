@@ -9,42 +9,53 @@ import SwiftUI
 
 struct noobView: View {
     @State var goAction: Int?
-    var tfengine: TFEngine
+    var tuengine: tutorialEngine
     
     @State var startClicked=false
+    
+    @State var wtf=false
+    
     var body: some View {
-        VStack {
-            Spacer()
+        NavigationView {
             VStack {
-                Text("Welcome to\n24 Points")
-                    .multilineTextAlignment(.center)
-                    .font(.system(size: 36, weight: .bold, design: .rounded))
-                    .padding(.bottom,10)
-                Text("Add, subtract, multiply, and divide four integers to get 24")
-                    .multilineTextAlignment(.center)
-                    .font(.system(size: 24, weight: .medium, design: .rounded))
-                    .padding(.horizontal,50)
-            }
-            Spacer()
-            Button(action: {
-                tfengine.generateHaptic(hap: .medium)
-                goAction=1
-            }, label: {
-                borederedButton(title: "Start", clicked: startClicked)
-            }).buttonStyle(nilButtonStyle())
-            .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
-                if buttonState == .pressed {
-                    startClicked=true
-                } else {
-                    startClicked=false
+                Spacer()
+                VStack {
+                    Text("Welcome to\n24 Points")
+                        .multilineTextAlignment(.center)
+                        .font(.system(size: 36, weight: .bold, design: .rounded))
+                        .padding(.bottom,10)
+                    Text("Add, subtract, multiply, and divide four integers to get 24")
+                        .multilineTextAlignment(.center)
+                        .font(.system(size: 24, weight: .medium, design: .rounded))
+                        .padding(.horizontal,50)
                 }
-            })).padding(.bottom,150)
+                Spacer()
+                NavigationLink(
+                    destination: noobLayout(tuengine: tuengine),tag: 1,selection: $goAction,
+                    label: {
+                        EmptyView()
+                    })
+                Button(action: {
+                    wtf=true
+                    generateHaptic(hap: .medium)
+                    goAction=1
+                }, label: {
+                    borederedButton(title: "Start", clicked: startClicked)
+                }).buttonStyle(nilButtonStyle())
+                .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
+                    if buttonState == .pressed {
+                        startClicked=true
+                    } else {
+                        startClicked=false
+                    }
+                })).padding(.bottom,150)
+            }
         }
     }
 }
 
 struct noobView_Previews: PreviewProvider {
     static var previews: some View {
-        noobView(tfengine: TFEngine(isPreview: true))
+        noobView(tuengine: tutorialEngine())
     }
 }

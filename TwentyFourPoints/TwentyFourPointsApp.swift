@@ -12,6 +12,7 @@ struct TwentyFourPointsApp: App {
     var body: some Scene {
         WindowGroup {
             mainView(tfengine: TFEngine(isPreview: false))
+//            noobView(tuengine: tutorialEngine())
         }
     }
 }

@@ -56,6 +56,12 @@ struct ProblemView: View {
                 Spacer()
             }.ignoresSafeArea(.keyboard,edges: .all)
             .navigationBarHidden(true)
+        }.onAppear {
+            print("Nav back")
+            canNavBack=true
+        }.onDisappear {
+            print("No nav back")
+            canNavBack=false
         }
     }
 }

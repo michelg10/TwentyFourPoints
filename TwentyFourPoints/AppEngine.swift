@@ -58,7 +58,18 @@ func randomString(length: Int) -> String {
     return String((0..<length).map{ _ in letters.randomElement()! })
 }
 
-class TFEngine: ObservableObject {
+enum daBtn:CaseIterable {
+    case add
+    case sub
+    case mul
+    case div
+    case c1
+    case c2
+    case c3
+    case c4
+}
+
+class TFEngine: ObservableObject,tfCallable {
     //MARK: Updaters and Updatees
     @Published var storedExpr: String?
     @Published var expr: String = "" //update this from getExpr
@@ -291,39 +302,11 @@ class TFEngine: ObservableObject {
     let viewShowDelay = 0.15
     let viewShowOrder=[1,3,0,2]
     var inTransition=false
-    let softHapticsEngine=UIImpactFeedbackGenerator.init(style: .soft)
-    let lightHapticsEngine=UIImpactFeedbackGenerator.init(style: .light)
-    let mediumHapticsEngine=UIImpactFeedbackGenerator.init(style: .medium)
-    let heavyHapticsEngine=UIImpactFeedbackGenerator.init(style: .heavy)
-    let rigidHapticsEngine=UIImpactFeedbackGenerator.init(style: .rigid)
     
     @Published var incorShowOpacity: Double
     @Published var incorText:String
     
-    enum haptic {
-        case soft
-        case light
-        case medium
-        case heavy
-        case rigid
-    }
-    func generateHaptic(hap:haptic) {
-        switch hap {
-        case .soft:
-            softHapticsEngine.impactOccurred()
-        case .light:
-            lightHapticsEngine.impactOccurred()
-        case .medium:
-            mediumHapticsEngine.impactOccurred()
-        case .heavy:
-            heavyHapticsEngine.impactOccurred()
-        case .rigid:
-            rigidHapticsEngine.impactOccurred()
-        }
-    }
-    
     func playCardsHaptic() {
-        softHapticsEngine.prepare()
         for i in 0..<viewShowOrder.count {
             DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
                 generateHaptic(hap: .soft)
@@ -388,17 +371,6 @@ class TFEngine: ObservableObject {
         updtStoredExpr()
         
         saveData()
-    }
-    
-    enum daBtn:CaseIterable {
-        case add
-        case sub
-        case mul
-        case div
-        case c1
-        case c2
-        case c3
-        case c4
     }
     
     var konamiLog:[daBtn]=[]

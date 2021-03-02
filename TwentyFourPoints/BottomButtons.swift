@@ -52,8 +52,8 @@ struct contrastBottomButtonStyle: ButtonStyle {
 }
 
 struct konamiLog: ViewModifier {
-    let tfengine:TFEngine
-    let daBtn: TFEngine.daBtn
+    let tfengine:tfCallable
+    let daBtn: daBtn
     public func body(content: Content) -> some View {
         content.simultaneousGesture(
             TapGesture()
@@ -65,7 +65,7 @@ struct konamiLog: ViewModifier {
 }
 
 struct TopButtonsRow: View {
-    var tfengine: TFEngine
+    var tfengine: tfCallable
     var storeActionEnabled: Bool
     var storeIconColorEnabled: Bool
     var storeTextColorEnabled: Bool
@@ -120,7 +120,7 @@ struct TopButtonsRow: View {
                         Spacer()
                         Button(action: {
                             tfengine.reset()
-                            tfengine.generateHaptic(hap: .medium)
+                            generateHaptic(hap: .medium)
                         }, label: {
                             VStack {
                                 Spacer()
@@ -173,7 +173,7 @@ struct MiddleButtonRow: View {
     var colorActive: [Bool]
     var actionActive: [Bool]
     var cards: [card]
-    var tfengine: TFEngine
+    var tfengine: tfCallable
     
     var body: some View {
         HStack(spacing:CGFloat(midSpace)) {
@@ -181,53 +181,57 @@ struct MiddleButtonRow: View {
                 Button(action: {
                     tfengine.handleNumberPress(index: index)
                 }, label: {
-                    bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(colorActive[index] ? "TextColor" : "ButtonInactiveTextColor"), text: String(cards[index].numb), id: "BottomButtonNum"+String(index))
+                    bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(colorActive[index] ? "TextColor" : "ButtonInactiveTextColor"), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), id: "BottomButtonNum"+String(index))
                 }).buttonStyle(bottomButtonStyle())
                 .disabled(!actionActive[index])
-                .modifier(konamiLog(tfengine: tfengine,daBtn: TFEngine.daBtn.allCases[4+index]))
+                .modifier(konamiLog(tfengine: tfengine,daBtn: daBtn.allCases[4+index]))
             }
         }
     }
 }
 
+func getButtonColor(active: Bool) -> Color {
+    return Color.init(active ? "ButtonColorActive" : "ButtonColorInactive")
+}
+
+func getButtonTextColor(active: Bool) -> Color {
+    return Color.init(active ? "TextColor" : "ButtonInactiveTextColor")
+}
+
 struct BottomButtonRow: View {
-    var tfengine: TFEngine
-    var generalOprActionActive: Bool
-    var generalOprColorActive: Bool
-    var subOprActionActive: Bool
-    var subOprColorActive: Bool
+    var tfengine: tfCallable
+    var oprActionActive: [Bool]
+    var oprColorActive: [Bool]
     
     var body: some View {
-        let bottomButtonFillColor=Color.init(generalOprColorActive ? "ButtonColorActive" : "ButtonColorInactive")
-        let bottomButtonTextColor=Color.init(generalOprColorActive ? "TextColor" : "ButtonInactiveTextColor")
         HStack(spacing:CGFloat(midSpace)) {
             Button(action: {
                 tfengine.handleOprPress(Opr: .add)
             }, label: {
-                bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "+", id: "BottomButtonAdd")
+                bottomButtonView(fillColor: getButtonColor(active: oprColorActive[0]), textColor: getButtonTextColor(active: oprColorActive[0]), text: "+", id: "BottomButtonAdd")
             }).buttonStyle(bottomButtonStyle())
-            .disabled(!generalOprActionActive)
+            .disabled(!oprActionActive[0])
             .modifier(konamiLog(tfengine: tfengine,daBtn: .add))
             Button(action: {
                 tfengine.handleOprPress(Opr: .sub)
             }, label: {
-                bottomButtonView(fillColor: Color.init(subOprColorActive ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(subOprColorActive ? "TextColor" : "ButtonInactiveTextColor"), text: "-", id: "BottomButtonSub")
+                bottomButtonView(fillColor: getButtonColor(active: oprColorActive[1]), textColor: getButtonTextColor(active: oprColorActive[1]), text: "-", id: "BottomButtonSub")
             }).buttonStyle(bottomButtonStyle())
-            .disabled(!subOprActionActive)
+            .disabled(!oprActionActive[1])
             .modifier(konamiLog(tfengine: tfengine,daBtn: .sub))
             Button(action: {
                 tfengine.handleOprPress(Opr: .mul)
             }, label: {
-                bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "×", id: "BottomButtonMul")
+                bottomButtonView(fillColor: getButtonColor(active: oprColorActive[2]), textColor: getButtonTextColor(active: oprColorActive[2]), text: "×", id: "BottomButtonMul")
             }).buttonStyle(bottomButtonStyle())
-            .disabled(!generalOprActionActive)
+            .disabled(!oprActionActive[2])
             .modifier(konamiLog(tfengine: tfengine,daBtn: .mul))
             Button(action: {
                 tfengine.handleOprPress(Opr: .div)
             }, label: {
-                bottomButtonView(fillColor: bottomButtonFillColor, textColor: bottomButtonTextColor, text: "÷", id: "BottomButtonDiv")
+                bottomButtonView(fillColor: getButtonColor(active: oprColorActive[3]), textColor: getButtonTextColor(active: oprColorActive[3]), text: "÷", id: "BottomButtonDiv")
             }).buttonStyle(bottomButtonStyle())
-            .disabled(!generalOprActionActive)
+            .disabled(!oprActionActive[3])
             .modifier(konamiLog(tfengine: tfengine,daBtn: .div))
         }
     }
@@ -241,7 +245,6 @@ struct bottomButtons: View {
     var body: some View {
         VStack {
             let allButtonsDisableSwitch=buttonsDisabled || tfengine.nxtState != .ready
-            
             TopButtonsRow(tfengine: tfengine,
                           storeActionEnabled: !(tfengine.storedExpr == nil && !tfengine.oprButtonActive || allButtonsDisableSwitch),
                           storeIconColorEnabled: !buttonsDisabled && tfengine.oprButtonActive,
@@ -262,8 +265,15 @@ struct bottomButtons: View {
                             cards: tfengine.cs,
                             tfengine: tfengine
             )
+            let otherOprActionActive = tfengine.oprButtonActive && !allButtonsDisableSwitch
+            let oprActionActive = [otherOprActionActive, !allButtonsDisableSwitch, otherOprActionActive, otherOprActionActive]
+            let otherOprColorActive=tfengine.oprButtonActive && !buttonsDisabled
+            let oprColorActive = [otherOprColorActive, !buttonsDisabled, otherOprColorActive, otherOprColorActive]
             
-            BottomButtonRow(tfengine: tfengine, generalOprActionActive: tfengine.oprButtonActive && !allButtonsDisableSwitch, generalOprColorActive: tfengine.oprButtonActive && !buttonsDisabled, subOprActionActive: !allButtonsDisableSwitch, subOprColorActive: !buttonsDisabled)
+            BottomButtonRow(tfengine: tfengine,
+                            oprActionActive: oprActionActive,
+                            oprColorActive: oprColorActive
+            )
         }
     }
 }

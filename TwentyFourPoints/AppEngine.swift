@@ -593,7 +593,7 @@ class TFEngine: ObservableObject {
         // check for all empty and 24
         let allEmpty: Bool = noCardsActive && stored == nil
         if allEmpty {
-            if doubleEquality(a: mainVal!.value,b: 24) {
+            if doubleEquality(a: abs(mainVal!.value),b: 24) {
                 return .success
             } else {
                 return .failure

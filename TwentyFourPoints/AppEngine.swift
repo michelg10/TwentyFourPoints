@@ -308,7 +308,7 @@ class TFEngine: ObservableObject,tfCallable {
     
     func playCardsHaptic() {
         for i in 0..<viewShowOrder.count {
-            DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
+            DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: {
                 generateHaptic(hap: .soft)
             })
         }

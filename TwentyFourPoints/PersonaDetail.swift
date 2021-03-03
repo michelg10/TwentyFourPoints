@@ -13,7 +13,7 @@ struct PersonaDetail: View {
         VStack {
             AchievementPropic(imageName: achievement[curLvl].name, active: true)
                 .frame(width: 200, height: 200, alignment: .center)
-                .padding(.bottom, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                .padding(.bottom, 10)
             Text(achievement[curLvl].name)
                 .font(.system(size: 24, weight: .semibold, design: .rounded))
             Text("LEVEL \(String(achievement[curLvl].lvlReq))")

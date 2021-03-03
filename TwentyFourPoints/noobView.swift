@@ -12,9 +12,7 @@ struct noobView: View {
     var tuengine: tutorialEngine
     
     @State var startClicked=false
-    
-    @State var wtf=false
-    
+        
     var body: some View {
         NavigationView {
             VStack {
@@ -36,7 +34,6 @@ struct noobView: View {
                         EmptyView()
                     })
                 Button(action: {
-                    wtf=true
                     generateHaptic(hap: .medium)
                     goAction=1
                 }, label: {

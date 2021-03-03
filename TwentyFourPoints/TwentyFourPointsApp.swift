@@ -11,8 +11,11 @@ import SwiftUI
 struct TwentyFourPointsApp: App {
     var body: some Scene {
         WindowGroup {
-            mainView(tfengine: TFEngine(isPreview: false))
-//            noobView(tuengine: tutorialEngine())
+            if UserDefaults.standard.string(forKey: "deviceID") == nil {
+                noobView(tuengine: tutorialEngine())
+            } else {
+                mainView(tfengine: TFEngine(isPreview: false))
+            }
         }
     }
 }

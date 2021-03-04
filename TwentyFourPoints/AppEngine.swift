@@ -305,11 +305,14 @@ class TFEngine: ObservableObject,tfCallable {
     
     @Published var incorShowOpacity: Double
     @Published var incorText:String
+    @Published var rewardScreenVisible: Bool = false
     
     func playCardsHaptic() {
         for i in 0..<viewShowOrder.count {
-            DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: {
-                generateHaptic(hap: .soft)
+            DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
+                if cardsOnScreen {
+                    generateHaptic(hap: .soft)
+                }
             })
         }
     }
@@ -324,9 +327,7 @@ class TFEngine: ObservableObject,tfCallable {
         cardsShouldVisible=Array(repeating: false, count: 4)
         curQuestionID=UUID()
         inTransition=true
-        if cardsOnScreen {
-            playCardsHaptic()
-        }
+        playCardsHaptic()
         for i in 0..<viewShowOrder.count {
             if cardsOnScreen {
                 DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
@@ -404,6 +405,24 @@ class TFEngine: ObservableObject,tfCallable {
     @Published var konamiCheatVisible:Bool=false
     
     @Published var cardsShouldVisible:[Bool]=[true,true,true,true]
+    
+    func dismissRank() {
+        cardsOnScreen=true
+        playCardsHaptic()
+        reset()
+        cardsShouldVisible=Array(repeating: false, count: 4)
+        cardsClickable=true
+        inTransition=true
+        rewardScreenVisible=false
+        for i in 0..<viewShowOrder.count {
+            DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay+0.1, execute: { [self] in
+                if i == viewShowOrder.count-1 {
+                    inTransition=false
+                }
+                cardsShouldVisible[viewShowOrder[i]]=true
+            })
+        }
+    }
     
     func konamiLvl(setLvl: Int?) {
         cardsOnScreen=true
@@ -540,8 +559,19 @@ class TFEngine: ObservableObject,tfCallable {
     
     func incrementLvl() {
         print("Increment Level")
+        // check if rank has changed
+        let lastRank = getLvlIndex(getLvl: levelInfo.lvl)
         deviceData[deviceID]!+=1
         updtLvlName()
+        let currentRank=getLvlIndex(getLvl: levelInfo.lvl)
+        if currentRank != lastRank {
+            // show
+            cardsOnScreen=false
+            cardsClickable=false
+            rewardScreenVisible=true
+            cardsShouldVisible=Array(repeating: false, count: 4)
+            curQuestionID=UUID()
+        }
         saveData()
     }
     

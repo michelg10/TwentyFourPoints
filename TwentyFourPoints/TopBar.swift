@@ -25,12 +25,13 @@ struct textButtonStyle: ButtonStyle {
 
 struct TopBar: View, Equatable {
     static func == (lhs: TopBar, rhs: TopBar) -> Bool {
-        return lhs.lvl == rhs.lvl && lhs.konamiCheatVisible == rhs.konamiCheatVisible
+        return lhs.lvl == rhs.lvl && lhs.konamiCheatVisible == rhs.konamiCheatVisible && lhs.rewardVisible == rhs.rewardVisible
     }
     
     var lvl: Int
     var lvlName: String?
     var konamiCheatVisible: Bool
+    var rewardVisible: Bool
     var tfengine: TFEngine
     @State var achPresented: Bool = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -43,20 +44,24 @@ struct TopBar: View, Equatable {
                     tfengine.reset()
                     generateHaptic(hap: .medium)
                 }, label: {
-                    navBarButton(symbolName: "chevron.backward", active: !konamiCheatVisible)
+                    navBarButton(symbolName: "chevron.backward", active: !konamiCheatVisible && !rewardVisible)
                 }).buttonStyle(topBarButtonStyle())
-                .disabled(konamiCheatVisible)
+                .disabled(konamiCheatVisible || rewardVisible)
                 Spacer()
                 Button(action: {
                     if konamiCheatVisible {
                         tfengine.konamiLvl(setLvl: nil)
                         generateHaptic(hap: .medium)
+                    } else if rewardVisible {
+                        tfengine.dismissRank()
                     } else {
                         tfengine.nxtButtonPressed()
                     }
                 }, label: {
                     if konamiCheatVisible {
                         navBarButton(symbolName: "xmark", active: true)
+                    } else if rewardVisible {
+                        navBarButton(symbolName: "chevron.forward", active: true)
                     } else {
                         navBarButton(symbolName: "chevron.forward.2", active: true)
                     }
@@ -92,6 +97,6 @@ struct TopBar: View, Equatable {
 
 struct TopBar_Previews: PreviewProvider {
     static var previews: some View {
-        TopBar(lvl:10,lvlName:"Jonathan", konamiCheatVisible: false,tfengine: TFEngine(isPreview: true))
+        TopBar(lvl:10,lvlName:"Jonathan", konamiCheatVisible: false, rewardVisible: false,tfengine: TFEngine(isPreview: true))
     }
 }

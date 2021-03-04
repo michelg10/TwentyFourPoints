@@ -89,7 +89,7 @@ struct EmitterView: UIViewRepresentable {
 
         print("Init confetti layer")
         
-//        emitterLayer.beginTime = CACurrentMediaTime()
+        emitterLayer.beginTime = CACurrentMediaTime()
         return emitterLayer
     }
 
@@ -193,11 +193,8 @@ struct EmitterView: UIViewRepresentable {
         }
     }
     
-    var foregroundConfettiLayer: CAEmitterLayer
-    
-    var backgroundConfettiLayer: CAEmitterLayer
-    
     init() {
+        print("Reinit")
         confettiTypes = {
             // For each position x shape x color, construct an image
             return [ConfettiPosition.foreground, ConfettiPosition.background].flatMap { position in
@@ -206,31 +203,27 @@ struct EmitterView: UIViewRepresentable {
                 }
             }
         }()
-        
-        foregroundConfettiLayer=CAEmitterLayer()
-        backgroundConfettiLayer=CAEmitterLayer()
-        
-        foregroundConfettiLayer=createConfettiLayer()
-        
-        let emitterLayer = createConfettiLayer()
-        
-        for emitterCell in emitterLayer.emitterCells ?? [] {
-            emitterCell.scale = 0.5
-        }
-
-        emitterLayer.opacity = 0.5
-        emitterLayer.speed = 0.95
-        backgroundConfettiLayer=emitterLayer
     }
     
     func makeUIView(context: Context) -> UIView {
         let host = UIView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         host.backgroundColor=UIColor.clear
-        for layer in [foregroundConfettiLayer, backgroundConfettiLayer] {
-            host.layer.addSublayer(layer)
-            addBehaviors(to: layer)
-            addAnimations(to: layer)
+        
+        let foregroundConfettiLayer=createConfettiLayer()
+        host.layer.addSublayer(foregroundConfettiLayer)
+        addBehaviors(to: foregroundConfettiLayer)
+        addAnimations(to: foregroundConfettiLayer)
+        
+        let backgroundConfettiLayer=createConfettiLayer()
+        for emitterCell in backgroundConfettiLayer.emitterCells ?? [] {
+            emitterCell.scale = 0.5
         }
+        backgroundConfettiLayer.opacity = 0.5
+        backgroundConfettiLayer.speed = 0.95
+        host.layer.addSublayer(backgroundConfettiLayer)
+        addBehaviors(to: backgroundConfettiLayer)
+        addAnimations(to: backgroundConfettiLayer)
+        
         host.isUserInteractionEnabled=false
         host.isExclusiveTouch=false
         print("Startup Confetti")
@@ -238,6 +231,6 @@ struct EmitterView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
-        
+        print("uiView")
     }
 }

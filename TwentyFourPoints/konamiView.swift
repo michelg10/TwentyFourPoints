@@ -63,7 +63,14 @@ struct konamiView: View {
             }.padding(.horizontal,30)
             Spacer()
             if tfengine.konamiLimitation() != 1 {
-                Text("The level on this device must be at least \(tfengine.konamiLimitation()). If you want to further lower your level, change the level on your other devices.")
+                Button(action: {
+                    tfengine.softStorageReset()
+                    generateHaptic(hap: .medium)
+                }, label: {
+                    navBarButton(symbolName: "arrow.clockwise", active: true)
+                }).buttonStyle(konamiButtonStyle())
+
+                Text("The level on this device must be at least \(tfengine.konamiLimitation()). If you want to further lower your level, change the level on your other devices or press the revalidate button above.")
                     .font(.system(size: 15, weight: .regular, design: .rounded))
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)

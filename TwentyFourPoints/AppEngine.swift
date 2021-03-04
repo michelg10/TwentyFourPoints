@@ -119,6 +119,22 @@ class TFEngine: ObservableObject,tfCallable {
     
     var deviceID: String
         
+    func softStorageReset() {
+        icloudstore.synchronize()
+        for (itrDeviceID,itrDeviceLvl) in deviceData {
+            if itrDeviceID == deviceID { // only save my own level as a security (???) measure
+                print("Erasing \(itrDeviceID) -> \(itrDeviceLvl)")
+                icloudstore.removeObject(forKey: "dev"+itrDeviceID+"lvl")
+            }
+        }
+        let myData=deviceData[deviceID]
+        deviceData.removeAll()
+        deviceData[deviceID]=myData
+        saveData()
+        konamiLvl(setLvl: nil)
+        updtLvlName()
+    }
+    
     func saveData() {
         icloudstore.removeObject(forKey: "devemptylvl")
         precondition(deviceID != "empty")
@@ -129,8 +145,10 @@ class TFEngine: ObservableObject,tfCallable {
         print(deviceList)
         icloudstore.set(deviceList, forKey: "devices")
         for (itrDeviceID,itrDeviceLvl) in deviceData {
-            print("Saving \(itrDeviceID) as \(itrDeviceLvl)")
-            icloudstore.set(itrDeviceLvl, forKey: "dev"+itrDeviceID+"lvl")
+            if itrDeviceID == deviceID { // only save my own level as a security (???) measure
+                print("Saving \(itrDeviceID) as \(itrDeviceLvl)")
+                icloudstore.set(itrDeviceLvl, forKey: "dev"+itrDeviceID+"lvl")
+            }
         }
         icloudstore.set(try? PropertyListEncoder().encode(cs), forKey: "cards")
         NSUbiquitousKeyValueStore.default.synchronize()

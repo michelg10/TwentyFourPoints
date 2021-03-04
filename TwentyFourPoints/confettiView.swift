@@ -59,7 +59,7 @@ struct EmitterView: UIViewRepresentable {
             cell.name = confettiType.name
             
             cell.beginTime = 0.1
-            cell.birthRate = 100
+            cell.birthRate = 80
             cell.contents = confettiType.image.cgImage
             cell.emissionRange = CGFloat(Double.pi)
             cell.lifetime = 10
@@ -244,7 +244,7 @@ struct EmitterView: UIViewRepresentable {
             if backgroundConfettiLayer.animationKeys()?.count == nil {
                 addAnimations(to: backgroundConfettiLayer)
             }
-            print(foregroundConfettiLayer.animationKeys()?.count)
+            print(foregroundConfettiLayer.animationKeys()?.count as Any)
         }
     }
 }

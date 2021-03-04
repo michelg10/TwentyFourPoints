@@ -569,6 +569,9 @@ class TFEngine: ObservableObject,tfCallable {
             cardsOnScreen=false
             cardsClickable=false
             rewardScreenVisible=true
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.2, execute: {
+                generateHaptic(hap: .rigid)
+            })
             cardsShouldVisible=Array(repeating: false, count: 4)
             curQuestionID=UUID()
         }

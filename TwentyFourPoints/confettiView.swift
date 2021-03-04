@@ -48,6 +48,8 @@ enum ConfettiPosition {
     case background
 }
 
+let wtfDelay:Double = 0.1
+
 struct EmitterView: UIViewRepresentable {
     var confettiTypes: [ConfettiType]
     
@@ -57,7 +59,7 @@ struct EmitterView: UIViewRepresentable {
             cell.name = confettiType.name
             
             cell.beginTime = 0.1
-            cell.birthRate = 80
+            cell.birthRate = 100
             cell.contents = confettiType.image.cgImage
             cell.emissionRange = CGFloat(Double.pi)
             cell.lifetime = 10
@@ -82,14 +84,14 @@ struct EmitterView: UIViewRepresentable {
         
         emitterLayer.birthRate = 0
         emitterLayer.emitterCells = createConfettiCells()
-        emitterLayer.emitterPosition = CGPoint(x: UIScreen.main.bounds.minX-100, y: UIScreen.main.bounds.midY)
+        emitterLayer.emitterPosition = CGPoint(x: UIScreen.main.bounds.minX-100, y: UIScreen.main.bounds.midY*0.8)
         emitterLayer.emitterSize = CGSize(width: 100, height: 100)
         emitterLayer.emitterShape = .sphere
         emitterLayer.frame = UIScreen.main.bounds
 
         print("Init confetti layer")
         
-        emitterLayer.beginTime = CACurrentMediaTime()
+        emitterLayer.beginTime = CACurrentMediaTime()+wtfDelay
         return emitterLayer
     }
 
@@ -186,7 +188,7 @@ struct EmitterView: UIViewRepresentable {
         let animation = CAKeyframeAnimation()
         animation.duration = 6
         animation.keyTimes = [0.05, 0.1, 0.5, 1]
-        animation.values = [0, 100, 2000, 6000]
+        animation.values = [0, 100, 1700, 4000]
         
         for image in confettiTypes {
             layer.add(animation, forKey: "emitterCells.\(image.name).yAcceleration")
@@ -203,18 +205,22 @@ struct EmitterView: UIViewRepresentable {
                 }
             }
         }()
+        foregroundConfettiLayer=createConfettiLayer()
+        backgroundConfettiLayer=createConfettiLayer()
     }
     
+    var foregroundConfettiLayer: CAEmitterLayer=CAEmitterLayer()
+    var backgroundConfettiLayer: CAEmitterLayer=CAEmitterLayer()
+    
     func makeUIView(context: Context) -> UIView {
+        
         let host = UIView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         host.backgroundColor=UIColor.clear
         
-        let foregroundConfettiLayer=createConfettiLayer()
         host.layer.addSublayer(foregroundConfettiLayer)
         addBehaviors(to: foregroundConfettiLayer)
-        addAnimations(to: foregroundConfettiLayer)
+        foregroundConfettiLayer.removeAllAnimations()
         
-        let backgroundConfettiLayer=createConfettiLayer()
         for emitterCell in backgroundConfettiLayer.emitterCells ?? [] {
             emitterCell.scale = 0.5
         }
@@ -222,7 +228,6 @@ struct EmitterView: UIViewRepresentable {
         backgroundConfettiLayer.speed = 0.95
         host.layer.addSublayer(backgroundConfettiLayer)
         addBehaviors(to: backgroundConfettiLayer)
-        addAnimations(to: backgroundConfettiLayer)
         
         host.isUserInteractionEnabled=false
         host.isExclusiveTouch=false
@@ -232,5 +237,14 @@ struct EmitterView: UIViewRepresentable {
 
     func updateUIView(_ uiView: UIView, context: Context) {
         print("uiView")
+        DispatchQueue.main.asyncAfter(deadline: .now()+wtfDelay) {
+            if foregroundConfettiLayer.animationKeys()?.count == nil {
+                addAnimations(to: foregroundConfettiLayer)
+            }
+            if backgroundConfettiLayer.animationKeys()?.count == nil {
+                addAnimations(to: backgroundConfettiLayer)
+            }
+            print(foregroundConfettiLayer.animationKeys()?.count)
+        }
     }
 }

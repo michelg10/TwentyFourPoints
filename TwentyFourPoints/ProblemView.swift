@@ -31,6 +31,10 @@ struct ProblemView: View {
                             InGameRankUpView(tfengine: tfengine,newRank: tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl))
                                 .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width, y: 0), removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
                                 .animation(springAnimation)
+                                .onAppear {
+                                    sID=UUID().uuidString
+                                    confettiEnabled=true
+                                }
                         } else {
                             CardLayout(tfengine: tfengine, cA: tfengine.cA, cs: tfengine.cs, cardsShouldVisible: tfengine.cardsShouldVisible, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString)
                                 .padding(.horizontal,30)
@@ -59,10 +63,13 @@ struct ProblemView: View {
                         .padding(.top,23)
                     Spacer()
                 }
-                EmitterView()
-                    .disabled(true)
-                    .id(tfengine.curQuestionID.uuidString+"emit")
-                    .zIndex(9999)
+                if confettiEnabled {
+                    EmitterView()
+                        .id("emit"+sID)
+                        .animation(nil)
+                        .disabled(true)
+                        .zIndex(9999)
+                }
             }.ignoresSafeArea(.keyboard,edges: .all)
             .navigationBarHidden(true)
         }.onAppear {

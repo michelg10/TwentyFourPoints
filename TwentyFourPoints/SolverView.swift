@@ -48,11 +48,10 @@ struct SolverView: View {
                     Text(String(index)).tag(index)
                 }
             }).padding(.bottom,10)
-            let arrSrted = eachCardState.sorted()
-            let solID=(arrSrted[0]-1)*13*13*13+(arrSrted[1]-1)*13*13+(arrSrted[2]-1)*13+arrSrted[3]-1
-            Text(tfengine.cachedSols[solID]==nil ? "No Solution" : "Solution")
+            let solution=tfengine.solution(problemSet: eachCardState)
+            Text(solution==nil ? "No Solution" : "Solution")
                 .font(.system(size: 32, weight: .semibold, design: .rounded))
-            Text(tfengine.cachedSols[solID] == nil ? " " : tfengine.cachedSols[solID]!.replacingOccurrences(of: "/", with: "÷").replacingOccurrences(of: "*", with: "×"))
+            Text(solution == nil ? " " : solution!.replacingOccurrences(of: "/", with: "÷").replacingOccurrences(of: "*", with: "×"))
                 .font(.system(size: 24, weight: .medium, design: .rounded))
             
             Spacer()

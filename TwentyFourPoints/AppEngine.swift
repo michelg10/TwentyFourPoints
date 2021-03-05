@@ -109,6 +109,8 @@ class TFEngine: ObservableObject,tfCallable {
     
     @Published var cA: [Bool] // which cards are being activated and which are not
     
+    var currentProblemSol: String="currentProblemSol"
+    
     var buttonsCanPress=false
     
     var cardsOnScreen = false
@@ -202,9 +204,7 @@ class TFEngine: ObservableObject,tfCallable {
     var nxtNumNeg:Bool? //set this as nil when its been applied
     
     @Published var oprButtonActive: Bool = false // activate this when any number is pressed. and thus an opertor could be used.
-    
-    var cachedSols: [String?]
-    
+        
     func loadData(isIncremental: Bool) {
         let devices=icloudstore.array(forKey: "devices") as! [String]
         for i in 0..<devices.count {
@@ -229,7 +229,23 @@ class TFEngine: ObservableObject,tfCallable {
             }
         } else {
             cs=newcs
+            let checkSolution=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])
+            if checkSolution==nil {
+                getRandomCards()
+            } else {
+                currentProblemSol=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])!
+            }
         }
+    }
+    
+    func solution(problemSet: [Int]) -> String? {
+        let solvedData=solve24(Int32(problemSet[0]), Int32(problemSet[1]), Int32(problemSet[2]), Int32(problemSet[3])).data
+        let solutionToProblem=String(cString: solvedData!)
+        solvedData?.deallocate()
+        if solutionToProblem=="nosol" {
+            return nil
+        }
+        return solutionToProblem
     }
     
     func resetStorage() {
@@ -265,7 +281,6 @@ class TFEngine: ObservableObject,tfCallable {
         curQuestionID=UUID()
         cardsClickable=true
         
-        cachedSols=Array(repeating: nil, count: 13*13*13*13)
         deviceID="empty"
         
         incorText=""
@@ -273,9 +288,6 @@ class TFEngine: ObservableObject,tfCallable {
         
         if isPreview {
             return
-        }
-        for i in 0..<tfqs.count {
-            cachedSols[(tfqs[i][0]-1)*13*13*13+(tfqs[i][1]-1)*13*13+(tfqs[i][2]-1)*13+tfqs[i][3]-1]=tfas[i]
         }
 
         // store locally: Device ID
@@ -298,12 +310,7 @@ class TFEngine: ObservableObject,tfCallable {
         icloudstore.synchronize()
         
         if readDevID == nil {
-            let nxtNum=Int.random(in: 0..<tfqs.count)
-            var crdSet=tfqs[nxtNum]
-            crdSet.shuffle()
-            for i in 0..<4 {
-                cs[i]=card(CardIcon: cardIcon.allCases.randomElement()!, numb: crdSet[i])
-            }
+            getRandomCards()
         } else {
             loadData(isIncremental: false)
             print("load")
@@ -313,6 +320,39 @@ class TFEngine: ObservableObject,tfCallable {
         
         updtExpr()
         updtLvlName()
+    }
+    
+    var cachedCards: problem24?
+    
+    var cacheFilling: Bool = false
+    
+    func fillCache() {
+        if cacheFilling||cachedCards != nil {
+            return
+        }
+        DispatchQueue.main.async { [self] in
+            cacheFilling=true
+            cachedCards=generateProblem(13)
+            cacheFilling=false
+        }
+    }
+    
+    func getRandomCards() {
+        var nxtCards: problem24
+        if cachedCards == nil {
+            fillCache()
+            nxtCards=generateProblem(13)
+        } else {
+            nxtCards=cachedCards!
+            cachedCards=nil
+            fillCache()
+        }
+        let nxtCardsList=[nxtCards.c1,nxtCards.c2,nxtCards.c3,nxtCards.c4]
+        for i in 0..<4 {
+            cs[i]=card(CardIcon: cardIcon.allCases.randomElement()!, numb: Int(nxtCardsList[i]))
+        }
+        currentProblemSol=String(cString: nxtCards.res.data)
+        nxtCards.res.data.deallocate()
     }
         
     @Published var cardsClickable:Bool
@@ -361,16 +401,15 @@ class TFEngine: ObservableObject,tfCallable {
         }
         
         if nxtCardSet == nil {
-            let nxtNum=Int.random(in: 0..<tfqs.count)
-            var crdSet=tfqs[nxtNum]
-            crdSet.shuffle()
-            var newCs=Array(repeating:card(CardIcon: .club, numb: 0),count:4)
-            for i in 0..<4 {
-                newCs[i]=card(CardIcon: cardIcon.allCases.randomElement()!, numb: crdSet[i])
-            }
-            cs=newCs
+            getRandomCards()
         } else {
             cs=nxtCardSet!
+            let checkSolution=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])
+            if checkSolution==nil {
+                getRandomCards()
+            } else {
+                currentProblemSol=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])!
+            }
         }
 
         cA=[true,true,true,true]
@@ -728,7 +767,7 @@ class TFEngine: ObservableObject,tfCallable {
             }
             ansCs=ansCs.sorted()
             answerShowOpacity=0
-            answerShow = cachedSols[13*13*13*ansCs[0]+13*13*ansCs[1]+13*ansCs[2]+ansCs[3]]!
+            answerShow = currentProblemSol
             withAnimation(.easeInOut(duration:ansBrightenTime)) {
                 answerShowOpacity = 1.0
             }

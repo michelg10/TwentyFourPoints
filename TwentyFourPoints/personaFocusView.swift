@@ -31,6 +31,7 @@ struct personaFocusView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal,50)
                     .foregroundColor(.secondary)
+                    .padding(.bottom,30)
             }
         }.navigationBarHidden(true)
     }

@@ -59,7 +59,7 @@ struct EmitterView: UIViewRepresentable {
             cell.name = confettiType.name
             
             cell.beginTime = 0.1
-            cell.birthRate = 80
+            cell.birthRate = 100
             cell.contents = confettiType.image.cgImage
             cell.emissionRange = CGFloat(Double.pi)
             cell.lifetime = 10

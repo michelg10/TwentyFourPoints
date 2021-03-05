@@ -70,7 +70,7 @@ struct konamiView: View {
                     navBarButton(symbolName: "arrow.clockwise", active: true)
                 }).buttonStyle(konamiButtonStyle())
 
-                Text("The level on this device must be at least \(tfengine.konamiLimitation()). If you want to further lower your level, change the level on your other devices or press the revalidate button above.")
+                Text("The level on this device must be at least \(String(tfengine.konamiLimitation())). If you want to further lower your level, change the level on your other devices or press the revalidate button above.")
                     .font(.system(size: 15, weight: .regular, design: .rounded))
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)

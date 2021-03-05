@@ -598,6 +598,11 @@ class TFEngine: ObservableObject,tfCallable {
     
     func doMath(addendB: Double, noCardsActive: Bool) -> mathResult {
         let addendA = mainVal!.value * (nxtNumNeg == true ? -1 : 1)
+        if selectedOperator == .div && doubleEquality(a: addendB, b: 0) {
+            mainVal!.value=0
+            selectedOperator = nil
+            return .failure
+        }
         switch selectedOperator! {
         case .add:
             mainVal!.value=addendA+addendB

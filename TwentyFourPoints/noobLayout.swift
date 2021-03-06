@@ -54,11 +54,14 @@ struct noobLayout: View {
                 MiddleButtonRow(colorActive: tuengine.numbButtonsHighlighted,
                                 actionActive: tuengine.getNumbButtonsClickable(),
                                 cards: tuengine.cards,
-                                tfengine: tuengine
+                                tfengine: tuengine,
+                                ultraCompetitive: tuengine.getUltraCompetitive()
                 )
                 BottomButtonRow(tfengine: tuengine,
                                 oprActionActive: tuengine.getOprButtonsClickable(),
-                                oprColorActive: tuengine.oprButtonsHighlighted)
+                                oprColorActive: tuengine.oprButtonsHighlighted,
+                                ultraCompetitive: tuengine.getUltraCompetitive()
+                )
             }.padding(.horizontal,15)
             .padding(.bottom,50)
             .padding(.top,23)

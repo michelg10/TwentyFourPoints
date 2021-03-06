@@ -40,7 +40,6 @@ struct bottomButtonStyle: ButtonStyle {
         configuration.label
             .saturation(configuration.isPressed ? 0.95 : 1)
             .brightness(configuration.isPressed ? 0.03 : 0) //0.05
-            .animation(.easeInOut(duration: 0.07))
     }
 }
 
@@ -166,6 +165,7 @@ struct TopButtonsRow: View {
                 })
                 .id("StoreButton")
                 .buttonStyle(bottomButtonStyle())
+                .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
                 .disabled(!storeActionEnabled)
             }
         }.frame(height: CGFloat(textInpHei))
@@ -177,6 +177,7 @@ struct MiddleButtonRow: View {
     var actionActive: [Bool]
     var cards: [card]
     var tfengine: tfCallable
+    var ultraCompetitive: Bool
     
     var body: some View {
         HStack(spacing:CGFloat(midSpace)) {
@@ -186,6 +187,7 @@ struct MiddleButtonRow: View {
                 }, label: {
                     bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(colorActive[index] ? "TextColor" : "ButtonInactiveTextColor"), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), id: "BottomButtonNum"+String(index), ultraCompetitive: tfengine.getUltraCompetitive())
                 }).buttonStyle(bottomButtonStyle())
+                .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
                 .disabled(!actionActive[index])
                 .modifier(konamiLog(tfengine: tfengine,daBtn: daBtn.allCases[4+index]))
             }
@@ -205,6 +207,7 @@ struct BottomButtonRow: View {
     var tfengine: tfCallable
     var oprActionActive: [Bool]
     var oprColorActive: [Bool]
+    var ultraCompetitive: Bool
     
     var body: some View {
         HStack(spacing:CGFloat(midSpace)) {
@@ -213,6 +216,7 @@ struct BottomButtonRow: View {
             }, label: {
                 bottomButtonView(fillColor: getButtonColor(active: oprColorActive[0]), textColor: getButtonTextColor(active: oprColorActive[0]), text: "+", id: "BottomButtonAdd", ultraCompetitive: tfengine.getUltraCompetitive())
             }).buttonStyle(bottomButtonStyle())
+            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
             .disabled(!oprActionActive[0])
             .modifier(konamiLog(tfengine: tfengine,daBtn: .add))
             Button(action: {
@@ -220,6 +224,7 @@ struct BottomButtonRow: View {
             }, label: {
                 bottomButtonView(fillColor: getButtonColor(active: oprColorActive[1]), textColor: getButtonTextColor(active: oprColorActive[1]), text: "-", id: "BottomButtonSub", ultraCompetitive: tfengine.getUltraCompetitive())
             }).buttonStyle(bottomButtonStyle())
+            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
             .disabled(!oprActionActive[1])
             .modifier(konamiLog(tfengine: tfengine,daBtn: .sub))
             Button(action: {
@@ -227,6 +232,7 @@ struct BottomButtonRow: View {
             }, label: {
                 bottomButtonView(fillColor: getButtonColor(active: oprColorActive[2]), textColor: getButtonTextColor(active: oprColorActive[2]), text: "×", id: "BottomButtonMul", ultraCompetitive: tfengine.getUltraCompetitive())
             }).buttonStyle(bottomButtonStyle())
+            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
             .disabled(!oprActionActive[2])
             .modifier(konamiLog(tfengine: tfengine,daBtn: .mul))
             Button(action: {
@@ -234,6 +240,7 @@ struct BottomButtonRow: View {
             }, label: {
                 bottomButtonView(fillColor: getButtonColor(active: oprColorActive[3]), textColor: getButtonTextColor(active: oprColorActive[3]), text: "÷", id: "BottomButtonDiv", ultraCompetitive: tfengine.getUltraCompetitive())
             }).buttonStyle(bottomButtonStyle())
+            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
             .disabled(!oprActionActive[3])
             .modifier(konamiLog(tfengine: tfengine,daBtn: .div))
         }
@@ -267,7 +274,8 @@ struct bottomButtons: View {
             MiddleButtonRow(colorActive: buttonsDisabled ? Array(repeating: false,count: 4) : tfengine.cA,
                             actionActive: allButtonsDisableSwitch ? Array(repeating: false,count:4) : tfengine.cA,
                             cards: tfengine.cs,
-                            tfengine: tfengine
+                            tfengine: tfengine,
+                            ultraCompetitive: tfengine.getUltraCompetitive()
             )
             let otherOprActionActive = tfengine.oprButtonActive && !allButtonsDisableSwitch
             let oprActionActive = [otherOprActionActive, !allButtonsDisableSwitch, otherOprActionActive, otherOprActionActive]
@@ -276,7 +284,8 @@ struct bottomButtons: View {
             
             BottomButtonRow(tfengine: tfengine,
                             oprActionActive: oprActionActive,
-                            oprColorActive: oprColorActive
+                            oprColorActive: oprColorActive,
+                            ultraCompetitive: tfengine.getUltraCompetitive()
             )
         }
     }

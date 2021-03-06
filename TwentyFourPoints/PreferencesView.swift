@@ -71,8 +71,8 @@ struct PreferencesView: View {
                         tfengine.upperBound=val
                         tfengine.saveData()
                     }), label: Text("Number Range").foregroundColor(.init("TextColor")), content: {
-                        ForEach((9...24), id:\.self) { index in
-                            Text(String(index)).tag(index)
+                        ForEach((8...24), id:\.self) { index in
+                            Text("\(String(index))").tag(index)
                         }
                     }).pickerStyle(InlinePickerStyle())
                 }

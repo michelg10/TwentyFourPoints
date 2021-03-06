@@ -40,6 +40,7 @@ struct SolverView: View {
                     }, label: {
                         cardView(active: index != selectedCardIndex, card: card(CardIcon: cardIcon.allCases[index], numb: eachCardState[index]),isStationary: true, ultraCompetitive: false)
                     }).buttonStyle(cardButtonStyle())
+                    .animation(.easeInOut(duration: competitiveButtonAnimationTime))
                 }
             }.padding(.horizontal,23)
 

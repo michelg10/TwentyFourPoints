@@ -158,6 +158,7 @@
 				F0E7271625DFC7BF00403CDD /* TopBar.swift */,
 				F02AB9F925E39EFD008EBE91 /* navBarButton.swift */,
 				F0B5B44425E28FBE0073606E /* mainView.swift */,
+				F0FF2E8A25F364740097B4A0 /* PreferencesView.swift */,
 				F0A16D8F25E76C5600C46C62 /* achievementView.swift */,
 				F01DAD4825EBF2D00096740B /* personaFocusView.swift */,
 				F02D3F1025F279800063716D /* generator24.cpp */,
@@ -171,7 +172,6 @@
 				F0B2E22925D9505A007DF20E /* BottomButtons.swift */,
 				F0B2E21625D91617007DF20E /* CardLayout.swift */,
 				F0B2E20B25D8D496007DF20E /* Card.swift */,
-				F0FF2E8A25F364740097B4A0 /* PreferencesView.swift */,
 				F0FFF9B325ECB40000E90620 /* constants.swift */,
 				F013E97A25EDE26A00FCBCD4 /* tutorialEngine.swift */,
 				F019984625EC5E5800946AD8 /* noobView.swift */,
@@ -530,7 +530,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;
@@ -560,7 +560,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;

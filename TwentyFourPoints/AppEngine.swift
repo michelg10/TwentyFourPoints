@@ -176,6 +176,14 @@ class TFEngine: ObservableObject,tfCallable {
             icloudstore.set(useHaptics, forKey: "useHaptics")
             icloudstore.set(upperBound, forKey: "upperBound")
             icloudstore.set(ultraCompetitive, forKey: "ultraCompetitive")
+            switch preferredColorMode {
+            case .none:
+                icloudstore.set(0, forKey: "appearance")
+            case .light:
+                icloudstore.set(1, forKey: "appearance")
+            case .dark:
+                icloudstore.set(2, forKey: "appearance")
+            }
             NSUbiquitousKeyValueStore.default.synchronize()
         } else {
             // save cards array locally
@@ -184,6 +192,14 @@ class TFEngine: ObservableObject,tfCallable {
             defaults.set(useHaptics, forKey: "useHaptics")
             defaults.set(upperBound, forKey: "upperBound")
             defaults.set(ultraCompetitive, forKey: "ultraCompetitive")
+            switch preferredColorMode {
+            case .none:
+                defaults.set(0, forKey: "appearance")
+            case .light:
+                defaults.set(1, forKey: "appearance")
+            case .dark:
+                defaults.set(2, forKey: "appearance")
+            }
         }
         defaults.synchronize()
         savingData=false
@@ -261,6 +277,7 @@ class TFEngine: ObservableObject,tfCallable {
         
     func loadData(isIncremental: Bool) {
         print("Load data")
+        let startingAppearance=preferredColorMode
         if synciCloud {
             let icloudDevicesVal=icloudstore.array(forKey: "devices")
             if icloudDevicesVal != nil {
@@ -310,6 +327,19 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 print("iCloud ultra competitive data not present")
             }
+            let appearanceVal=icloudstore.object(forKey: "appearance")
+            if appearanceVal != nil {
+                let tmpAppearanceVal = appearanceVal as! Int
+                if tmpAppearanceVal == 0 {
+                    preferredColorMode = .none
+                } else if tmpAppearanceVal == 1 {
+                    preferredColorMode = .light
+                } else if tmpAppearanceVal == 2 {
+                    preferredColorMode = .dark
+                }
+            } else {
+                print("iCloud appearance data not present")
+            }
         } else {
             csGrab=defaults.object(forKey: "cards") as! Data
             let localHapticsVal=defaults.object(forKey: "useHaptics")
@@ -330,6 +360,19 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 print("Local ultra competitive data not present")
             }
+            let appearanceVal=defaults.object(forKey: "appearance")
+            if appearanceVal != nil {
+                let tmpAppearanceVal = appearanceVal as! Int
+                if tmpAppearanceVal == 0 {
+                    preferredColorMode = .none
+                } else if tmpAppearanceVal == 1 {
+                    preferredColorMode = .light
+                } else if tmpAppearanceVal == 2 {
+                    preferredColorMode = .dark
+                }
+            } else {
+                print("Local appearance data not present")
+            }
         }
         let newcs:[card]=try! PropertyListDecoder().decode(Array<card>.self, from: csGrab)
         if isIncremental {
@@ -344,6 +387,20 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 currentProblemSol=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])!
             }
+        }
+        if preferredColorMode != startingAppearance {
+            updtColorScheme()
+        }
+    }
+    
+    func updtColorScheme() {
+        switch preferredColorMode {
+        case .none:
+            UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .unspecified
+        case .light:
+            UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .light
+        case .dark:
+            UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
         }
     }
     
@@ -404,6 +461,8 @@ class TFEngine: ObservableObject,tfCallable {
         }
     }
     
+    @Published var preferredColorMode: ColorScheme?
+    
     init(isPreview: Bool) {
         icloudstore=NSUbiquitousKeyValueStore.default
         
@@ -411,7 +470,7 @@ class TFEngine: ObservableObject,tfCallable {
         cA=[true, true, true,true]
         
         if isPreview {
-            levelInfo=LevelInfo(lvl: 696, lvlName: nil)
+            levelInfo=LevelInfo(lvl: 696, lvlName: "Mimi")
         } else {
             levelInfo=LevelInfo(lvl: 1, lvlName: nil)
         }

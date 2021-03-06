@@ -66,6 +66,15 @@ public struct TouchDownUpEventModifier: ViewModifier {
     }
 }
 
+struct achievementButtonStyle: ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .saturation(configuration.isPressed ? 0.95 : 1)
+            .brightness(configuration.isPressed ? 0.03 : 0) //0.05
+            .animation(.easeInOut(duration: 0.1))
+    }
+}
+
 struct mainView: View {
     @State var playClicked=false
     @State var solverClicked=false
@@ -103,7 +112,13 @@ struct mainView: View {
                     .sheet(isPresented: $prefPresented, onDismiss: {
                         tfengine.commitSnap()
                     }, content: {
-                        PreferencesView(tfengine: tfengine)
+                        PreferencesView(tfengine: tfengine, prefColorScheme: Binding(get: {
+                            tfengine.preferredColorMode
+                        }, set: { (value) in
+                            tfengine.preferredColorMode=value
+                            tfengine.saveData()
+                            print("go")
+                        }))
                     })
                 }.padding(.top,20)
                 Spacer()
@@ -131,7 +146,7 @@ struct mainView: View {
                     VStack {
                         Text("Achievements")
                             .font(.system(size: 24, weight: .semibold, design: .rounded))
-                            .offset(x: 0, y: 5)
+                            .offset(x: 0, y: 2)
                         Button(action: {
                             tfengine.hapticGate(hap: .medium)
                             achPresented=true
@@ -160,11 +175,11 @@ struct mainView: View {
                             }.background(
                                 RoundedRectangle(cornerRadius: 9)
                                     .animation(nil)
-                                    .frame(height:53)
+                                    .frame(height:55)
                                     .foregroundColor(.init("AchievementColor"))
                             )
                         })
-                        .buttonStyle(topBarButtonStyle())
+                        .buttonStyle(achievementButtonStyle())
                         .sheet(isPresented: $achPresented,onDismiss: {
                             canNavBack=false
                             print("No nav back")
@@ -220,6 +235,7 @@ struct mainView: View {
             }.navigationBarHidden(true)
         }
         .onAppear {
+            tfengine.updtColorScheme()
             DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
                 viewDidLoad=true
             }

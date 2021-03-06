@@ -139,7 +139,13 @@ class TFEngine: ObservableObject,tfCallable {
         }
     }
     
+    var savingData: Bool=false
+    
     func saveData() {
+        if savingData {
+            return
+        }
+        savingData=true
         print("Save data")
         if synciCloud {
             icloudstore.removeObject(forKey: "devemptylvl")
@@ -172,6 +178,7 @@ class TFEngine: ObservableObject,tfCallable {
             defaults.set(upperBound, forKey: "upperBound")
         }
         defaults.synchronize()
+        savingData=false
     }
     
     var stored: storedVal?

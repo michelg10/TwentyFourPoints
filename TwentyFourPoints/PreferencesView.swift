@@ -40,6 +40,7 @@ struct PreferencesView: View {
                     tfengine.useHaptics
                 }, set: { (val) in
                     tfengine.useHaptics=val
+                    tfengine.saveData()
                 }), label: {
                     Text("Haptics")
                 })
@@ -60,6 +61,7 @@ struct PreferencesView: View {
                         tfengine.upperBound
                     }, set: { (val) in
                         tfengine.upperBound=val
+                        tfengine.saveData()
                     }), label: Text("Number Range").foregroundColor(.init("TextColor")), content: {
                         ForEach((9...24), id:\.self) { index in
                             Text(String(index)).tag(index)

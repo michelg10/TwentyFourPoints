@@ -48,7 +48,8 @@ struct noobLayout: View {
                               incorText: "",
                               resetActionEnabled: false,
                               resetColorEnabled: true,
-                              storedExpr: tuengine.stored
+                              storedExpr: tuengine.stored,
+                              ultraCompetitive: tuengine.getUltraCompetitive()
                 )
                 MiddleButtonRow(colorActive: tuengine.numbButtonsHighlighted,
                                 actionActive: tuengine.getNumbButtonsClickable(),

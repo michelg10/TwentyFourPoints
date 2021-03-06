@@ -41,6 +41,7 @@ struct numView: View {
     var CardIcon: cardIcon
     var numberString:String
     var foregroundColor:Color
+    var ultraCompetitive: Bool
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .center, spacing: 0, content: {
@@ -53,7 +54,7 @@ struct numView: View {
                             .animation(springAnimation)
                             .foregroundColor(Color.white)
                             .colorMultiply(foregroundColor)
-                            .animation(.easeInOut(duration:0.1))
+                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
                         Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
                             .if (isStationary) { view in
                                 view.animation(nil)
@@ -61,7 +62,7 @@ struct numView: View {
                             .animation(springAnimation)
                             .foregroundColor(Color.white)
                             .colorMultiply(foregroundColor)
-                            .animation(.easeInOut(duration:0.1))
+                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
                     }
                     Spacer()
                 }
@@ -77,7 +78,7 @@ struct numView: View {
                             .animation(springAnimation)
                             .foregroundColor(Color.white)
                             .colorMultiply(foregroundColor)
-                            .animation(.easeInOut(duration:0.1))
+                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
                         Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
                             .if (isStationary) { view in
                                 view.animation(nil)
@@ -86,7 +87,7 @@ struct numView: View {
                             .animation(springAnimation)
                             .foregroundColor(Color.white)
                             .colorMultiply(foregroundColor)
-                            .animation(.easeInOut(duration:0.1))
+                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
                     }
                 }
             }).frame(minWidth: 0,maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
@@ -137,6 +138,7 @@ struct cardView: View {
     var active: Bool
     var card: card
     var isStationary: Bool
+    var ultraCompetitive: Bool
     var body: some View {
         let foregroundColor:Color=Color.init("CardForeground" + (card.CardIcon == .diamond || card.CardIcon == .heart ? "Red" : "Black") + (active ? "Active" : "Inactive"))
         Rectangle()
@@ -149,12 +151,12 @@ struct cardView: View {
                             .foregroundColor(Color.white)
                             .animation(springAnimation)
                             .colorMultiply(Color(active ? "Card-Active-Bg" : "Card-Inactive-Bg"))
-                            .animation(.easeInOut(duration:competitiveTime))
+                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
                         RoundedRectangle(cornerRadius: geometry.size.width*0.07,style: .continuous)
                             .stroke(Color.white, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
                             .animation(springAnimation)
                             .colorMultiply(foregroundColor)
-                            .animation(.easeInOut(duration:competitiveTime))
+                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
                             .padding(geometry.size.width*0.025)
                         Text(String(card.numb)).font(.system(size:(geometry.size.width)*0.55, weight: .medium, design: .rounded))
                             .if (isStationary) { view in
@@ -163,8 +165,8 @@ struct cardView: View {
                             .foregroundColor(Color.white)
                             .animation(springAnimation)
                             .colorMultiply(foregroundColor)
-                            .animation(.easeInOut(duration:competitiveTime))
-                        numView(isStationary: isStationary, CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor)
+                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
+                        numView(isStationary: isStationary, CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor, ultraCompetitive: ultraCompetitive)
                     }
                 }
 
@@ -174,7 +176,7 @@ struct cardView: View {
 
 struct card_Previews: PreviewProvider {
     static var previews: some View {
-        cardView(active: true, card: card(CardIcon: .club, numb: 2), isStationary: false)
+        cardView(active: true, card: card(CardIcon: .club, numb: 2), isStationary: false, ultraCompetitive: false)
 //        CardLayout(tfengine: TFEngine(), index: 0, primID: "")
     }
 }

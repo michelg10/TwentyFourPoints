@@ -70,6 +70,10 @@ enum daBtn:CaseIterable {
 }
 
 class TFEngine: ObservableObject,tfCallable {
+    func getUltraCompetitive() -> Bool {
+        return ultraCompetitive
+    }
+    
     //MARK: Updaters and Updatees
     @Published var storedExpr: String?
     @Published var expr: String = "" //update this from getExpr
@@ -114,6 +118,8 @@ class TFEngine: ObservableObject,tfCallable {
     var buttonsCanPress=false
     
     var cardsOnScreen = false
+    
+    @Published var ultraCompetitive: Bool
     
     var deviceData = [String: Int]()
     
@@ -169,6 +175,7 @@ class TFEngine: ObservableObject,tfCallable {
             icloudstore.set(try? PropertyListEncoder().encode(cs), forKey: "cards")
             icloudstore.set(useHaptics, forKey: "useHaptics")
             icloudstore.set(upperBound, forKey: "upperBound")
+            icloudstore.set(ultraCompetitive, forKey: "ultraCompetitive")
             NSUbiquitousKeyValueStore.default.synchronize()
         } else {
             // save cards array locally
@@ -176,6 +183,7 @@ class TFEngine: ObservableObject,tfCallable {
 
             defaults.set(useHaptics, forKey: "useHaptics")
             defaults.set(upperBound, forKey: "upperBound")
+            defaults.set(ultraCompetitive, forKey: "ultraCompetitive")
         }
         defaults.synchronize()
         savingData=false
@@ -280,6 +288,12 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 print("iCloud upper bound data not present")
             }
+            let ultraCompetitiveVal=icloudstore.object(forKey: "ultraCompetitive")
+            if ultraCompetitiveVal != nil {
+                ultraCompetitive=ultraCompetitiveVal as! Bool
+            } else {
+                print("iCloud ultra competitive data not present")
+            }
         } else {
             csGrab=defaults.object(forKey: "cards") as! Data
             let localHapticsVal=defaults.object(forKey: "useHaptics")
@@ -293,6 +307,12 @@ class TFEngine: ObservableObject,tfCallable {
                 upperBound=upperBoundVal as! Int
             } else {
                 print("Local upper bound data not present")
+            }
+            let ultraCompetitiveVal=defaults.object(forKey: "ultraCompetitive")
+            if ultraCompetitiveVal != nil {
+                ultraCompetitive=ultraCompetitiveVal as! Bool
+            } else {
+                print("Local ultra competitive data not present")
             }
         }
         let newcs:[card]=try! PropertyListDecoder().decode(Array<card>.self, from: csGrab)
@@ -390,6 +410,7 @@ class TFEngine: ObservableObject,tfCallable {
         useHaptics=true
         synciCloud=true
         upperBound=13
+        ultraCompetitive=false
         
         if isPreview {
             return

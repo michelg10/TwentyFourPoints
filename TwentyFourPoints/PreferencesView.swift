@@ -45,6 +45,14 @@ struct PreferencesView: View {
                     Text("Haptics")
                 })
                 Toggle(isOn: Binding(get: {
+                    !tfengine.ultraCompetitive
+                }, set: { (val) in
+                    tfengine.ultraCompetitive = !val
+                    tfengine.saveData()
+                }), label: {
+                    Text("Animate number presses")
+                })
+                Toggle(isOn: Binding(get: {
                     tfengine.synciCloud
                 }, set: { (val) in
                     tfengine.setiCloudSync(val: val)

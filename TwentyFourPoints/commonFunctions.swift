@@ -45,6 +45,7 @@ protocol tfCallable {
     func handleNumberPress(index: Int)
     func handleOprPress(Opr:opr)
     func hapticGate(hap:haptic)
+    func getUltraCompetitive() -> Bool
 }
 
 struct NavigationConfigurator: UIViewControllerRepresentable {

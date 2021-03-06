@@ -38,13 +38,13 @@ struct SolverView: View {
                             selectedCardIndex=index
                         }
                     }, label: {
-                        cardView(active: index != selectedCardIndex, card: card(CardIcon: cardIcon.allCases[index], numb: eachCardState[index]),isStationary: true)
+                        cardView(active: index != selectedCardIndex, card: card(CardIcon: cardIcon.allCases[index], numb: eachCardState[index]),isStationary: true, ultraCompetitive: false)
                     }).buttonStyle(cardButtonStyle())
                 }
             }.padding(.horizontal,23)
 
             Picker(selection: $eachCardState[selectedCardIndex], label: Text("Card"), content: {
-                ForEach((1...tfengine.upperBound), id:\.self) { index in
+                ForEach((1...24), id:\.self) { index in
                     Text(String(index)).tag(index)
                 }
             }).padding(.bottom,10)

@@ -72,6 +72,7 @@ struct mainView: View {
     @State var navAction: Int? = 0
     @State var achPresented: Bool = false
     @State var prefPresented: Bool = false
+    @State var viewDidLoad: Bool = false
     
     var tfengine: TFEngine
     var body: some View {
@@ -83,7 +84,20 @@ struct mainView: View {
                         tfengine.hapticGate(hap: .medium)
                         prefPresented=true
                     }, label: {
-                        navBarButton(symbolName: "gearshape.fill", active: true)
+                        ZStack {
+                            Circle()
+                                .foregroundColor(.white)
+                                .colorMultiply(Color.init("ButtonColorActive"))
+                                .frame(width:45,height:45)
+                            Image(systemName: "gearshape.fill")
+                                .animation(nil)
+                                .rotationEffect(.init(degrees: prefPresented ? -540:0), anchor: .center)
+                                .animation(viewDidLoad ? springAnimation : nil)
+                                .foregroundColor(.white)
+                                .colorMultiply(.init("TextColor"))
+                                .font(.system(size:22,weight: .medium))
+                                .animation(nil)
+                        }.padding(.horizontal,20)
                     }).buttonStyle(topBarButtonStyle())
                     .sheet(isPresented: $prefPresented,content: {
                         PreferencesView(tfengine: tfengine)
@@ -203,6 +217,9 @@ struct mainView: View {
             }.navigationBarHidden(true)
         }
         .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
+                viewDidLoad=true
+            }
             canNavBack=false
             print("No nav back")
         }

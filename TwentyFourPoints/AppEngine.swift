@@ -738,14 +738,14 @@ class TFEngine: ObservableObject,tfCallable {
     
     func respondToFailure() {
         updtExpr()
-        incorText=expr
+        let currentExpr=expr
+        reset()
+        incorText=currentExpr
         let flashDuration=0.2
         incorShowOpacity=0.6
         DispatchQueue.main.asyncAfter(deadline: .now()+flashDuration) { [self] in
-            
             incorShowOpacity=1.0
         }
-        reset()
     }
     
     func incrementLvl() {
@@ -804,6 +804,7 @@ class TFEngine: ObservableObject,tfCallable {
     }
     
     func reset() { //deactivate everything and reset engine
+        incorText=""
         selectedOperator=nil
         nxtNumNeg=nil
         withAnimation(.easeInOut(duration: cardAniDur)) {

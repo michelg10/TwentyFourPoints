@@ -67,7 +67,17 @@ struct konamiView: View {
                     tfengine.softStorageReset()
                     tfengine.hapticGate(hap: .medium)
                 }, label: {
-                    navBarButton(symbolName: "arrow.clockwise", active: true)
+                    ZStack {
+                        Circle()
+                            .foregroundColor(.white)
+                            .colorMultiply(Color.init("ButtonColorActive"))
+                            .frame(width:45,height:45)
+                        Image(systemName: "arrow.clockwise")
+                            .padding(.bottom,4)
+                            .foregroundColor(.white)
+                            .colorMultiply(.init("TextColor"))
+                            .font(.system(size:22,weight: .medium))
+                    }.padding(.horizontal,20)
                 }).buttonStyle(konamiButtonStyle())
 
                 Text("The level on this device must be at least \(String(tfengine.konamiLimitation())). If you want to further lower your level, change the level on your other devices or press the revalidate button above.")

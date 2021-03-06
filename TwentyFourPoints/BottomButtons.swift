@@ -258,7 +258,7 @@ struct bottomButtons: View {
                           answerText: tfengine.answerShow.replacingOccurrences(of: "/", with: "÷").replacingOccurrences(of: "*", with: "×"),
                           incorShowOpacity: tfengine.incorShowOpacity,
                           incorText: tfengine.incorText,
-                          resetActionEnabled: !(tfengine.expr=="" && tfengine.storedExpr == nil || allButtonsDisableSwitch),
+                          resetActionEnabled: !(tfengine.expr=="" && tfengine.storedExpr == nil && tfengine.incorText == "" || allButtonsDisableSwitch),
                           resetColorEnabled: !buttonsDisabled,
                           storedExpr: tfengine.storedExpr,
                           ultraCompetitive: tfengine.getUltraCompetitive()

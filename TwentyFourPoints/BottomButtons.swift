@@ -120,7 +120,7 @@ struct TopButtonsRow: View {
                         Spacer()
                         Button(action: {
                             tfengine.reset()
-                            generateHaptic(hap: .medium)
+                            tfengine.hapticGate(hap: .medium)
                         }, label: {
                             VStack {
                                 Spacer()

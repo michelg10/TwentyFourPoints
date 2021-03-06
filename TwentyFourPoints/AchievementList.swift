@@ -32,7 +32,7 @@ struct AchievementList: View {
                                 EmptyView()
                             })
                         Button(action: {
-                            generateHaptic(hap: .medium)
+                            tfengine.hapticGate(hap: .medium)
                             navTag=index
                         }, label: {
                             achievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)

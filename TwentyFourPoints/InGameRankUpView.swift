@@ -35,7 +35,7 @@ struct InGameRankUpView: View {
                 .fixedSize(horizontal: false, vertical: true)
             Spacer()
             Button(action: {
-                generateHaptic(hap: .medium)
+                tfengine.hapticGate(hap: .medium)
                 tfengine.dismissRank()
             }, label: {
                 navBarButton(symbolName: "chevron.forward", active: true)

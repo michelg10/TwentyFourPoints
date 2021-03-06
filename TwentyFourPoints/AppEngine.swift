@@ -122,38 +122,55 @@ class TFEngine: ObservableObject,tfCallable {
     var deviceID: String
         
     func softStorageReset() {
-        icloudstore.synchronize()
-        for (itrDeviceID,itrDeviceLvl) in deviceData {
-            if itrDeviceID == deviceID { // only save my own level as a security (???) measure
-                print("Erasing \(itrDeviceID) -> \(itrDeviceLvl)")
-                icloudstore.removeObject(forKey: "dev"+itrDeviceID+"lvl")
+        if synciCloud {
+            icloudstore.synchronize()
+            for (itrDeviceID,itrDeviceLvl) in deviceData {
+                if itrDeviceID == deviceID { // only save my own level as a security (???) measure
+                    print("Erasing \(itrDeviceID) -> \(itrDeviceLvl)")
+                    icloudstore.removeObject(forKey: "dev"+itrDeviceID+"lvl")
+                }
             }
+            let myData=deviceData[deviceID]
+            deviceData.removeAll()
+            deviceData[deviceID]=myData
+            saveData()
+            konamiLvl(setLvl: nil)
+            updtLvlName()
         }
-        let myData=deviceData[deviceID]
-        deviceData.removeAll()
-        deviceData[deviceID]=myData
-        saveData()
-        konamiLvl(setLvl: nil)
-        updtLvlName()
     }
     
     func saveData() {
-        icloudstore.removeObject(forKey: "devemptylvl")
+        print("Save data")
+        if synciCloud {
+            icloudstore.removeObject(forKey: "devemptylvl")
+        }
         precondition(deviceID != "empty")
         defaults.setValue(deviceData[deviceID], forKey: "myLvl")
         defaults.setValue(deviceID, forKey: "deviceID")
+        defaults.setValue(synciCloud, forKey: "synciCloud")
         deviceData.removeValue(forKey: "empty")
-        let deviceList:[String]=Array(deviceData.keys)
-        print(deviceList)
-        icloudstore.set(deviceList, forKey: "devices")
-        for (itrDeviceID,itrDeviceLvl) in deviceData {
-            if itrDeviceID == deviceID { // only save my own level as a security (???) measure
-                print("Saving \(itrDeviceID) as \(itrDeviceLvl)")
-                icloudstore.set(itrDeviceLvl, forKey: "dev"+itrDeviceID+"lvl")
+        
+        if synciCloud {
+            let deviceList:[String]=Array(deviceData.keys)
+            print(deviceList)
+            icloudstore.set(deviceList, forKey: "devices")
+            for (itrDeviceID,itrDeviceLvl) in deviceData {
+                if itrDeviceID == deviceID { // only save my own level as a security (???) measure
+                    print("Saving \(itrDeviceID) as \(itrDeviceLvl)")
+                    icloudstore.set(itrDeviceLvl, forKey: "dev"+itrDeviceID+"lvl")
+                }
             }
+            icloudstore.set(try? PropertyListEncoder().encode(cs), forKey: "cards")
+            icloudstore.set(useHaptics, forKey: "useHaptics")
+            icloudstore.set(upperBound, forKey: "upperBound")
+            NSUbiquitousKeyValueStore.default.synchronize()
+        } else {
+            // save cards array locally
+            defaults.set(try? PropertyListEncoder().encode(cs), forKey: "cards")
+
+            defaults.set(useHaptics, forKey: "useHaptics")
+            defaults.set(upperBound, forKey: "upperBound")
         }
-        icloudstore.set(try? PropertyListEncoder().encode(cs), forKey: "cards")
-        NSUbiquitousKeyValueStore.default.synchronize()
         defaults.synchronize()
     }
     
@@ -199,6 +216,12 @@ class TFEngine: ObservableObject,tfCallable {
     
     var selectedOperator : opr?
     
+    var useHaptics: Bool
+    
+    var synciCloud: Bool
+    
+    @Published var upperBound: Int
+    
     @Published var curQuestionID: UUID
     
     var nxtNumNeg:Bool? //set this as nil when its been applied
@@ -206,22 +229,65 @@ class TFEngine: ObservableObject,tfCallable {
     @Published var oprButtonActive: Bool = false // activate this when any number is pressed. and thus an opertor could be used.
         
     func loadData(isIncremental: Bool) {
-        let devices=icloudstore.array(forKey: "devices") as! [String]
-        for i in 0..<devices.count {
-            if devices[i] == "empty" {
-                continue
-            }
-            let tryDeviceLevel = icloudstore.object(forKey: "dev"+devices[i]+"lvl")
-            if tryDeviceLevel != nil {
-                let deviceLevel=tryDeviceLevel as! Int
-                deviceData[devices[i]]=deviceLevel
-                print("Set \(devices[i]) as \(deviceLevel)")
+        print("Load data")
+        if synciCloud {
+            let icloudDevicesVal=icloudstore.array(forKey: "devices")
+            if icloudDevicesVal != nil {
+                let devices=icloudDevicesVal as! [String]
+                for i in 0..<devices.count {
+                    if devices[i] == "empty" {
+                        continue
+                    }
+                    let tryDeviceLevel = icloudstore.object(forKey: "dev"+devices[i]+"lvl")
+                    if tryDeviceLevel != nil {
+                        let deviceLevel=tryDeviceLevel as! Int
+                        deviceData[devices[i]]=deviceLevel
+                        print("Set \(devices[i]) as \(deviceLevel)")
+                    }
+                }
+            } else {
+                print("iCloud devices list not present")
             }
         }
-        deviceData[deviceID]=(defaults.object(forKey: "myLvl") as! Int)
+        let defaultsmyLvlVal=defaults.object(forKey: "myLvl")
+        if defaultsmyLvlVal != nil {
+            deviceData[deviceID]=(defaults.object(forKey: "myLvl") as! Int)
+        } else {
+            print("Local level data not present")
+            deviceData[deviceID]=1
+        }
         updtLvlName()
         
-        let csGrab=icloudstore.object(forKey: "cards") as! Data
+        var csGrab: Data
+        if synciCloud {
+            csGrab=icloudstore.object(forKey: "cards") as! Data
+            let icloudHapticVal=icloudstore.object(forKey: "useHaptics")
+            if icloudHapticVal != nil {
+                useHaptics=icloudHapticVal as! Bool
+            } else {
+                print("iCloud haptics data not present")
+            }
+            let upperBoundVal=icloudstore.object(forKey: "upperBound")
+            if upperBoundVal != nil {
+                upperBound=upperBoundVal as! Int
+            } else {
+                print("iCloud upper bound data not present")
+            }
+        } else {
+            csGrab=defaults.object(forKey: "cards") as! Data
+            let localHapticsVal=defaults.object(forKey: "useHaptics")
+            if localHapticsVal != nil {
+                useHaptics=localHapticsVal as! Bool
+            } else {
+                print("Local haptics data not present")
+            }
+            let upperBoundVal=defaults.object(forKey: "upperBound")
+            if upperBoundVal != nil {
+                upperBound=upperBoundVal as! Int
+            } else {
+                print("Local upper bound data not present")
+            }
+        }
         let newcs:[card]=try! PropertyListDecoder().decode(Array<card>.self, from: csGrab)
         if isIncremental {
             if cs != newcs {
@@ -267,6 +333,34 @@ class TFEngine: ObservableObject,tfCallable {
         loadData(isIncremental: true)
     }
     
+    func setiCloudSync(val: Bool) {
+        if val==synciCloud {
+            return
+        }
+        if val==true {
+            NotificationCenter.default.addObserver(self, selector: #selector(storeUpdated(notification:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: icloudstore)
+            synciCloud=val
+            saveData()
+            loadData(isIncremental: false)
+        } else {
+            NotificationCenter.default.removeObserver(self, name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: icloudstore)
+            icloudstore.removeObject(forKey: "dev"+deviceID+"lvl")
+            icloudstore.synchronize()
+            let myData=deviceData[deviceID]
+            deviceData.removeAll()
+            deviceData[deviceID]=myData
+            updtLvlName()
+            synciCloud=val
+            saveData()
+        }
+    }
+    
+    func hapticGate(hap:haptic) {
+        if useHaptics {
+            generateHaptic(hap: hap)
+        }
+    }
+    
     init(isPreview: Bool) {
         icloudstore=NSUbiquitousKeyValueStore.default
         
@@ -286,14 +380,24 @@ class TFEngine: ObservableObject,tfCallable {
         incorText=""
         incorShowOpacity=1
         
+        useHaptics=true
+        synciCloud=true
+        upperBound=13
+        
         if isPreview {
             return
         }
 
         // store locally: Device ID
         // store in the cloud: All level information and card information
+        let doesicloudsync=defaults.value(forKey: "synciCloud")
+        if doesicloudsync != nil {
+            synciCloud=doesicloudsync as! Bool
+        }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(storeUpdated(notification:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: icloudstore)
+        if synciCloud {
+            NotificationCenter.default.addObserver(self, selector: #selector(storeUpdated(notification:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: icloudstore)
+        }
                 
         // fetch device ID from UserDefaults
         let readDevID=defaults.string(forKey: "deviceID")
@@ -307,7 +411,9 @@ class TFEngine: ObservableObject,tfCallable {
             deviceID=readDevID!
         }
         
-        icloudstore.synchronize()
+        if synciCloud {
+            icloudstore.synchronize()
+        }
         
         if readDevID == nil {
             getRandomCards()
@@ -332,7 +438,7 @@ class TFEngine: ObservableObject,tfCallable {
         }
         DispatchQueue.main.async { [self] in
             cacheFilling=true
-            cachedCards=generateProblem(13)
+            cachedCards=generateProblem(Int32(upperBound))
             cacheFilling=false
         }
     }
@@ -341,7 +447,7 @@ class TFEngine: ObservableObject,tfCallable {
         var nxtCards: problem24
         if cachedCards == nil {
             fillCache()
-            nxtCards=generateProblem(13)
+            nxtCards=generateProblem(Int32(upperBound))
         } else {
             nxtCards=cachedCards!
             cachedCards=nil
@@ -369,7 +475,7 @@ class TFEngine: ObservableObject,tfCallable {
         for i in 0..<viewShowOrder.count {
             DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
                 if cardsOnScreen {
-                    generateHaptic(hap: .soft)
+                    hapticGate(hap: .soft)
                 }
             })
         }
@@ -510,7 +616,7 @@ class TFEngine: ObservableObject,tfCallable {
     
     func handleOprPress(Opr:opr) {
         incorText=""
-        generateHaptic(hap: .light)
+        hapticGate(hap: .light)
         // replace whatever operator is currently in use. if there's nothing in the expression right now, turn the next number negative.
         
         if (mainVal == nil) {
@@ -530,7 +636,7 @@ class TFEngine: ObservableObject,tfCallable {
             
     func handleNumberPress(index: Int) {
         incorText=""
-        generateHaptic(hap: .light)
+        hapticGate(hap: .light)
         
         if !cA[index] {
             return
@@ -626,8 +732,8 @@ class TFEngine: ObservableObject,tfCallable {
             cardsOnScreen=false
             cardsClickable=false
             rewardScreenVisible=true
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.2, execute: {
-                generateHaptic(hap: .rigid)
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.2, execute: { [self] in
+                hapticGate(hap: .rigid)
             })
             cardsShouldVisible=Array(repeating: false, count: 4)
             curQuestionID=UUID()
@@ -683,7 +789,7 @@ class TFEngine: ObservableObject,tfCallable {
     }
     
     func doStore() {
-        generateHaptic(hap: .medium)
+        hapticGate(hap: .medium)
         //store can only be called if there's something in store or in the expression
         
         //handle operator selected
@@ -757,7 +863,7 @@ class TFEngine: ObservableObject,tfCallable {
             }
         }
         if nxtState == .ready {
-            generateHaptic(hap: .soft)
+            hapticGate(hap: .soft)
             expr=""
             // show the answer
             nxtState = .inTransition
@@ -788,7 +894,7 @@ class TFEngine: ObservableObject,tfCallable {
             })
         }
         if nxtState == .showingAnswer && !inTransition {
-            generateHaptic(hap: .medium)
+            hapticGate(hap: .medium)
             nxtState = .ready
             nextCardView(nxtCardSet: nil)
         }

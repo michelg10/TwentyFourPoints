@@ -71,11 +71,24 @@ struct mainView: View {
     @State var solverClicked=false
     @State var navAction: Int? = 0
     @State var achPresented: Bool = false
+    @State var prefPresented: Bool = false
     
     var tfengine: TFEngine
     var body: some View {
         NavigationView {
             VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        tfengine.hapticGate(hap: .medium)
+                        prefPresented=true
+                    }, label: {
+                        navBarButton(symbolName: "gearshape.fill", active: true)
+                    }).buttonStyle(topBarButtonStyle())
+                    .sheet(isPresented: $prefPresented,content: {
+                        PreferencesView(tfengine: tfengine)
+                    })
+                }.padding(.top,20)
                 Spacer()
                 VStack {
                     HStack {
@@ -103,7 +116,7 @@ struct mainView: View {
                             .font(.system(size: 24, weight: .semibold, design: .rounded))
                             .offset(x: 0, y: 5)
                         Button(action: {
-                            generateHaptic(hap: .medium)
+                            tfengine.hapticGate(hap: .medium)
                             achPresented=true
                             canNavBack=true
                             print("Nav back")
@@ -157,7 +170,7 @@ struct mainView: View {
                         })
                     
                     Button(action: {
-                        generateHaptic(hap: .medium)
+                        tfengine.hapticGate(hap: .medium)
                         navAction=1
                         tfengine.cardsOnScreen=true
                     }, label: {
@@ -173,7 +186,7 @@ struct mainView: View {
                     .padding(.bottom,12)
                     
                     Button(action: {
-                        generateHaptic(hap: .medium)
+                        tfengine.hapticGate(hap: .medium)
                         navAction=2
                     }, label: {
                         borederedButton(title: "Solver", clicked: solverClicked)
@@ -187,8 +200,8 @@ struct mainView: View {
                     }))
                 }.padding(.bottom,80)
                 Spacer()
-            }
-        }.navigationBarHidden(true)
+            }.navigationBarHidden(true)
+        }
         .onAppear {
             canNavBack=false
             print("No nav back")

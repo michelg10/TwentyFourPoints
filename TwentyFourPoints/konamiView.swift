@@ -48,7 +48,7 @@ struct konamiView: View {
                     )
                 Button(action: {
                     tfengine.konamiLvl(setLvl: levelInput)
-                    generateHaptic(hap: .medium)
+                    tfengine.hapticGate(hap: .medium)
                 }, label: {
                     Circle()
                         .frame(width:42,height:42)
@@ -65,7 +65,7 @@ struct konamiView: View {
             if tfengine.konamiLimitation() != 1 {
                 Button(action: {
                     tfengine.softStorageReset()
-                    generateHaptic(hap: .medium)
+                    tfengine.hapticGate(hap: .medium)
                 }, label: {
                     navBarButton(symbolName: "arrow.clockwise", active: true)
                 }).buttonStyle(konamiButtonStyle())

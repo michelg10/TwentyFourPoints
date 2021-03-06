@@ -15,7 +15,7 @@ struct personaFocusView: View {
         VStack {
             HStack {
                 Button(action: {
-                    generateHaptic(hap: .medium)
+                    tfengine.hapticGate(hap: .medium)
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
                     navBarButton(symbolName: "chevron.backward", active: true)

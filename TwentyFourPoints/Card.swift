@@ -10,16 +10,20 @@ import SwiftUI
 func getStringNameOfNum(num: Int) -> String {
     if num>=2&&num<=10 {
         return String(num)
-    } else if num==1 {
-        return "A"
-    } else if num==11 {
-        return "J"
-    } else if num==12 {
-        return "Q"
-    } else if num==13 {
-        return "K"
+    } else {
+        switch num {
+        case 1:
+            return "A"
+        case 11:
+            return "J"
+        case 12:
+            return "Q"
+        case 13:
+            return "K"
+        default:
+            return String(num)
+        }
     }
-    return "E"
 }
 
 func getImageNameOfIcon(icn:cardIcon) -> String {

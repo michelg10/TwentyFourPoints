@@ -17,7 +17,7 @@ struct SolverView: View {
         VStack() {
             HStack {
                 Button(action: {
-                    generateHaptic(hap: .medium)
+                    tfengine.hapticGate(hap: .medium)
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
                     navBarButton(symbolName: "chevron.backward", active: true)
@@ -34,7 +34,7 @@ struct SolverView: View {
                 ForEach((0..<4), id:\.self) { index in
                     Button(action: {
                         if selectedCardIndex != index {
-                            generateHaptic(hap: .medium)
+                            tfengine.hapticGate(hap: .medium)
                             selectedCardIndex=index
                         }
                     }, label: {
@@ -44,7 +44,7 @@ struct SolverView: View {
             }.padding(.horizontal,23)
 
             Picker(selection: $eachCardState[selectedCardIndex], label: Text("Card"), content: {
-                ForEach((1...13), id:\.self) { index in
+                ForEach((1...tfengine.upperBound), id:\.self) { index in
                     Text(String(index)).tag(index)
                 }
             }).padding(.bottom,10)

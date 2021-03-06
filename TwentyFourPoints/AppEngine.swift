@@ -237,6 +237,22 @@ class TFEngine: ObservableObject,tfCallable {
     
     @Published var upperBound: Int
     
+    var uboundSnapshot: Int?
+    
+    func snapshotUBound() {
+        uboundSnapshot=upperBound
+    }
+    
+    func commitSnap() {
+        if uboundSnapshot != nil {
+            if upperBound != uboundSnapshot {
+                cachedCards=nil
+                nextCardView(nxtCardSet: nil)
+            }
+            uboundSnapshot=nil
+        }
+    }
+    
     @Published var curQuestionID: UUID
     
     var nxtNumNeg:Bool? //set this as nil when its been applied

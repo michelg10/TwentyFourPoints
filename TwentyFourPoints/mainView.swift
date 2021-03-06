@@ -81,6 +81,7 @@ struct mainView: View {
                 HStack {
                     Spacer()
                     Button(action: {
+                        tfengine.snapshotUBound()
                         tfengine.hapticGate(hap: .medium)
                         prefPresented=true
                     }, label: {
@@ -99,7 +100,9 @@ struct mainView: View {
                                 .animation(nil)
                         }.padding(.horizontal,20)
                     }).buttonStyle(topBarButtonStyle())
-                    .sheet(isPresented: $prefPresented,content: {
+                    .sheet(isPresented: $prefPresented, onDismiss: {
+                        tfengine.commitSnap()
+                    }, content: {
                         PreferencesView(tfengine: tfengine)
                     })
                 }.padding(.top,20)

@@ -61,7 +61,7 @@ struct ProblemView: View {
                                                         }))
                         }
                     }
-                    bottomButtons(tfengine: tfengine, buttonsDisabled: tfengine.konamiCheatVisible || tfengine.rewardScreenVisible, buttonsPadding: buttonsPadding)
+                    bottomButtons(rotationObserver: rotationObserver, tfengine: tfengine, buttonsDisabled: tfengine.konamiCheatVisible || tfengine.rewardScreenVisible, buttonsPadding: buttonsPadding)
                         .padding(.horizontal,CGFloat(buttonsPadding))
                         .padding(.bottom,50)
                         .padding(.top,23)

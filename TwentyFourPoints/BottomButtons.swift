@@ -17,6 +17,7 @@ struct bottomButtonView: View {
     var text:String
     var id:String
     var ultraCompetitive: Bool
+    var doSplit:Bool
         
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -34,7 +35,7 @@ struct bottomButtonView: View {
                 .colorMultiply(textColor)
                 .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
                 .id(id+"-text")
-        }.frame(maxWidth: horizontalSizeClass == .regular ? CGFloat(maxButtonSize) : nil)
+        }.frame(maxWidth: doSplit ? CGFloat(maxButtonSize) : nil)
     }
 }
 
@@ -232,7 +233,7 @@ struct MiddleButtonRow: View {
                     Button(action: {
                         tfengine.handleNumberPress(index: index)
                     }, label: {
-                        bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(colorActive[index] ? "TextColor" : "ButtonInactiveTextColor"), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), id: "BottomButtonNum"+String(index), ultraCompetitive: tfengine.getUltraCompetitive())
+                        bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(colorActive[index] ? "TextColor" : "ButtonInactiveTextColor"), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), id: "BottomButtonNum"+String(index), ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
                     }).buttonStyle(bottomButtonStyle())
                     .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
                     .disabled(!actionActive[index])
@@ -256,7 +257,7 @@ struct MiddleButtonRow: View {
                     Button(action: {
                         tfengine.handleNumberPress(index: index)
                     }, label: {
-                        bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(colorActive[index] ? "TextColor" : "ButtonInactiveTextColor"), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), id: "BottomButtonNum"+String(index), ultraCompetitive: tfengine.getUltraCompetitive())
+                        bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(colorActive[index] ? "TextColor" : "ButtonInactiveTextColor"), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), id: "BottomButtonNum"+String(index), ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
                     }).buttonStyle(bottomButtonStyle())
                     .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
                     .disabled(!actionActive[index])
@@ -292,7 +293,7 @@ struct BottomButtonRow: View {
                 Button(action: {
                     tfengine.handleOprPress(Opr: .add)
                 }, label: {
-                    bottomButtonView(fillColor: getButtonColor(active: oprColorActive[0]), textColor: getButtonTextColor(active: oprColorActive[0]), text: "+", id: "BottomButtonAdd", ultraCompetitive: tfengine.getUltraCompetitive())
+                    bottomButtonView(fillColor: getButtonColor(active: oprColorActive[0]), textColor: getButtonTextColor(active: oprColorActive[0]), text: "+", id: "BottomButtonAdd", ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
                 }).buttonStyle(bottomButtonStyle())
                 .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
                 .disabled(!oprActionActive[0])
@@ -301,7 +302,7 @@ struct BottomButtonRow: View {
                 Button(action: {
                     tfengine.handleOprPress(Opr: .sub)
                 }, label: {
-                    bottomButtonView(fillColor: getButtonColor(active: oprColorActive[1]), textColor: getButtonTextColor(active: oprColorActive[1]), text: "-", id: "BottomButtonSub", ultraCompetitive: tfengine.getUltraCompetitive())
+                    bottomButtonView(fillColor: getButtonColor(active: oprColorActive[1]), textColor: getButtonTextColor(active: oprColorActive[1]), text: "-", id: "BottomButtonSub", ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
                 }).buttonStyle(bottomButtonStyle())
                 .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
                 .disabled(!oprActionActive[1])
@@ -323,7 +324,7 @@ struct BottomButtonRow: View {
                 Button(action: {
                     tfengine.handleOprPress(Opr: .mul)
                 }, label: {
-                    bottomButtonView(fillColor: getButtonColor(active: oprColorActive[2]), textColor: getButtonTextColor(active: oprColorActive[2]), text: "×", id: "BottomButtonMul", ultraCompetitive: tfengine.getUltraCompetitive())
+                    bottomButtonView(fillColor: getButtonColor(active: oprColorActive[2]), textColor: getButtonTextColor(active: oprColorActive[2]), text: "×", id: "BottomButtonMul", ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
                 }).buttonStyle(bottomButtonStyle())
                 .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
                 .disabled(!oprActionActive[2])
@@ -332,7 +333,7 @@ struct BottomButtonRow: View {
                 Button(action: {
                     tfengine.handleOprPress(Opr: .div)
                 }, label: {
-                    bottomButtonView(fillColor: getButtonColor(active: oprColorActive[3]), textColor: getButtonTextColor(active: oprColorActive[3]), text: "÷", id: "BottomButtonDiv", ultraCompetitive: tfengine.getUltraCompetitive())
+                    bottomButtonView(fillColor: getButtonColor(active: oprColorActive[3]), textColor: getButtonTextColor(active: oprColorActive[3]), text: "÷", id: "BottomButtonDiv", ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
                 }).buttonStyle(bottomButtonStyle())
                 .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
                 .disabled(!oprActionActive[3])
@@ -348,12 +349,14 @@ struct bottomButtons: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     
+    @ObservedObject var rotationObserver : UIRotationObserver
     @ObservedObject var tfengine:TFEngine
     var buttonsDisabled: Bool
     var buttonsPadding: Double
     
     var body: some View {
         let doSplit: Bool=CGFloat(2*buttonsPadding+4*maxButtonSize+3*midSpace+2*buttonTooltipSize)<UIApplication.shared.windows.first!.frame.width && horizontalSizeClass == .regular
+//        let doSplit=false
         VStack {
             let allButtonsDisableSwitch=buttonsDisabled || tfengine.nxtState != .ready
             TopButtonsRow(tfengine: tfengine,
@@ -398,7 +401,7 @@ struct bottomButtons: View {
 struct BottomButtons_Previews: PreviewProvider {
     static var previews: some View {
 //        TopButtonsRow(tfengine: TFEngine(isPreview: true), storeActionEnabled: true, storeIconColorEnabled: true, storeTextColorEnabled: true, storeRectColorEnabled: true, expr: "Expression", answerShowOpacity: 1, answerText: "", incorShowOpacity: 0, incorText: "", resetActionEnabled: true, resetColorEnabled: true, storedExpr: nil, ultraCompetitive: false, doSplit: true)
-        bottomButtons(tfengine: TFEngine(isPreview: true), buttonsDisabled: false, buttonsPadding: 30.0)
+        bottomButtons(rotationObserver: UIRotationObserver(), tfengine: TFEngine(isPreview: true), buttonsDisabled: false, buttonsPadding: 30.0)
             .preferredColorScheme(.light)
     }
 }

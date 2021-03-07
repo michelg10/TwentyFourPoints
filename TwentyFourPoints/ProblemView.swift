@@ -51,7 +51,7 @@ struct ProblemView: View {
                                                             draggedAmt=value.translation
                                                             tfengine.cardsClickable=false
                                                         }).onEnded({ (value) in
-                                                            if value.predictedEndTranslation.width > UIScreen.main.bounds.width*(horizontalSizeClass == .regular ? 0.2 : 0.4) {
+                                                            if value.predictedEndTranslation.width > UIApplication.shared.windows.first!.frame.width*(horizontalSizeClass == .regular ? 0.2 : 0.4) {
                                                                 draggedAmt = .zero
                                                                 tfengine.nextCardView(nxtCardSet: nil)
                                                             } else {
@@ -63,7 +63,7 @@ struct ProblemView: View {
                     }
                     bottomButtons(rotationObserver: rotationObserver, tfengine: tfengine, buttonsDisabled: tfengine.konamiCheatVisible || tfengine.rewardScreenVisible, buttonsPadding: buttonsPadding)
                         .padding(.horizontal,CGFloat(buttonsPadding))
-                        .padding(.bottom,50)
+                        .padding(.bottom,horizontalSizeClass == .regular ? 80.0 : 50.0)
                         .padding(.top,23)
                     Spacer()
                 }
@@ -74,7 +74,8 @@ struct ProblemView: View {
                         .disabled(true)
                         .zIndex(9999)
                 }
-            }.ignoresSafeArea(.keyboard,edges: .all)
+            }.background(Color.init("bgColor"))
+            .ignoresSafeArea(.keyboard,edges: .all)
             .navigationBarHidden(true)
         }.onAppear {
             print("Nav back")

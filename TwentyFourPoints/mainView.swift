@@ -254,6 +254,7 @@ struct mainView: View {
                 }.padding(.bottom,80)
                 Spacer()
             }.navigationBarHidden(true)
+            .background(Color.init("bgColor"))
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {

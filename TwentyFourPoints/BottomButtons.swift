@@ -74,7 +74,7 @@ let midSpace=10.0
 let buttonRadius=0.4
 let textField=0.65
 let textFontSize=0.5
-let maxButtonSize: Double=160
+let maxButtonSize: Double=140
 let buttonTooltipSize: Double=51
 
 struct imageTooltip: View {

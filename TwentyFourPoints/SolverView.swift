@@ -57,7 +57,8 @@ struct SolverView: View {
             
             Spacer()
             
-        }.navigationBarHidden(true)
+        }.background(Color.init("bgColor"))
+        .navigationBarHidden(true)
         .onAppear {
             print("Nav back")
             canNavBack=true

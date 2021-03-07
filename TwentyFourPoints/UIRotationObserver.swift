@@ -19,11 +19,13 @@ class UIRotationObserver:ObservableObject {
         print("Update")
     }
     init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
-        isPortrait = UIApplication.shared.windows
-            .first?
-            .windowScene?
-            .interfaceOrientation
-            .isPortrait ?? false
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            NotificationCenter.default.addObserver(self, selector: #selector(self.rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
+            isPortrait = UIApplication.shared.windows
+                .first?
+                .windowScene?
+                .interfaceOrientation
+                .isPortrait ?? false
+        }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GameController
 
 struct bottomButtonView: View {
     let buttonHei=49.0
@@ -123,6 +124,7 @@ struct TopButtonsRow: View {
     var ultraCompetitive: Bool
     
     var doSplit: Bool
+    var showTooltip: Bool
     
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -174,12 +176,12 @@ struct TopButtonsRow: View {
                         .keyboardShortcut(tfengine.getKeyboardSettings().resetButton, modifiers: .init([]))
                     }
                 }.frame(width: doSplit ? CGFloat(2*maxButtonSize+midSpace) : CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .leading)
-                if doSplit {
+                if doSplit && showTooltip {
                     imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().resetButton.character))
                         .padding(.leading,10)
                 }
                 Spacer()
-                if doSplit {
+                if doSplit && showTooltip {
                     imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().storeButton.character))
                         .padding(.trailing,10)
                 }
@@ -222,6 +224,7 @@ struct MiddleButtonRow: View {
     var tfengine: tfCallable
     var ultraCompetitive: Bool
     var doSplit: Bool
+    var showTooltip: Bool
     
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -242,15 +245,19 @@ struct MiddleButtonRow: View {
                 }
             }
             if doSplit {
-                imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().numsButton[0].character))
-                    .padding(.leading,CGFloat(tooltipDistance))
-                imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().numsButton[1].character))
-                    .padding(.leading,CGFloat(tooltipSpacing))
+                if showTooltip {
+                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().numsButton[0].character))
+                        .padding(.leading,CGFloat(tooltipDistance))
+                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().numsButton[1].character))
+                        .padding(.leading,CGFloat(tooltipSpacing))
+                }
                 Spacer()
-                imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().numsButton[2].character))
-                    .padding(.trailing,CGFloat(tooltipSpacing))
-                imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().numsButton[3].character))
-                    .padding(.trailing,CGFloat(tooltipDistance))
+                if showTooltip {
+                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().numsButton[2].character))
+                        .padding(.trailing,CGFloat(tooltipSpacing))
+                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().numsButton[3].character))
+                        .padding(.trailing,CGFloat(tooltipDistance))
+                }
             }
             HStack(spacing:CGFloat(midSpace)) {
                 ForEach((2..<4), id:\.self) { index in
@@ -283,6 +290,7 @@ struct BottomButtonRow: View {
     var oprColorActive: [Bool]
     var ultraCompetitive: Bool
     var doSplit: Bool
+    var showTooltip: Bool
     
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -310,15 +318,19 @@ struct BottomButtonRow: View {
                 .keyboardShortcut(tfengine.getKeyboardSettings().oprsButton[1], modifiers: .init([]))
             }
             if doSplit {
-                imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().oprsButton[0].character))
-                    .padding(.leading,CGFloat(tooltipDistance))
-                imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().oprsButton[1].character))
-                    .padding(.leading,CGFloat(tooltipSpacing))
+                if showTooltip {
+                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().oprsButton[0].character))
+                        .padding(.leading,CGFloat(tooltipDistance))
+                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().oprsButton[1].character))
+                        .padding(.leading,CGFloat(tooltipSpacing))
+                }
                 Spacer()
-                imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().oprsButton[2].character))
-                    .padding(.trailing,CGFloat(tooltipSpacing))
-                imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().oprsButton[3].character))
-                    .padding(.trailing,CGFloat(tooltipDistance))
+                if showTooltip {
+                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().oprsButton[2].character))
+                        .padding(.trailing,CGFloat(tooltipSpacing))
+                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().oprsButton[3].character))
+                        .padding(.trailing,CGFloat(tooltipDistance))
+                }
             }
             HStack(spacing:CGFloat(midSpace)) {
                 Button(action: {
@@ -355,7 +367,8 @@ struct bottomButtons: View {
     var buttonsPadding: Double
     
     var body: some View {
-        let doSplit: Bool=CGFloat(2*buttonsPadding+4*maxButtonSize+3*midSpace+2*buttonTooltipSize)<UIApplication.shared.windows.first!.frame.width && horizontalSizeClass == .regular
+        let showTooltip=GCKeyboard.coalesced != nil
+        let doSplit: Bool=CGFloat(2*buttonsPadding+4*maxButtonSize+3*midSpace+(showTooltip ? 2*buttonTooltipSize : 0))<UIApplication.shared.windows.first!.frame.width && horizontalSizeClass == .regular
 //        let doSplit=false
         VStack {
             let allButtonsDisableSwitch=buttonsDisabled || tfengine.nxtState != .ready
@@ -373,7 +386,8 @@ struct bottomButtons: View {
                           resetColorEnabled: !buttonsDisabled,
                           storedExpr: tfengine.storedExpr,
                           ultraCompetitive: tfengine.getUltraCompetitive(),
-                          doSplit: doSplit
+                          doSplit: doSplit,
+                          showTooltip: showTooltip
             )
             
             MiddleButtonRow(colorActive: buttonsDisabled ? Array(repeating: false,count: 4) : tfengine.cA,
@@ -381,7 +395,8 @@ struct bottomButtons: View {
                             cards: tfengine.cs,
                             tfengine: tfengine,
                             ultraCompetitive: tfengine.getUltraCompetitive(),
-                            doSplit: doSplit
+                            doSplit: doSplit,
+                            showTooltip: showTooltip
             )
             let otherOprActionActive = tfengine.oprButtonActive && !allButtonsDisableSwitch
             let oprActionActive = [otherOprActionActive, !allButtonsDisableSwitch, otherOprActionActive, otherOprActionActive]
@@ -392,7 +407,8 @@ struct bottomButtons: View {
                             oprActionActive: oprActionActive,
                             oprColorActive: oprColorActive,
                             ultraCompetitive: tfengine.getUltraCompetitive(),
-                            doSplit: doSplit
+                            doSplit: doSplit,
+                            showTooltip: showTooltip
             )
         }
     }

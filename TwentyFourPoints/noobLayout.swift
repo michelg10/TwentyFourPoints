@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GameController
 
 struct noobLayout: View {
     @ObservedObject var tuengine: tutorialEngine
@@ -16,6 +17,7 @@ struct noobLayout: View {
     var body: some View {
         let buttonsPadding=horizontalSizeClass == .regular ? 30.0 : 15.0
         let curState=tuengine.tutState[tuengine.curState]
+        let showTooltip=GCKeyboard.coalesced != nil
         VStack {
             Text("24 Points")
                 .font(.system(size: 32, weight: .bold, design: .rounded))
@@ -54,20 +56,23 @@ struct noobLayout: View {
                               resetColorEnabled: true,
                               storedExpr: tuengine.stored,
                               ultraCompetitive: tuengine.getUltraCompetitive(),
-                              doSplit: doSplit
+                              doSplit: doSplit,
+                              showTooltip: showTooltip
                 )
                 MiddleButtonRow(colorActive: tuengine.numbButtonsHighlighted,
                                 actionActive: tuengine.getNumbButtonsClickable(),
                                 cards: tuengine.cards,
                                 tfengine: tuengine,
                                 ultraCompetitive: tuengine.getUltraCompetitive(),
-                                doSplit: doSplit
+                                doSplit: doSplit,
+                                showTooltip: showTooltip
                 )
                 BottomButtonRow(tfengine: tuengine,
                                 oprActionActive: tuengine.getOprButtonsClickable(),
                                 oprColorActive: tuengine.oprButtonsHighlighted,
                                 ultraCompetitive: tuengine.getUltraCompetitive(),
-                                doSplit: doSplit
+                                doSplit: doSplit,
+                                showTooltip: showTooltip
                 )
             }.padding(.horizontal,15)
             .padding(.bottom,50)

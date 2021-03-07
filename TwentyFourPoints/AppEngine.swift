@@ -23,7 +23,7 @@ enum opr {
 }
 
 let qwertySet=KeyboardShortcutSet(resetButton: .init(" "), storeButton: .init("v"), numsButton: [.init("w"),.init("r"),.init("u"),.init("o")], oprsButton: [.init("s"),.init("f"),.init("j"),.init("l")], skipButton: .return)
-let azertySet=KeyboardShortcutSet(resetButton: .init(" "), storeButton: .init("v"), numsButton: [.init("a"),.init("z"),.init("e"),.init("r")], oprsButton: [.init("q"),.init("s"),.init("d"),.init("f")], skipButton: .return)
+let azertySet=KeyboardShortcutSet(resetButton: .init(" "), storeButton: .init("v"), numsButton: [.init("z"),.init("r"),.init("u"),.init("o")], oprsButton: [.init("s"),.init("f"),.init("j"),.init("l")], skipButton: .return)
 
 struct card:Codable, Equatable {
     var CardIcon:cardIcon

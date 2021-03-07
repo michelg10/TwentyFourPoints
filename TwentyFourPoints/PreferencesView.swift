@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import CoreHaptics
 
 struct icon24: View {
     var appearance: ColorScheme
@@ -22,7 +22,8 @@ struct icon24: View {
                     .font(.system(size: geometry.size.width*240/512, weight: .medium, design: .rounded))
                     .foregroundColor(Color.init(appearance == .light ? "CardForegroundBlackActive-Light" : "CardForegroundBlackActive-Dark"))
             }
-        }.aspectRatio(1.0, contentMode: .fit)
+        }.frame(maxWidth:100, maxHeight:100)
+        .aspectRatio(1.0, contentMode: .fit)
     }
 }
 
@@ -55,6 +56,7 @@ struct colorSchemeSelector: View {
     @Binding var preferredColorMode: ColorScheme?
     @State var userSelected: Bool = false
     var appearanceName: String
+    var tfengine: TFEngine
     var body: some View {
         Button(action: {
             if appearance == .light {
@@ -65,6 +67,7 @@ struct colorSchemeSelector: View {
                 UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .unspecified
             }
             preferredColorMode=appearance
+            tfengine.hapticGate(hap: .medium)
         }, label: {
             VStack {
                 if appearance == .none {
@@ -117,16 +120,15 @@ struct PreferencesView: View {
                 }, label: {
                     ZStack {
                         Circle()
-                            .foregroundColor(.white)
-                            .colorMultiply(Color.init("ButtonColorActive"))
+                            .foregroundColor(.init("ButtonColorActive"))
                             .frame(width:45,height:45)
                         Image(systemName: "chevron.down")
-                            .foregroundColor(.white)
-                            .colorMultiply(.init("TextColor"))
+                            .foregroundColor(.init("TextColor"))
                             .font(.system(size:22,weight: .medium))
                             .padding(.top,3)
                     }.padding(.horizontal,20)
                 }).buttonStyle(topBarButtonStyle())
+                .hoverEffect(.lift)
                 Spacer()
             }.padding(.top,20)
             Text("Preferences")
@@ -134,35 +136,64 @@ struct PreferencesView: View {
                 .padding(.top, 13)
                 .padding(.bottom,17)
             List {
-                Toggle(isOn: Binding(get: {
-                    tfengine.useHaptics
-                }, set: { (val) in
-                    tfengine.useHaptics=val
-                    tfengine.saveData()
-                }), label: {
+                HStack(spacing:0) {
                     Text("Haptics")
-                })
+                    Spacer()
+                    if CHHapticEngine.capabilitiesForHardware().supportsHaptics {
+                        Toggle("", isOn: Binding(get: {
+                            tfengine.useHaptics
+                        }, set: { (val) in
+                            tfengine.useHaptics=val
+                            tfengine.saveData()
+                        }))
+                    } else {
+                        Text("Unavailable")
+                            .foregroundColor(.secondary)
+                    }
+                }
                 VStack(alignment: .leading,spacing:0) {
                     Text("Appearance")
                         .padding(.bottom,10)
-                    HStack(spacing:18) {
-                        colorSchemeSelector(appearanceSeems: colorScheme,
-                                            appearance: nil,
-                                            preferredColorMode: $prefColorScheme,
-                                            appearanceName: "System"
-                        )
-                        colorSchemeSelector(appearanceSeems: .light,
-                                            appearance: .light,
-                                            preferredColorMode: $prefColorScheme,
-                                            appearanceName: "Light"
-                        )
-                        colorSchemeSelector(appearanceSeems: .dark,
-                                            appearance: .dark,
-                                            preferredColorMode: $prefColorScheme,
-                                            appearanceName: "Dark"
-                        )
-                    }.padding(.horizontal,20)
+                    HStack(spacing:0) {
+                        Spacer()
+                        HStack(spacing:18) {
+                            colorSchemeSelector(appearanceSeems: colorScheme,
+                                                appearance: nil,
+                                                preferredColorMode: $prefColorScheme,
+                                                appearanceName: "System",
+                                                tfengine: tfengine
+                            )
+                            colorSchemeSelector(appearanceSeems: .light,
+                                                appearance: .light,
+                                                preferredColorMode: $prefColorScheme,
+                                                appearanceName: "Light",
+                                                tfengine: tfengine
+                            )
+                            colorSchemeSelector(appearanceSeems: .dark,
+                                                appearance: .dark,
+                                                preferredColorMode: $prefColorScheme,
+                                                appearanceName: "Dark",
+                                                tfengine: tfengine
+                            )
+                        }.padding(.horizontal,20)
+                        Spacer()
+                    }
                 }.padding(.bottom,10)
+                HStack {
+                    Text("Keyboard")
+                    Spacer()
+                    Picker(selection: Binding(get: {
+                        tfengine.keyboardType
+                    }, set: { (val) in
+                        tfengine.keyboardType=val
+                        tfengine.getKeyboardType()
+                        tfengine.saveData()
+                    }), label: Text(""), content: {
+                        Text("QWERTY").tag(1)
+                        Text("AZERTY").tag(2)
+                    }).pickerStyle(SegmentedPickerStyle())
+                    .fixedSize()
+                }
                 Toggle(isOn: Binding(get: {
                     !tfengine.ultraCompetitive
                 }, set: { (val) in

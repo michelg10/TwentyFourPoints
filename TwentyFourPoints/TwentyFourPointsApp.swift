@@ -14,7 +14,7 @@ struct TwentyFourPointsApp: App {
             if UserDefaults.standard.string(forKey: "deviceID") == nil {
                 noobView(tuengine: tutorialEngine())
             } else {
-                mainView(tfengine: TFEngine(isPreview: false))
+                mainView(rotationObserver: UIRotationObserver(), tfengine: TFEngine(isPreview: false))
             }
         }
     }

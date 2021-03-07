@@ -10,16 +10,18 @@ import SwiftUI
 struct navBarButton: View {
     var symbolName: String
     var active: Bool
+    
+    @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
+    
     var body: some View {
         ZStack {
             Circle()
-                .foregroundColor(.white)
-                .colorMultiply(Color.init(active ? "ButtonColorActive" : "ButtonColorInactive"))
-                .frame(width:45,height:45)
+                .foregroundColor(.init(active ? "ButtonColorActive" : "ButtonColorInactive"))
+                .frame(width:horizontalSizeClass == .regular ? 55 : 45,height:horizontalSizeClass == .regular ? 65 : 45)
             Image(systemName: symbolName)
-                .foregroundColor(.white)
-                .colorMultiply(.init(active ? "TextColor" : "ButtonInactiveTextColor"))
-                .font(.system(size:22,weight: .medium))
+                .foregroundColor(.init(active ? "TextColor" : "ButtonInactiveTextColor"))
+                .font(.system(size: horizontalSizeClass == .regular ? 27 : 22,weight: .medium))
         }.padding(.horizontal,20)
     }
 }

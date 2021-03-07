@@ -20,6 +20,7 @@ struct personaFocusView: View {
                 }, label: {
                     navBarButton(symbolName: "chevron.backward", active: true)
                 }).buttonStyle(topBarButtonStyle())
+                .hoverEffect(.lift)
                 Spacer()
             }.padding(.top,20)
             .padding(.bottom,50)

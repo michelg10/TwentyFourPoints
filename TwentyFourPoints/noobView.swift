@@ -45,9 +45,10 @@ struct noobView: View {
                     } else {
                         startClicked=false
                     }
-                })).padding(.bottom,150)
+                }))
+                Spacer()
             }
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

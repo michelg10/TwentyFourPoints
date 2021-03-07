@@ -20,16 +20,15 @@ struct achievementView: View {
                     }, label: {
                         ZStack {
                             Circle()
-                                .foregroundColor(.white)
-                                .colorMultiply(Color.init("ButtonColorActive"))
+                                .foregroundColor(.init("ButtonColorActive"))
                                 .frame(width:45,height:45)
                             Image(systemName: "chevron.down")
-                                .foregroundColor(.white)
-                                .colorMultiply(.init("TextColor"))
+                                .foregroundColor(.init("TextColor"))
                                 .font(.system(size:22,weight: .medium))
                                 .padding(.top,3)
                         }.padding(.horizontal,20)
                     }).buttonStyle(topBarButtonStyle())
+                    .hoverEffect(.lift)
                     Spacer()
                 }.padding(.top,20)
                 Text("Achievements")
@@ -47,7 +46,8 @@ struct achievementView: View {
                 if curLvl != -1 {
                     AchievementList(curLvl: curLvl, tfengine: tfengine, listType: .complete)
                 }
-            }.navigationBarHidden(true)
+            }
+            .navigationBarHidden(true)
         }
     }
 }

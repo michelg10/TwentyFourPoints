@@ -82,6 +82,14 @@ struct mainView: View {
     @State var achPresented: Bool = false
     @State var prefPresented: Bool = false
     @State var viewDidLoad: Bool = false
+    @State var achievementHover: Bool = false
+    @State var playHover: Bool = false
+    @State var solverHover: Bool = false
+    @State var prefHover: Bool = false
+    
+    @ObservedObject var rotationObserver: UIRotationObserver
+    @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     
     var tfengine: TFEngine
     var body: some View {
@@ -96,19 +104,20 @@ struct mainView: View {
                     }, label: {
                         ZStack {
                             Circle()
-                                .foregroundColor(.white)
-                                .colorMultiply(Color.init("ButtonColorActive"))
-                                .frame(width:45,height:45)
+                                .foregroundColor(.init("ButtonColorActive"))
+                                .frame(width:horizontalSizeClass == .regular ? 55 : 45,height:horizontalSizeClass == .regular ? 65 : 45)
                             Image(systemName: "gearshape.fill")
                                 .animation(nil)
                                 .rotationEffect(.init(degrees: prefPresented ? -540:0), anchor: .center)
                                 .animation(viewDidLoad ? springAnimation : nil)
-                                .foregroundColor(.white)
-                                .colorMultiply(.init("TextColor"))
-                                .font(.system(size:22,weight: .medium))
+                                .foregroundColor(.init("TextColor"))
+                                .font(.system(size: horizontalSizeClass == .regular ? 27 : 22,weight: .medium))
                                 .animation(nil)
-                        }.padding(.horizontal,20)
+                        }
                     }).buttonStyle(topBarButtonStyle())
+                    .onHover(perform: { (hovering) in
+                        prefHover=hovering
+                    }).brightness(prefHover ? 0.03 : 0)
                     .sheet(isPresented: $prefPresented, onDismiss: {
                         tfengine.commitSnap()
                     }, content: {
@@ -119,7 +128,7 @@ struct mainView: View {
                             tfengine.saveData()
                             print("go")
                         }))
-                    })
+                    }).padding(.horizontal,20)
                 }.padding(.top,20)
                 Spacer()
                 VStack {
@@ -179,6 +188,10 @@ struct mainView: View {
                                     .foregroundColor(.init("AchievementColor"))
                             )
                         })
+                        .onHover(perform: { hovering in
+                            achievementHover=hovering
+                        })
+                        .brightness(achievementHover ? 0.03 : 0) //0.05
                         .buttonStyle(achievementButtonStyle())
                         .sheet(isPresented: $achPresented,onDismiss: {
                             canNavBack=false
@@ -191,7 +204,7 @@ struct mainView: View {
                 Spacer()
                 VStack {
                     NavigationLink(
-                        destination: ProblemView(tfengine: tfengine),tag: 1,selection: $navAction,
+                        destination: ProblemView(tfengine: tfengine, rotationObserver: rotationObserver),tag: 1,selection: $navAction,
                         label: {
                             EmptyView()
                         })
@@ -215,6 +228,10 @@ struct mainView: View {
                             playClicked=false
                         }
                     }))
+                    .onHover(perform: { hovering in
+                        playHover=hovering
+                    })
+                    .brightness(playHover ? 0.03 : 0)
                     .padding(.bottom,12)
                     
                     Button(action: {
@@ -230,10 +247,15 @@ struct mainView: View {
                             solverClicked=false
                         }
                     }))
+                    .onHover(perform: { hovering in
+                        solverHover=hovering
+                    })
+                    .brightness(solverHover ? 0.03 : 0)
                 }.padding(.bottom,80)
                 Spacer()
             }.navigationBarHidden(true)
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
             tfengine.updtColorScheme()
             DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
@@ -241,12 +263,15 @@ struct mainView: View {
             }
             canNavBack=false
             print("No nav back")
+            tfengine.cardsOnScreen=false
         }
     }
 }
 
 struct mainView_Previews: PreviewProvider {
     static var previews: some View {
-        mainView(tfengine: TFEngine(isPreview: true))
+        mainView(rotationObserver: UIRotationObserver(), tfengine: TFEngine(isPreview: true))
+            .previewLayout(.device)
+            .previewDevice("iPad Pro (11-inch) (2nd generation)")
     }
 }

@@ -69,13 +69,11 @@ struct konamiView: View {
                 }, label: {
                     ZStack {
                         Circle()
-                            .foregroundColor(.white)
-                            .colorMultiply(Color.init("ButtonColorActive"))
+                            .foregroundColor(.init("ButtonColorActive"))
                             .frame(width:45,height:45)
                         Image(systemName: "arrow.clockwise")
                             .padding(.bottom,4)
-                            .foregroundColor(.white)
-                            .colorMultiply(.init("TextColor"))
+                            .foregroundColor(.init("TextColor"))
                             .font(.system(size:22,weight: .medium))
                     }.padding(.horizontal,20)
                 }).buttonStyle(konamiButtonStyle())

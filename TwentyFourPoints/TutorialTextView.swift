@@ -27,28 +27,34 @@ struct TutorialTextView: View {
             Spacer()
             HStack {
                 if skippable {
-                    Button(action: {
-                        tuengine.updtState()
-                        generateHaptic(hap: .medium)
-                    }, label: {
-                        navBarButton(symbolName: "chevron.forward", active: true)
-                            .padding(.top,5)
-                            .animation(springAnimation)
-                    }).buttonStyle(topBarButtonStyle())
-                    .padding(.bottom,20)
+                    VStack(spacing:0) {
+                        Button(action: {
+                            tuengine.updtState()
+                            generateHaptic(hap: .medium)
+                        }, label: {
+                            navBarButton(symbolName: "chevron.forward", active: true)
+                                .padding(.top,5)
+                                .animation(springAnimation)
+                        }).buttonStyle(topBarButtonStyle())
+                        .padding(.bottom,8)
+                        Text("Next")
+                    }.padding(.bottom,10)
                     .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width, y: 0), removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
                     .animation(springAnimation)
                 }
                 if skipVisible {
-                    Button(action: {
-                        finishTutorial=1
-                        generateHaptic(hap: .medium)
-                    }, label: {
-                        navBarButton(symbolName: "chevron.forward.2", active: true)
-                            .padding(.top,5)
-                            .animation(springAnimation)
-                    }).buttonStyle(topBarButtonStyle())
-                    .padding(.bottom,20)
+                    VStack(spacing:0) {
+                        Button(action: {
+                            finishTutorial=1
+                            generateHaptic(hap: .medium)
+                        }, label: {
+                            navBarButton(symbolName: "chevron.forward.2", active: true)
+                                .padding(.top,5)
+                                .animation(springAnimation)
+                        }).buttonStyle(topBarButtonStyle())
+                        .padding(.bottom,8)
+                        Text("Skip")
+                    }.padding(.bottom,10)
                     .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width, y: 0), removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
                     .animation(springAnimation)
                 }

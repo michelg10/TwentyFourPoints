@@ -15,6 +15,7 @@ struct AchievementList: View {
     var curLvl: Int
     var tfengine:TFEngine
     var listType:ListType
+    @State var isHovering=Array(repeating: false, count: achievement.count)
     var body: some View {
         VStack {
             HStack {
@@ -37,6 +38,9 @@ struct AchievementList: View {
                         }, label: {
                             achievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)
                         }).buttonStyle(topBarButtonStyle())
+                        .onHover { (hovering) in
+                            isHovering[index]=hovering
+                        }.brightness(isHovering[index] ? 0.03 : 0)
                     }
                 } else {
                     achievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)

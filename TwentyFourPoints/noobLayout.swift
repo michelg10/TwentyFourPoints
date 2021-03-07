@@ -10,8 +10,11 @@ import SwiftUI
 struct noobLayout: View {
     @ObservedObject var tuengine: tutorialEngine
     @State var finishTutorial: Int?
+    @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     
     var body: some View {
+        let buttonsPadding=horizontalSizeClass == .regular ? 30.0 : 15.0
         let curState=tuengine.tutState[tuengine.curState]
         VStack {
             Text("24 Points")
@@ -20,7 +23,7 @@ struct noobLayout: View {
                 .font(.system(size: 18, weight: .regular, design: .rounded))
                 .foregroundColor(.init("TextColor"))
             NavigationLink(
-                destination: mainView(tfengine: TFEngine(isPreview: false)),
+                destination: mainView(rotationObserver: UIRotationObserver(), tfengine: TFEngine(isPreview: false)),
                 tag: 1,
                 selection: $finishTutorial,
                 label: {
@@ -36,6 +39,7 @@ struct noobLayout: View {
             )
             
             VStack {
+                let doSplit: Bool=CGFloat(2*buttonsPadding+4*maxButtonSize+3*midSpace)<UIScreen.main.bounds.width
                 TopButtonsRow(tfengine: tuengine,
                               storeActionEnabled: curState.tutProperty.storeClickable,
                               storeIconColorEnabled: curState.tutProperty.storeHighlighted,
@@ -49,18 +53,21 @@ struct noobLayout: View {
                               resetActionEnabled: false,
                               resetColorEnabled: true,
                               storedExpr: tuengine.stored,
-                              ultraCompetitive: tuengine.getUltraCompetitive()
+                              ultraCompetitive: tuengine.getUltraCompetitive(),
+                              doSplit: doSplit
                 )
                 MiddleButtonRow(colorActive: tuengine.numbButtonsHighlighted,
                                 actionActive: tuengine.getNumbButtonsClickable(),
                                 cards: tuengine.cards,
                                 tfengine: tuengine,
-                                ultraCompetitive: tuengine.getUltraCompetitive()
+                                ultraCompetitive: tuengine.getUltraCompetitive(),
+                                doSplit: doSplit
                 )
                 BottomButtonRow(tfengine: tuengine,
                                 oprActionActive: tuengine.getOprButtonsClickable(),
                                 oprColorActive: tuengine.oprButtonsHighlighted,
-                                ultraCompetitive: tuengine.getUltraCompetitive()
+                                ultraCompetitive: tuengine.getUltraCompetitive(),
+                                doSplit: doSplit
                 )
             }.padding(.horizontal,15)
             .padding(.bottom,50)

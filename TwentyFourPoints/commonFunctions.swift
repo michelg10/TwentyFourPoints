@@ -38,6 +38,14 @@ func generateHaptic(hap:haptic) {
     }
 }
 
+struct KeyboardShortcutSet {
+    var resetButton: KeyEquivalent
+    var storeButton: KeyEquivalent
+    var numsButton: [KeyEquivalent]
+    var oprsButton: [KeyEquivalent]
+    var skipButton: KeyEquivalent
+}
+
 protocol tfCallable {
     func logButtonKonami(button: daBtn)
     func reset()
@@ -46,6 +54,7 @@ protocol tfCallable {
     func handleOprPress(Opr:opr)
     func hapticGate(hap:haptic)
     func getUltraCompetitive() -> Bool
+    func getKeyboardSettings() -> KeyboardShortcutSet
 }
 
 struct NavigationConfigurator: UIViewControllerRepresentable {

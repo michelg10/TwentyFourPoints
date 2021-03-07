@@ -22,6 +22,9 @@ enum opr {
     case div
 }
 
+let qwertySet=KeyboardShortcutSet(resetButton: .init(" "), storeButton: .init("v"), numsButton: [.init("w"),.init("r"),.init("u"),.init("o")], oprsButton: [.init("s"),.init("f"),.init("j"),.init("l")], skipButton: .return)
+let azertySet=KeyboardShortcutSet(resetButton: .init(" "), storeButton: .init("v"), numsButton: [.init("a"),.init("z"),.init("e"),.init("r")], oprsButton: [.init("q"),.init("s"),.init("d"),.init("f")], skipButton: .return)
+
 struct card:Codable, Equatable {
     var CardIcon:cardIcon
     var numb:Int
@@ -119,6 +122,25 @@ class TFEngine: ObservableObject,tfCallable {
     
     var cardsOnScreen = false
     
+    @Published var keyboardType: Int
+    
+    @Published var curKeyboardSettings: KeyboardShortcutSet?
+    
+    func getKeyboardSettings() -> KeyboardShortcutSet {
+        if curKeyboardSettings == nil {
+            return qwertySet
+        }
+        return curKeyboardSettings!
+    }
+    
+    func getKeyboardType() {
+        if keyboardType == 1 {
+            curKeyboardSettings=qwertySet
+        } else if keyboardType == 2 {
+            curKeyboardSettings=azertySet
+        }
+    }
+    
     @Published var ultraCompetitive: Bool
     
     var deviceData = [String: Int]()
@@ -176,6 +198,7 @@ class TFEngine: ObservableObject,tfCallable {
             icloudstore.set(useHaptics, forKey: "useHaptics")
             icloudstore.set(upperBound, forKey: "upperBound")
             icloudstore.set(ultraCompetitive, forKey: "ultraCompetitive")
+            icloudstore.set(keyboardType, forKey: "keyboardType")
             switch preferredColorMode {
             case .none:
                 icloudstore.set(0, forKey: "appearance")
@@ -192,6 +215,7 @@ class TFEngine: ObservableObject,tfCallable {
             defaults.set(useHaptics, forKey: "useHaptics")
             defaults.set(upperBound, forKey: "upperBound")
             defaults.set(ultraCompetitive, forKey: "ultraCompetitive")
+            defaults.set(keyboardType, forKey: "keyboardType")
             switch preferredColorMode {
             case .none:
                 defaults.set(0, forKey: "appearance")
@@ -340,6 +364,12 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 print("iCloud appearance data not present")
             }
+            let keyboardTypeVal=icloudstore.object(forKey: "keyboardType")
+            if keyboardTypeVal != nil {
+                keyboardType=keyboardTypeVal as! Int
+            } else {
+                print("iCloud keyboard type data not present")
+            }
         } else {
             csGrab=defaults.object(forKey: "cards") as! Data
             let localHapticsVal=defaults.object(forKey: "useHaptics")
@@ -373,6 +403,12 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 print("Local appearance data not present")
             }
+            let keyboardTypeVal=defaults.object(forKey: "keyboardType")
+            if keyboardTypeVal != nil {
+                keyboardType=keyboardTypeVal as! Int
+            } else {
+                print("Local keyboard type data not present")
+            }
         }
         let newcs:[card]=try! PropertyListDecoder().decode(Array<card>.self, from: csGrab)
         if isIncremental {
@@ -391,6 +427,7 @@ class TFEngine: ObservableObject,tfCallable {
         if preferredColorMode != startingAppearance {
             updtColorScheme()
         }
+        getKeyboardType()
     }
     
     func updtColorScheme() {
@@ -471,6 +508,7 @@ class TFEngine: ObservableObject,tfCallable {
         
         if isPreview {
             levelInfo=LevelInfo(lvl: 696, lvlName: "Mimi")
+            expr="Expression"
         } else {
             levelInfo=LevelInfo(lvl: 1, lvlName: nil)
         }
@@ -486,6 +524,7 @@ class TFEngine: ObservableObject,tfCallable {
         synciCloud=true
         upperBound=13
         ultraCompetitive=false
+        keyboardType=1
         
         if isPreview {
             return

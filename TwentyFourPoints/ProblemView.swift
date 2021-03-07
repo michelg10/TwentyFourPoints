@@ -13,8 +13,12 @@ struct ProblemView: View {
     @State var displaceDrag: CGFloat = .zero
     @State var sID: String=""
     @State var confettiEnabled=false
+    @ObservedObject var rotationObserver: UIRotationObserver
+    @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     
     var body: some View {
+        let buttonsPadding=horizontalSizeClass == .regular ? 30.0 : 15.0
         GeometryReader { _ in
             ZStack {
                 VStack {
@@ -36,7 +40,7 @@ struct ProblemView: View {
                                     confettiEnabled=true
                                 }
                         } else {
-                            CardLayout(tfengine: tfengine, cA: tfengine.cA, cs: tfengine.cs, cardsShouldVisible: tfengine.cardsShouldVisible, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString, ultraCompetitive: tfengine.getUltraCompetitive())
+                            CardLayout(tfengine: tfengine, cA: tfengine.cA, cs: tfengine.cs, cardsShouldVisible: tfengine.cardsShouldVisible, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString, ultraCompetitive: tfengine.getUltraCompetitive(), rotationObserver: rotationObserver)
                                 .padding(.horizontal,30)
                                 .id("MasterCardLayoutView")
                                 .animation(.spring())
@@ -47,7 +51,7 @@ struct ProblemView: View {
                                                             draggedAmt=value.translation
                                                             tfengine.cardsClickable=false
                                                         }).onEnded({ (value) in
-                                                            if value.predictedEndTranslation.width > UIScreen.main.bounds.width*0.4 {
+                                                            if value.predictedEndTranslation.width > UIScreen.main.bounds.width*(horizontalSizeClass == .regular ? 0.2 : 0.4) {
                                                                 draggedAmt = .zero
                                                                 tfengine.nextCardView(nxtCardSet: nil)
                                                             } else {
@@ -57,8 +61,8 @@ struct ProblemView: View {
                                                         }))
                         }
                     }
-                    bottomButtons(tfengine: tfengine, buttonsDisabled: tfengine.konamiCheatVisible || tfengine.rewardScreenVisible)
-                        .padding(.horizontal,15)
+                    bottomButtons(tfengine: tfengine, buttonsDisabled: tfengine.konamiCheatVisible || tfengine.rewardScreenVisible, buttonsPadding: buttonsPadding)
+                        .padding(.horizontal,CGFloat(buttonsPadding))
                         .padding(.bottom,50)
                         .padding(.top,23)
                     Spacer()
@@ -86,8 +90,10 @@ struct ProblemView_Previews: PreviewProvider {
     static var previews: some View {
         //        ProblemView(tfengine: TFEngine())
         //            .previewDevice("iPhone 8")
-        ProblemView(tfengine: TFEngine(isPreview: true))
-            .previewDevice("iPhone 12")
+        ProblemView(tfengine: TFEngine(isPreview: true), rotationObserver: UIRotationObserver())
+            .previewLayout(.fixed(width: 1194, height: 834))
+            .environment(\.horizontalSizeClass, .regular)
+            .environment(\.verticalSizeClass, .regular)
         //        ProblemView(tfengine: TFEngine())
         //            .previewDevice("iPhone 12 Pro Max")
     }

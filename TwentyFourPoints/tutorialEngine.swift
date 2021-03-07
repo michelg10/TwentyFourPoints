@@ -48,6 +48,10 @@ let allTrue=[true,true,true,true]
 let gameMessageProperty = TutProperty(skippable: true, oprButtonsHighlighted: allFalse, oprButtonsClickable: false, numbButtonsHighlighted: allFalse, numbButtonsClickable: false, storeHighlighted: false,storeClickable: false)
 
 class tutorialEngine: ObservableObject, tfCallable {
+    func getKeyboardSettings() -> KeyboardShortcutSet {
+        return qwertySet
+    }
+    
     func getUltraCompetitive() -> Bool {
         return false
     }

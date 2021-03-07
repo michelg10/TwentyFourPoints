@@ -33,6 +33,7 @@
 		F0B3469825EF5D13001938A8 /* InGameRankUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B3469025EF5B77001938A8 /* InGameRankUpView.swift */; };
 		F0B346D725F05573001938A8 /* confettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B346D625F05572001938A8 /* confettiView.swift */; };
 		F0B5B44525E28FBE0073606E /* mainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B5B44425E28FBE0073606E /* mainView.swift */; };
+		F0E5FA6925F4AE4E0010E8A9 /* UIRotationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E5FA6125F4AC9B0010E8A9 /* UIRotationObserver.swift */; };
 		F0E7271725DFC7BF00403CDD /* TopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E7271625DFC7BF00403CDD /* TopBar.swift */; };
 		F0FF2E8B25F364740097B4A0 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF2E8A25F364740097B4A0 /* PreferencesView.swift */; };
 		F0FFF9B425ECB40000E90620 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FFF9B325ECB40000E90620 /* constants.swift */; };
@@ -93,6 +94,7 @@
 		F0B3469025EF5B77001938A8 /* InGameRankUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InGameRankUpView.swift; sourceTree = "<group>"; };
 		F0B346D625F05572001938A8 /* confettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = confettiView.swift; sourceTree = "<group>"; };
 		F0B5B44425E28FBE0073606E /* mainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainView.swift; sourceTree = "<group>"; };
+		F0E5FA6125F4AC9B0010E8A9 /* UIRotationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIRotationObserver.swift; sourceTree = "<group>"; };
 		F0E7271625DFC7BF00403CDD /* TopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBar.swift; sourceTree = "<group>"; };
 		F0FF2E8A25F364740097B4A0 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		F0FFF9B325ECB40000E90620 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 			children = (
 				F0A16D9425E76E6A00C46C62 /* Twenty Four Points.entitlements */,
 				F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */,
+				F0E5FA6125F4AC9B0010E8A9 /* UIRotationObserver.swift */,
 				F0B3469025EF5B77001938A8 /* InGameRankUpView.swift */,
 				F0B346D625F05572001938A8 /* confettiView.swift */,
 				F0B2E21B25D91652007DF20E /* AppEngine.swift */,
@@ -363,6 +366,7 @@
 				F0B2E21725D91617007DF20E /* CardLayout.swift in Sources */,
 				F013E97B25EDE26A00FCBCD4 /* tutorialEngine.swift in Sources */,
 				F0B2E22A25D9505A007DF20E /* BottomButtons.swift in Sources */,
+				F0E5FA6925F4AE4E0010E8A9 /* UIRotationObserver.swift in Sources */,
 				F02AB9F525E39EA7008EBE91 /* SolverView.swift in Sources */,
 				F0B2E21C25D91652007DF20E /* AppEngine.swift in Sources */,
 				F019984725EC5E5800946AD8 /* noobView.swift in Sources */,

@@ -19,7 +19,7 @@ struct AchievementList: View {
     var body: some View {
         VStack {
             HStack {
-                Text(listType == .upNext ? "Up Next" : "Complete")
+                Text(listType == .upNext ? NSLocalizedString("UpNext", comment: "upnext in the achievements menu") : NSLocalizedString("Complete", comment: "complete in the achievements menu"))
                     .font(.system(size: 24, weight: .semibold, design: .rounded))
                 Spacer()
             }.padding(.horizontal,20)
@@ -81,7 +81,8 @@ struct achievementListItem: View {
                 Text(achievement[index].secret && listType == .upNext ? "???" : achievement[index].name)
                     .font(.system(size: 18, weight: .medium, design: .rounded))
                     .foregroundColor(.init("TextColor"))
-                Text("Reach \(String(achievement[index].lvlReq)) levels"+(listType == .complete ? "" : " • \(String(achievement[index].lvlReq-tfengine.levelInfo.lvl)) left"))
+                let lvlLeftLocalizedText=" • "+NSLocalizedString("achievementListItemLvlLeftPrefix",comment: "")+String(achievement[index].lvlReq-tfengine.levelInfo.lvl)+NSLocalizedString("achievementListItemLvlLeftPostfix",comment: "")
+                Text(NSLocalizedString("achievementListItemLvlReqPrefix",comment:"")+String(achievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReqPostfix",comment:"")+(listType == .complete ? "" : lvlLeftLocalizedText))
                     .foregroundColor(.secondary)
             }.padding(.leading,8)
             Spacer()

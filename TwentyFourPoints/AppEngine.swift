@@ -73,6 +73,10 @@ enum daBtn:CaseIterable {
 }
 
 class TFEngine: ObservableObject,tfCallable {
+    func getDoSplit() -> Bool {
+        return useSplit
+    }
+    
     func getUltraCompetitive() -> Bool {
         return ultraCompetitive
     }
@@ -123,6 +127,8 @@ class TFEngine: ObservableObject,tfCallable {
     var cardsOnScreen = false
     
     @Published var keyboardType: Int
+    
+    @Published var showKeyboardTips: Bool
     
     @Published var curKeyboardSettings: KeyboardShortcutSet?
     
@@ -207,6 +213,8 @@ class TFEngine: ObservableObject,tfCallable {
             case .dark:
                 icloudstore.set(2, forKey: "appearance")
             }
+            icloudstore.set(showKeyboardTips, forKey: "showKeyboardTips")
+            icloudstore.set(useSplit, forKey: "useSplit")
             NSUbiquitousKeyValueStore.default.synchronize()
         } else {
             // save cards array locally
@@ -224,6 +232,8 @@ class TFEngine: ObservableObject,tfCallable {
             case .dark:
                 defaults.set(2, forKey: "appearance")
             }
+            defaults.set(showKeyboardTips, forKey: "showKeyboardTips")
+            defaults.set(useSplit, forKey: "useSplit")
         }
         defaults.synchronize()
         savingData=false
@@ -298,6 +308,8 @@ class TFEngine: ObservableObject,tfCallable {
     var nxtNumNeg:Bool? //set this as nil when its been applied
     
     @Published var oprButtonActive: Bool = false // activate this when any number is pressed. and thus an opertor could be used.
+    
+    @Published var useSplit: Bool
         
     func loadData(isIncremental: Bool) {
         print("Load data")
@@ -370,6 +382,18 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 print("iCloud keyboard type data not present")
             }
+            let showKeyboardTipsVal=icloudstore.object(forKey: "showKeyboardTips")
+            if showKeyboardTipsVal != nil {
+                showKeyboardTips=showKeyboardTipsVal as! Bool
+            } else {
+                print("iCloud show keyboard tips data not present")
+            }
+            let useSplitVal=icloudstore.object(forKey: "useSplit")
+            if useSplitVal != nil {
+                useSplit=useSplitVal as! Bool
+            } else {
+                print("iCloud use split data not present")
+            }
         } else {
             csGrab=defaults.object(forKey: "cards") as! Data
             let localHapticsVal=defaults.object(forKey: "useHaptics")
@@ -408,6 +432,18 @@ class TFEngine: ObservableObject,tfCallable {
                 keyboardType=keyboardTypeVal as! Int
             } else {
                 print("Local keyboard type data not present")
+            }
+            let showKeyboardTipsVal=defaults.object(forKey: "showKeyboardTips")
+            if showKeyboardTipsVal != nil {
+                showKeyboardTips=showKeyboardTipsVal as! Bool
+            } else {
+                print("Local show keyboard tips data not present")
+            }
+            let useSplitVal=defaults.object(forKey: "useSplit")
+            if useSplitVal != nil {
+                useSplit=useSplitVal as! Bool
+            } else {
+                print("iCloud use split data not present")
             }
         }
         let newcs:[card]=try! PropertyListDecoder().decode(Array<card>.self, from: csGrab)
@@ -525,6 +561,8 @@ class TFEngine: ObservableObject,tfCallable {
         upperBound=13
         ultraCompetitive=false
         keyboardType=1
+        showKeyboardTips=true
+        useSplit=true
         
         if isPreview {
             return
@@ -617,6 +655,7 @@ class TFEngine: ObservableObject,tfCallable {
         for i in 0..<viewShowOrder.count {
             DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
                 if cardsOnScreen {
+                    print("Play cards haptic")
                     hapticGate(hap: .soft)
                 }
             })

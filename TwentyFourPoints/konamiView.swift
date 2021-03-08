@@ -30,17 +30,18 @@ struct konamiView: View {
     var body: some View {
         VStack(alignment: .center) {
             Spacer()
-            Text("I solemnly swear that I am up to no good")
+            Text(NSLocalizedString("konamiString", comment: "I solemnly swear that I am up to no good"))
                 .font(.system(size: 24, weight: .semibold, design: .rounded))
                 .multilineTextAlignment(.center)
                 .padding(.bottom,15)
             HStack(spacing:14) {
-                TextField("Level", value: $levelInput, formatter: formatter)
+                TextField(NSLocalizedString("konamiPlaceholder", comment: "Level"), value: $levelInput, formatter: formatter)
                     .font(.system(size: 18, weight: .medium, design: .rounded))
                     .keyboardType(.numbersAndPunctuation)
                     .multilineTextAlignment(.center)
                     .padding(3)
                     .padding(.horizontal,15)
+                    .frame(maxWidth:350)
                     .background(
                         RoundedRectangle(cornerRadius: .greatestFiniteMagnitude)
                             .frame(height: 42, alignment: .center)
@@ -78,7 +79,7 @@ struct konamiView: View {
                     }.padding(.horizontal,20)
                 }).buttonStyle(konamiButtonStyle())
 
-                Text("The level on this device must be at least \(String(tfengine.konamiLimitation())). If you want to further lower your level, change the level on your other devices or press the revalidate button above.")
+                Text(NSLocalizedString("CloudSyncKonamiLimitationPrefix",comment: "")+String(tfengine.konamiLimitation())+NSLocalizedString("CloudSyncKonamiLimitationPostfix", comment: ""))
                     .font(.system(size: 15, weight: .regular, design: .rounded))
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)

@@ -16,7 +16,7 @@ struct PersonaDetail: View {
                 .padding(.bottom, 10)
             Text(achievement[curLvl].name)
                 .font(.system(size: 24, weight: .semibold, design: .rounded))
-            Text("LEVEL \(String(achievement[curLvl].lvlReq))")
+            Text(NSLocalizedString("lvlReqPrefix",comment:"The LEVEL text in the persona detail view")+String(achievement[curLvl].lvlReq)+NSLocalizedString("lvlReqPostfix",comment:"The LEVEL text in the persona detail view"))
                 .font(.system(size: 15, weight: .heavy, design: .rounded))
                 .padding(.bottom,1)
             Text(achievement[curLvl].description)

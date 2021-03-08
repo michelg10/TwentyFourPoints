@@ -13,7 +13,7 @@ struct InGameRankUpView: View {
     var body: some View {
         VStack(spacing:0) {
             Spacer()
-            Text("New Rank")
+            Text(NSLocalizedString("New Rank", comment: ""))
                 .font(.system(size: 32, weight: .semibold, design: .rounded))
                 .padding(.bottom,10)
             HStack {
@@ -23,7 +23,7 @@ struct InGameRankUpView: View {
                 VStack(alignment:.leading) {
                     Text(achievement[newRank].name)
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
-                    Text("Level \(String(achievement[newRank].lvlReq))")
+                    Text(NSLocalizedString("RankUpViewLevelPrefix", comment: "")+String(achievement[newRank].lvlReq)+NSLocalizedString("RankUpViewLevelPostfix", comment: ""))
                         .font(.system(size: 18, weight: .semibold, design: .rounded))
                 }
             }.padding(.bottom,20)

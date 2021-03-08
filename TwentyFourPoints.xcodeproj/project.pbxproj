@@ -16,7 +16,9 @@
 		F02AB9FA25E39EFD008EBE91 /* navBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F925E39EFD008EBE91 /* navBarButton.swift */; };
 		F02AB9FF25E4AF11008EBE91 /* konamiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9FE25E4AF11008EBE91 /* konamiView.swift */; };
 		F02D3F1225F279800063716D /* generator24.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F02D3F1025F279800063716D /* generator24.cpp */; };
+		F037DB2425F63D5900872526 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F037DB2625F63D5900872526 /* InfoPlist.strings */; };
 		F055928025E8694400688D2C /* AchievementData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F055927F25E8694400688D2C /* AchievementData.swift */; };
+		F060656725F61D1700C62C29 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F060656925F61D1700C62C29 /* Localizable.strings */; };
 		F0A16D9025E76C5600C46C62 /* achievementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A16D8F25E76C5600C46C62 /* achievementView.swift */; };
 		F0AB4EF825EBDAAE009F53CB /* AchievementPropic.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AB4EF725EBDAAE009F53CB /* AchievementPropic.swift */; };
 		F0AB4EFD25EBE422009F53CB /* PersonaDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AB4EFC25EBE422009F53CB /* PersonaDetail.swift */; };
@@ -70,7 +72,12 @@
 		F02D3F0F25F279800063716D /* TwentyFourPoints-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TwentyFourPoints-Bridging-Header.h"; sourceTree = "<group>"; };
 		F02D3F1025F279800063716D /* generator24.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = generator24.cpp; sourceTree = "<group>"; };
 		F02D3F1125F279800063716D /* generator24.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = generator24.hpp; sourceTree = "<group>"; };
+		F037DB1725F63CCB00872526 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F037DB2525F63D5900872526 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F037DB2A25F63D5C00872526 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		F055927F25E8694400688D2C /* AchievementData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementData.swift; sourceTree = "<group>"; };
+		F060656825F61D1700C62C29 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F060656A25F61D1E00C62C29 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		F0A16D8F25E76C5600C46C62 /* achievementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = achievementView.swift; sourceTree = "<group>"; };
 		F0A16D9425E76E6A00C46C62 /* Twenty Four Points.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Twenty Four Points.entitlements"; sourceTree = "<group>"; };
 		F0AB4EF725EBDAAE009F53CB /* AchievementPropic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementPropic.swift; sourceTree = "<group>"; };
@@ -80,7 +87,6 @@
 		F0B2E1D725D8D41D007DF20E /* ProblemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProblemView.swift; sourceTree = "<group>"; };
 		F0B2E1D925D8D41E007DF20E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F0B2E1DC25D8D41E007DF20E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		F0B2E1DE25D8D41E007DF20E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F0B2E1E325D8D41F007DF20E /* TwentyFourPointsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwentyFourPointsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0B2E1E725D8D41F007DF20E /* TwentyFourPointsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwentyFourPointsTests.swift; sourceTree = "<group>"; };
 		F0B2E1E925D8D41F007DF20E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -155,8 +161,10 @@
 				F0E5FA6125F4AC9B0010E8A9 /* UIRotationObserver.swift */,
 				F0B3469025EF5B77001938A8 /* InGameRankUpView.swift */,
 				F0B346D625F05572001938A8 /* confettiView.swift */,
+				F037DB2625F63D5900872526 /* InfoPlist.strings */,
 				F0B2E21B25D91652007DF20E /* AppEngine.swift */,
 				F013E98225EE607E00FCBCD4 /* commonFunctions.swift */,
+				F060656925F61D1700C62C29 /* Localizable.strings */,
 				F0B2E1D725D8D41D007DF20E /* ProblemView.swift */,
 				F0E7271625DFC7BF00403CDD /* TopBar.swift */,
 				F02AB9F925E39EFD008EBE91 /* navBarButton.swift */,
@@ -174,6 +182,7 @@
 				F02AB9FE25E4AF11008EBE91 /* konamiView.swift */,
 				F0B2E22925D9505A007DF20E /* BottomButtons.swift */,
 				F0B2E21625D91617007DF20E /* CardLayout.swift */,
+				F037DB1725F63CCB00872526 /* Info.plist */,
 				F0B2E20B25D8D496007DF20E /* Card.swift */,
 				F0FFF9B325ECB40000E90620 /* constants.swift */,
 				F013E97A25EDE26A00FCBCD4 /* tutorialEngine.swift */,
@@ -181,7 +190,6 @@
 				F0FFF9BB25ECB8F600E90620 /* noobLayout.swift */,
 				F0FFF9C025ECD84200E90620 /* TutorialTextView.swift */,
 				F0B2E1D925D8D41E007DF20E /* Assets.xcassets */,
-				F0B2E1DE25D8D41E007DF20E /* Info.plist */,
 				F0B2E1DB25D8D41E007DF20E /* Preview Content */,
 				F02D3F0F25F279800063716D /* TwentyFourPoints-Bridging-Header.h */,
 			);
@@ -299,8 +307,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 				"zh-Hans",
+				Base,
 			);
 			mainGroup = F0B2E1C925D8D41D007DF20E;
 			productRefGroup = F0B2E1D325D8D41D007DF20E /* Products */;
@@ -320,6 +328,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0B2E1DD25D8D41E007DF20E /* Preview Assets.xcassets in Resources */,
+				F037DB2425F63D5900872526 /* InfoPlist.strings in Resources */,
+				F060656725F61D1700C62C29 /* Localizable.strings in Resources */,
 				F0B2E1DA25D8D41E007DF20E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -406,6 +416,27 @@
 			targetProxy = F0B2E1EF25D8D41F007DF20E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F037DB2625F63D5900872526 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F037DB2525F63D5900872526 /* en */,
+				F037DB2A25F63D5C00872526 /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		F060656925F61D1700C62C29 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F060656825F61D1700C62C29 /* en */,
+				F060656A25F61D1E00C62C29 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		F0B2E1F525D8D41F007DF20E /* Debug */ = {
@@ -534,7 +565,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;
@@ -564,7 +595,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;

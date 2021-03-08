@@ -55,6 +55,7 @@ protocol tfCallable {
     func hapticGate(hap:haptic)
     func getUltraCompetitive() -> Bool
     func getKeyboardSettings() -> KeyboardShortcutSet
+    func getDoSplit() -> Bool
 }
 
 struct NavigationConfigurator: UIViewControllerRepresentable {

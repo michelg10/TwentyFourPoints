@@ -82,6 +82,7 @@ struct ProblemView: View {
             canNavBack=true
         }.onDisappear {
             print("No nav back")
+            tfengine.cardsOnScreen=false
             canNavBack=false
         }
     }

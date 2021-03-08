@@ -19,9 +19,9 @@ struct noobLayout: View {
         let curState=tuengine.tutState[tuengine.curState]
         let showTooltip=GCKeyboard.coalesced != nil
         VStack {
-            Text("24 Points")
+            Text(NSLocalizedString("24 Points", comment: "The title of the app"))
                 .font(.system(size: 32, weight: .bold, design: .rounded))
-            Text("Tutorial")
+            Text(NSLocalizedString("Tutorial", comment: ""))
                 .font(.system(size: 18, weight: .regular, design: .rounded))
                 .foregroundColor(.init("TextColor"))
             NavigationLink(

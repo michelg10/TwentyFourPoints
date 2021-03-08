@@ -111,6 +111,8 @@ struct PreferencesView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var prefColorScheme: ColorScheme?
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     var body: some View {
         VStack {
             HStack {
@@ -121,23 +123,23 @@ struct PreferencesView: View {
                     ZStack {
                         Circle()
                             .foregroundColor(.init("ButtonColorActive"))
-                            .frame(width:45,height:45)
+                            .frame(width:horizontalSizeClass == .regular ? 55 : 45,height:horizontalSizeClass == .regular ? 65 : 45)
                         Image(systemName: "chevron.down")
                             .foregroundColor(.init("TextColor"))
-                            .font(.system(size:22,weight: .medium))
-                            .padding(.top,3)
+                            .font(.system(size: horizontalSizeClass == .regular ? 27 : 22,weight: .medium))
+                            .padding(.top,horizontalSizeClass == .regular ? 3 : 4)
                     }.padding(.horizontal,20)
                 }).buttonStyle(topBarButtonStyle())
                 .hoverEffect(.lift)
                 Spacer()
             }.padding(.top,20)
-            Text("Preferences")
+            Text(NSLocalizedString("Preferences", comment: "The title of the preferences menu"))
                 .font(.system(size: 36, weight: .semibold, design: .rounded))
                 .padding(.top, 13)
                 .padding(.bottom,17)
             List {
                 HStack(spacing:0) {
-                    Text("Haptics")
+                    Text(NSLocalizedString("Haptics", comment: ""))
                     Spacer()
                     if CHHapticEngine.capabilitiesForHardware().supportsHaptics {
                         Toggle("", isOn: Binding(get: {
@@ -147,12 +149,12 @@ struct PreferencesView: View {
                             tfengine.saveData()
                         }))
                     } else {
-                        Text("Unavailable")
+                        Text(NSLocalizedString("Unavailable", comment: "The message shown when haptics are unavailable"))
                             .foregroundColor(.secondary)
                     }
                 }
                 VStack(alignment: .leading,spacing:0) {
-                    Text("Appearance")
+                    Text(NSLocalizedString("Appearance", comment: "Title for the section of preferences preferring light or dark mode"))
                         .padding(.bottom,10)
                     HStack(spacing:0) {
                         Spacer()
@@ -160,19 +162,19 @@ struct PreferencesView: View {
                             colorSchemeSelector(appearanceSeems: colorScheme,
                                                 appearance: nil,
                                                 preferredColorMode: $prefColorScheme,
-                                                appearanceName: "System",
+                                                appearanceName: NSLocalizedString("System", comment: "Follow the system dark/light mode setting"),
                                                 tfengine: tfengine
                             )
                             colorSchemeSelector(appearanceSeems: .light,
                                                 appearance: .light,
                                                 preferredColorMode: $prefColorScheme,
-                                                appearanceName: "Light",
+                                                appearanceName: NSLocalizedString("Light", comment: "Force light mode"),
                                                 tfengine: tfengine
                             )
                             colorSchemeSelector(appearanceSeems: .dark,
                                                 appearance: .dark,
                                                 preferredColorMode: $prefColorScheme,
-                                                appearanceName: "Dark",
+                                                appearanceName: NSLocalizedString("Dark", comment: "Force dark mode"),
                                                 tfengine: tfengine
                             )
                         }.padding(.horizontal,20)
@@ -180,7 +182,7 @@ struct PreferencesView: View {
                     }
                 }.padding(.bottom,10)
                 HStack {
-                    Text("Keyboard")
+                    Text(NSLocalizedString("Keyboard", comment: "Keyboard layout settings in preferences"))
                     Spacer()
                     Picker(selection: Binding(get: {
                         tfengine.keyboardType
@@ -194,24 +196,44 @@ struct PreferencesView: View {
                     }).pickerStyle(SegmentedPickerStyle())
                     .fixedSize()
                 }
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    Toggle(isOn: Binding(get: {
+                        tfengine.useSplit
+                    }, set: { (val) in
+                        tfengine.useSplit=val
+                        tfengine.saveData()
+                    }), label: {
+                        Text(NSLocalizedString("Split buttons", comment: "Whether or not to split the buttons in the problem view on iPad"))
+                    })
+                    if tfengine.useSplit {
+                        Toggle(isOn: Binding(get: {
+                            tfengine.showKeyboardTips
+                        }, set: { (val) in
+                            tfengine.showKeyboardTips=val
+                            tfengine.saveData()
+                        }), label: {
+                            Text(NSLocalizedString("Show keyboard tips", comment: "Whether or not to show keyboard tips when an external keyboard is connected"))
+                        }).padding(.leading,10)
+                    }
+                }
                 Toggle(isOn: Binding(get: {
                     !tfengine.ultraCompetitive
                 }, set: { (val) in
                     tfengine.ultraCompetitive = !val
                     tfengine.saveData()
                 }), label: {
-                    Text("Animate number press")
+                    Text(NSLocalizedString("Animate number press", comment: "Enabling high performance mode"))
                 })
                 Toggle(isOn: Binding(get: {
                     tfengine.synciCloud
                 }, set: { (val) in
                     tfengine.setiCloudSync(val: val)
                 }), label: {
-                    Text("iCloud sync")
+                    Text(NSLocalizedString("iCloud sync", comment: ""))
                 })
                 VStack(alignment: .leading) {
                     HStack {
-                        Text("Number Range")
+                        Text(NSLocalizedString("Number Range", comment: "Set the range of the numbers for the problem"))
                         Spacer()
                         Text("1 ... \(String(tfengine.upperBound))")
                     }

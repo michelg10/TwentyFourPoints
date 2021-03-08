@@ -48,6 +48,10 @@ let allTrue=[true,true,true,true]
 let gameMessageProperty = TutProperty(skippable: true, oprButtonsHighlighted: allFalse, oprButtonsClickable: false, numbButtonsHighlighted: allFalse, numbButtonsClickable: false, storeHighlighted: false,storeClickable: false)
 
 class tutorialEngine: ObservableObject, tfCallable {
+    func getDoSplit() -> Bool {
+        return true
+    }
+    
     func getKeyboardSettings() -> KeyboardShortcutSet {
         return qwertySet
     }
@@ -148,18 +152,18 @@ class tutorialEngine: ObservableObject, tfCallable {
             updtState()
         }
         if curState == 13 {
-            if expr.firstIndex(of: "×") == nil {
-                expr=expr+"×"
+            if expr.firstIndex(of: "×") == nil && expr != "" {
+                expr+="×"
             }
         }
         if curState == 15 {
-            if expr.firstIndex(of: "×") == nil {
-                expr=expr+"×"
+            if expr.firstIndex(of: "×") == nil && expr != "" {
+                expr+="×"
             }
         }
         if curState == 16 {
-            if expr.firstIndex(of: "-") == nil {
-                expr=expr+"-"
+            if expr.firstIndex(of: "-") == nil && expr != "" {
+                expr+="-"
             }
         }
     }
@@ -206,24 +210,24 @@ class tutorialEngine: ObservableObject, tfCallable {
     }
     
     var tutState:[TutState]=[
-        TutState(stateText: "Each level consists of 4 integers between 1 and 13 and is guaranteed to have an answer.",tutProperty: gameMessageProperty),
-        TutState(stateText: "Your goal is to find a way to combine each of the 4 numbers once using the four primary operators get 24.",tutProperty: gameMessageProperty),
-        TutState(stateText: "The bottom-most row houses your operator buttons. These allow you to do addition, subtraction, and division.",tutProperty: TutProperty(skippable: true, oprButtonsHighlighted: allTrue, oprButtonsClickable: false, numbButtonsHighlighted: allFalse, numbButtonsClickable: false, storeHighlighted: false, storeClickable: false)),
-        TutState(stateText: "The middle row houses your number buttons. These show you the puzzle.",tutProperty: TutProperty(skippable: true, oprButtonsHighlighted: allFalse, oprButtonsClickable: false, numbButtonsHighlighted: allTrue, numbButtonsClickable: false, storeHighlighted: false, storeClickable: false)),
-        TutState(stateText: "The solution to this puzzle is 1×1×2×12=24. Try tapping on the first 1.",tutProperty: numberClickable(mods: [0])),
-        TutState(stateText: "Now try tapping the multiply", tutProperty: operatorClickable(mods: [2])),
-        TutState(stateText: "Now tap the 1", tutProperty: numberClickable(mods: [1])),
-        TutState(stateText: "Tap the multiply again", tutProperty: operatorClickable(mods: [2])),
-        TutState(stateText: "Tap the 2", tutProperty: numberClickable(mods: [2])),
-        TutState(stateText: "Tap the multiply again", tutProperty: operatorClickable(mods: [2])),
-        TutState(stateText: "Tap the 12", tutProperty: numberClickable(mods: [3])),
-        TutState(stateText: "Congratulations! You’ve completed the puzzle.", tutProperty: gameMessageProperty),
-        TutState(stateText: "Some more complex problems require the use of the store button. Let's look at one such problem.", tutProperty: TutProperty(skippable: true, oprButtonsHighlighted: allFalse, oprButtonsClickable: false, numbButtonsHighlighted: allFalse, numbButtonsClickable: false, storeHighlighted: true, storeClickable: false)),
-        TutState(stateText: "The solution for this problem is 13×3-3×5. Try multiplying 3 by 5.", tutProperty: TutProperty(skippable: false, oprButtonsHighlighted: [false,false,true,false], oprButtonsClickable: true, numbButtonsHighlighted: [false,false,true,true], numbButtonsClickable: true, storeHighlighted: false, storeClickable: false)),
-        TutState(stateText: "Now press the store button", tutProperty: TutProperty(skippable: false, oprButtonsHighlighted: allFalse, oprButtonsClickable: false, numbButtonsHighlighted: allFalse, numbButtonsClickable: false, storeHighlighted: true, storeClickable: true)),
-        TutState(stateText: "Now try multiplying 3 by 13.", tutProperty: TutProperty(skippable: false, oprButtonsHighlighted: [false,false,true,false], oprButtonsClickable: true, numbButtonsHighlighted: [true,true,false,false], numbButtonsClickable: true, storeHighlighted: true, storeClickable: false)),
-        TutState(stateText: "Press minus and then press the stored 15 to use it", tutProperty: TutProperty(skippable: false, oprButtonsHighlighted: [false,true,false,false], oprButtonsClickable: true, numbButtonsHighlighted: allFalse, numbButtonsClickable: false, storeHighlighted: true, storeClickable: true)),
-        TutState(stateText: "That’s it. Let’s go!", tutProperty: gameMessageProperty)
+        TutState(stateText: NSLocalizedString("tutorialStage1", comment: ""),tutProperty: gameMessageProperty),
+        TutState(stateText: NSLocalizedString("tutorialStage2", comment: ""),tutProperty: gameMessageProperty),
+        TutState(stateText: NSLocalizedString("tutorialStage3", comment: ""),tutProperty: TutProperty(skippable: true, oprButtonsHighlighted: allTrue, oprButtonsClickable: false, numbButtonsHighlighted: allFalse, numbButtonsClickable: false, storeHighlighted: false, storeClickable: false)),
+        TutState(stateText: NSLocalizedString("tutorialStage4", comment: ""),tutProperty: TutProperty(skippable: true, oprButtonsHighlighted: allFalse, oprButtonsClickable: false, numbButtonsHighlighted: allTrue, numbButtonsClickable: false, storeHighlighted: false, storeClickable: false)),
+        TutState(stateText: NSLocalizedString("tutorialStage5", comment: ""),tutProperty: numberClickable(mods: [0])),
+        TutState(stateText: NSLocalizedString("tutorialStage6", comment: ""), tutProperty: operatorClickable(mods: [2])),
+        TutState(stateText: NSLocalizedString("tutorialStage7", comment: ""), tutProperty: numberClickable(mods: [1])),
+        TutState(stateText: NSLocalizedString("tutorialStage8", comment: ""), tutProperty: operatorClickable(mods: [2])),
+        TutState(stateText: NSLocalizedString("tutorialStage9", comment: ""), tutProperty: numberClickable(mods: [2])),
+        TutState(stateText: NSLocalizedString("tutorialStage10", comment: ""), tutProperty: operatorClickable(mods: [2])),
+        TutState(stateText: NSLocalizedString("tutorialStage11", comment: ""), tutProperty: numberClickable(mods: [3])),
+        TutState(stateText: NSLocalizedString("tutorialStage12", comment: ""), tutProperty: gameMessageProperty),
+        TutState(stateText: NSLocalizedString("tutorialStage13", comment: ""), tutProperty: TutProperty(skippable: true, oprButtonsHighlighted: allFalse, oprButtonsClickable: false, numbButtonsHighlighted: allFalse, numbButtonsClickable: false, storeHighlighted: true, storeClickable: false)),
+        TutState(stateText: NSLocalizedString("tutorialStage14", comment: ""), tutProperty: TutProperty(skippable: false, oprButtonsHighlighted: [false,false,true,false], oprButtonsClickable: true, numbButtonsHighlighted: [false,false,true,true], numbButtonsClickable: true, storeHighlighted: false, storeClickable: false)),
+        TutState(stateText: NSLocalizedString("tutorialStage15", comment: ""), tutProperty: TutProperty(skippable: false, oprButtonsHighlighted: allFalse, oprButtonsClickable: false, numbButtonsHighlighted: allFalse, numbButtonsClickable: false, storeHighlighted: true, storeClickable: true)),
+        TutState(stateText: NSLocalizedString("tutorialStage16", comment: ""), tutProperty: TutProperty(skippable: false, oprButtonsHighlighted: [false,false,true,false], oprButtonsClickable: true, numbButtonsHighlighted: [true,true,false,false], numbButtonsClickable: true, storeHighlighted: true, storeClickable: false)),
+        TutState(stateText: NSLocalizedString("tutorialStage17", comment: ""), tutProperty: TutProperty(skippable: false, oprButtonsHighlighted: [false,true,false,false], oprButtonsClickable: true, numbButtonsHighlighted: allFalse, numbButtonsClickable: false, storeHighlighted: true, storeClickable: true)),
+        TutState(stateText: NSLocalizedString("tutorialStage18", comment: ""), tutProperty: gameMessageProperty)
     ]
     
     init() {

@@ -69,6 +69,10 @@ struct topBarButtons: View {
     }
 }
 
+func getQuestionText(lvl: Int) -> String {
+    return NSLocalizedString("questionPrefix", comment: "The string that goes in front of the level")+String(lvl)+NSLocalizedString("questionPostfix", comment: "The string that goes after the level")
+}
+
 struct TopBarText: View {
     var lvl: Int
     var lvlName: String?
@@ -78,7 +82,7 @@ struct TopBarText: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     var body: some View {
         VStack {
-            Text("24 Points")
+            Text(NSLocalizedString("24 Points", comment: "The title of the app"))
                 .font(.system(size: horizontalSizeClass == .regular ? 38 : 32, weight: .bold, design: .rounded))
             Button(action: {
                 tfengine.hapticGate(hap: .medium)
@@ -86,11 +90,11 @@ struct TopBarText: View {
                 tfengine.cardsOnScreen=false
             }, label: {
                 if lvlName == nil {
-                    Text("Question \(String(lvl))")
+                    Text(getQuestionText(lvl: lvl))
                         .font(.system(size: horizontalSizeClass == .regular ? 20 : 18, weight: .regular, design: .rounded))
                         .foregroundColor(.init("TextColor"))
                 } else {
-                    Text("\(lvlName!) • Question \(String(lvl))")
+                    Text("\(lvlName!) • "+getQuestionText(lvl: lvl))
                         .font(.system(size: horizontalSizeClass == .regular ? 20 : 18, weight: .regular, design: .rounded))
                         .foregroundColor(.init("TextColor"))
                 }

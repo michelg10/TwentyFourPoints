@@ -18,11 +18,11 @@ struct noobView: View {
             VStack {
                 Spacer()
                 VStack {
-                    Text("Welcome to\n24 Points")
+                    Text(NSLocalizedString("NoobViewTitle", comment: "The title shown at the noob launch screen of the app"))
                         .multilineTextAlignment(.center)
                         .font(.system(size: 36, weight: .bold, design: .rounded))
                         .padding(.bottom,10)
-                    Text("Add, subtract, multiply, and divide four integers to get 24")
+                    Text(NSLocalizedString("NoobViewDesc", comment: "The short description shown at the noob launch screen of the app"))
                         .multilineTextAlignment(.center)
                         .font(.system(size: 24, weight: .medium, design: .rounded))
                         .padding(.horizontal,50)
@@ -37,7 +37,7 @@ struct noobView: View {
                     generateHaptic(hap: .medium)
                     goAction=1
                 }, label: {
-                    borederedButton(title: "Start", clicked: startClicked)
+                    borederedButton(title: NSLocalizedString("Start", comment: "The start button shown at the noob launch screen of the app"), clicked: startClicked)
                 }).buttonStyle(nilButtonStyle())
                 .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
                     if buttonState == .pressed {
@@ -47,8 +47,9 @@ struct noobView: View {
                     }
                 }))
                 Spacer()
-            }
+            }.navigationBarHidden(true)
         }.navigationViewStyle(StackNavigationViewStyle())
+        .background(Color.init("bgColor"))
     }
 }
 

@@ -1,0 +1,249 @@
+/* The title of the app */
+"24 Points" = "24点";
+
+/* No comment provided by engineer. */
+"achievementListItemLvlLeftPostfix" = "关";
+
+/* No comment provided by engineer. */
+"achievementListItemLvlLeftPrefix" = "还剩";
+
+/* No comment provided by engineer. */
+"achievementListItemLvlReqPostfix" = "关";
+
+/* No comment provided by engineer. */
+"achievementListItemLvlReqPrefix" = "达到第";
+
+/* No comment provided by engineer. */
+"achievements" = "成就";
+
+/* No comment provided by engineer. */
+"achievementYetUnlockPostfix" = "达到第";
+
+/* No comment provided by engineer. */
+"achievementYetUnlockPrefix" = "关解锁成就";
+
+/* Enabling high performance mode */
+"Animate number press" = "按键动画";
+
+/* Title for the section of preferences preferring light or dark mode */
+"Appearance" = "外观";
+
+/* No comment provided by engineer. */
+"CloudSyncKonamiLimitationPostfix" = "The level on this device must be at least ";
+
+/* No comment provided by engineer. */
+"CloudSyncKonamiLimitationPrefix" = ". If you want to further lower your level, change the level on your other devices or press the revalidate button above.";
+
+/* complete in the achievements menu */
+"Complete" = "已完成";
+
+/* Force dark mode */
+"Dark" = "深色";
+
+/* No comment provided by engineer. */
+"Haptics" = "震动";
+
+/* No comment provided by engineer. */
+"iCloud sync" = "iCloud 同步";
+
+/* Keyboard layout settings in preferences */
+"Keyboard" = "键盘布局";
+
+/* Level */
+"konamiPlaceholder" = "跳关";
+
+/* I solemnly swear that I am up to no good */
+"konamiString" = "我庄严的发誓，我最近忙的不是什么好事";
+
+/* Force light mode */
+"Light" = "浅色";
+
+/* The LEVEL text in the persona detail view */
+"lvlReqPostfix" = "关";
+
+/* The LEVEL text in the persona detail view */
+"lvlReqPrefix" = "第";
+
+/* No comment provided by engineer. */
+"MikeSpecialThanks" = "Special thanks to Mike for his frequent suggestions during development.";
+
+/* No comment provided by engineer. */
+"MimiSpecialThanks" = "Special thanks to Mimi for her input and support in designing the app.";
+
+/* No comment provided by engineer. */
+"New Rank" = "升级";
+
+/* Tutorial tip screen next button */
+"Next" = "下一个";
+
+/* Final level message */
+"noMoreRankMessage" = "You've reached the final rank 😎";
+
+/* The short description shown at the noob launch screen of the app */
+"NoobViewDesc" = "Add, subtract, multiply, and divide four integers to get 24";
+
+/* The title shown at the noob launch screen of the app */
+"NoobViewTitle" = "Welcome to\n24 Points";
+
+/* nosol */
+"NoSolution" = "无解";
+
+/* Set the range of the numbers for the problem */
+"Number Range" = "数字范围";
+
+/* No comment provided by engineer. */
+"PersonaDescAlex" = "Alex is keener to write the fastest 24 Points robot than to actually play the game. However, his potential robot does give him a possible opportunity to dethrone the math titans.";
+
+/* No comment provided by engineer. */
+"PersonaDescAlyx" = "When Alyx isn't playing League of Legends or Subnautica, he's seen busily working on math olympiads. His math skills make him an impressive 24 Points player.";
+
+/* No comment provided by engineer. */
+"PersonaDescElla" = "When Ella isn't being Mrs. Styles, she's seen busily studying Biology or sneaking glances at Zayn. Ella's intense focus on everything makes her a fantastic 24 Points player.";
+
+/* No comment provided by engineer. */
+"PersonaDescEthan" = "When Ethan isn't busy playing or sleeping with his stuffed avocado, he can be seen doing physics or programming. His talent in everything STEM shows in his undeniable 24 Points performance.";
+
+/* No comment provided by engineer. */
+"PersonaDescHarrison" = "More interested in Chemistry than Math and music games more than puzzles, Harrison's a decent 24 Points player purely by his mental capabilities.";
+
+/* No comment provided by engineer. */
+"PersonaDescJonathan" = "Although Jonathan is intellectually capable, his love for sleeping leaves him at the bottom of the 24 Points chain.";
+
+/* No comment provided by engineer. */
+"PersonaDescMax" = "Max's undisputed strength in everything mathematics has transferred over to 24 Points, making him an astonishingly speedy player despite his lack of time playing the game.";
+
+/* No comment provided by engineer. */
+"PersonaDescMichel" = "Michel, like Alex, is more interested in writing code than actually playing the game, with his 100 levels purely from playtesting his app.";
+
+/* No comment provided by engineer. */
+"PersonaDescMike" = "When Mike isn't busy designing or latching speakers playing Justin Bieber onto friends, Mike can be seen playing 24 Points.";
+
+/* No comment provided by engineer. */
+"PersonaDescMimi" = "When Mimi's not busy writing poetry or managing teams, she's seen at the gym checking out the chads. Mimi's dedication and intellect make her a formidable 24 Points player.";
+
+/* No comment provided by engineer. */
+"PersonaDescRickAstley" = "Rick Astley is never gonna give you up or let you down. His full commitment marks him as the gold standard for the best 24 Points players.";
+
+/* No comment provided by engineer. */
+"PersonaDescSarah" = "Sarah's focus on machine learning has given her plenty of time to play 24 Points (and stare at her seven husbands) while she waits for her next state-of-the-art model to finish training.";
+
+/* No comment provided by engineer. */
+"PersonaDescSophie" = "Sophie's incredible intellect and playful persona make her one of the best 24 Points players, only surpassed by one that knows the game and plays it by heart while giving it his full commitment.";
+
+/* The play button on the main screen of the game */
+"Play" = "游戏";
+
+/* The points in the title label that appears in the launch screen of the game */
+"Points" = "点";
+
+/* The title of the preferences menu */
+"Preferences" = "设置";
+
+/* solver title */
+"ProblemSolver" = "解题";
+
+/* The string that goes after the level */
+"questionPostfix" = "关";
+
+/* The string that goes in front of the level */
+"questionPrefix" = "第";
+
+/* Whether or not to show keyboard tips when an external keyboard is connected */
+"Show keyboard tips" = "显示键盘提示";
+
+/* Tutorial tip screen skip button */
+"Skip" = "跳过";
+
+/* sol */
+"Solution" = "题解";
+
+/* The solver button on the main screen of the game */
+"Solver" = "解题";
+
+/* Whether or not to split the buttons in the problem view on iPad */
+"Split buttons" = "拆分按钮";
+
+/* The start button shown at the noob launch screen of the app */
+"Start" = "游戏";
+
+/* Follow the system dark/light mode setting */
+"System" = "系统";
+
+/* The short game description that appears in the launch screen of the game */
+"titleGameDescription" = "Add, subtract, multiply, and divide four integers to get 24";
+
+/* No comment provided by engineer. */
+"Tutorial" = "教程";
+
+/* No comment provided by engineer. */
+"tutorialStage1" = "Each level consists of 4 integers between 1 and 13 and is guaranteed to have an answer.";
+
+/* No comment provided by engineer. */
+"tutorialStage10" = "再点击乘号";
+
+/* No comment provided by engineer. */
+"tutorialStage11" = "点击 12";
+
+/* No comment provided by engineer. */
+"tutorialStage12" = "恭喜你完成这一题";
+
+/* No comment provided by engineer. */
+"tutorialStage13" = "有些更复杂的题目需要使用暂存。Let's look at one such problem.";
+
+/* No comment provided by engineer. */
+"tutorialStage14" = "The solution for this problem is 13×3-3×5. Try multiplying 3 by 5.";
+
+/* No comment provided by engineer. */
+"tutorialStage15" = "点击暂存按钮";
+
+/* No comment provided by engineer. */
+"tutorialStage16" = "Now try multiplying 3 by 13.";
+
+/* No comment provided by engineer. */
+"tutorialStage17" = "Press minus and then press the stored 15 to use it";
+
+/* No comment provided by engineer. */
+"tutorialStage18" = "That’s it. Let’s go!";
+
+/* No comment provided by engineer. */
+"tutorialStage2" = "Your goal is to find a way to combine each of the 4 numbers once using the four primary operators get 24.";
+
+/* No comment provided by engineer. */
+"tutorialStage3" = "The bottom-most row houses your operator buttons. These allow you to do addition, subtraction, and division.";
+
+/* No comment provided by engineer. */
+"tutorialStage4" = "The middle row houses your number buttons. These show you the puzzle.";
+
+/* No comment provided by engineer. */
+"tutorialStage5" = "The solution to this puzzle is 1×1×2×12=24. Try tapping on the first 1.";
+
+/* No comment provided by engineer. */
+"tutorialStage6" = "点击乘号";
+
+/* No comment provided by engineer. */
+"tutorialStage7" = "点击 1";
+
+/* No comment provided by engineer. */
+"tutorialStage8" = "点击乘号";
+
+/* No comment provided by engineer. */
+"tutorialStage9" = "点击 2";
+
+/* The message shown when haptics are unavailable */
+"Unavailable" = "不支持";
+
+/* upnext in the achievements menu */
+"UpNext" = "待完成";
+
+/* No comment provided by engineer. */
+"yetToGetToRankPostfixPlural" = "关到下一等级";
+
+/* No comment provided by engineer. */
+"yetToGetToRankPostfixSingular" = "关到下一等级";
+
+/* No comment provided by engineer. */
+"yetToGetToRankPrefix" = "还剩";
+
+"RankUpViewLevelPrefix" = "第";
+
+"RankUpViewLevelPostfix" = "关";

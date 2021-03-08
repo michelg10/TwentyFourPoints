@@ -91,7 +91,7 @@ struct mainView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     
-    var tfengine: TFEngine
+    @State var tfengine: TFEngine
     var body: some View {
         NavigationView {
             VStack {
@@ -117,7 +117,7 @@ struct mainView: View {
                     }).buttonStyle(topBarButtonStyle())
                     .onHover(perform: { (hovering) in
                         prefHover=hovering
-                    }).brightness(prefHover ? 0.03 : 0)
+                    }).brightness(prefHover ? hoverBrightness : 0)
                     .sheet(isPresented: $prefPresented, onDismiss: {
                         tfengine.commitSnap()
                     }, content: {
@@ -137,23 +137,23 @@ struct mainView: View {
                             .resizable()
                             .frame(width:72,height:72)
                             .padding(.trailing,4)
-                        Text("Points")
+                        Text(NSLocalizedString("Points", comment: "The points in the title label that appears in the launch screen of the game"))
                             .font(.system(size: 36, weight: .medium, design: .rounded))
                     }.padding(.bottom,7)
-                    Text("Add, subtract, multiply, and divide four integers to get 24")
+                    Text(NSLocalizedString("titleGameDescription", comment: "The short game description that appears in the launch screen of the game"))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 20)
                         .font(.system(size: 24, weight: .medium, design: .rounded))
                 }
                 Spacer()
                 if tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl) == -1 {
-                    Text("Reach Question \(String(achievement[0].lvlReq)) to unlock achievements")
+                    Text(NSLocalizedString("achievementYetUnlockPrefix",comment: "")+String(achievement[0].lvlReq)+NSLocalizedString("achievementYetUnlockPostfix",comment: ""))
                         .font(.system(size: 20, weight: .semibold, design: .rounded))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal,30)
                 } else {
                     VStack {
-                        Text("Achievements")
+                        Text(NSLocalizedString("achievements", comment: ""))
                             .font(.system(size: 24, weight: .semibold, design: .rounded))
                             .offset(x: 0, y: 2)
                         Button(action: {
@@ -175,7 +175,7 @@ struct mainView: View {
                                             .foregroundColor(.init("TextColor"))
                                             .font(.system(size: 18, weight: .medium, design: .rounded))
                                         let myRank=tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl)
-                                        Text(myRank == achievement.count-1 ? "You've reached the final rank 😎" : "\(String(achievement[myRank+1].lvlReq-tfengine.levelInfo.lvl)) question"+(achievement[myRank+1].lvlReq-tfengine.levelInfo.lvl==1 ? "" : "s")+" to next rank")
+                                        Text(myRank == achievement.count-1 ? NSLocalizedString("noMoreRankMessage", comment:"Final level message") : NSLocalizedString("yetToGetToRankPrefix",comment:"")+String(achievement[myRank+1].lvlReq-tfengine.levelInfo.lvl)+(achievement[myRank+1].lvlReq-tfengine.levelInfo.lvl==1 ? NSLocalizedString("yetToGetToRankPostfixSingular",comment:"") : NSLocalizedString("yetToGetToRankPostfixPlural",comment:"")))
                                             .animation(nil)
                                             .font(.system(size: 12, weight: .regular, design: .rounded))
                                             .foregroundColor(.secondary)
@@ -191,7 +191,7 @@ struct mainView: View {
                         .onHover(perform: { hovering in
                             achievementHover=hovering
                         })
-                        .brightness(achievementHover ? 0.03 : 0) //0.05
+                        .brightness(achievementHover ? hoverBrightness : 0) //0.05
                         .buttonStyle(achievementButtonStyle())
                         .sheet(isPresented: $achPresented,onDismiss: {
                             canNavBack=false
@@ -217,9 +217,11 @@ struct mainView: View {
                     Button(action: {
                         tfengine.hapticGate(hap: .medium)
                         navAction=1
+                        print("Prior card state: \(tfengine.cardsOnScreen)")
                         tfengine.cardsOnScreen=true
+                        print("Set cards to true")
                     }, label: {
-                        borederedButton(title: "Play", clicked: playClicked)
+                        borederedButton(title: NSLocalizedString("Play", comment: "The play button on the main screen of the game"), clicked: playClicked)
                     }).buttonStyle(nilButtonStyle())
                     .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
                         if buttonState == .pressed {
@@ -231,14 +233,14 @@ struct mainView: View {
                     .onHover(perform: { hovering in
                         playHover=hovering
                     })
-                    .brightness(playHover ? 0.03 : 0)
+                    .brightness(playHover ? hoverBrightness : 0)
                     .padding(.bottom,12)
                     
                     Button(action: {
                         tfengine.hapticGate(hap: .medium)
                         navAction=2
                     }, label: {
-                        borederedButton(title: "Solver", clicked: solverClicked)
+                        borederedButton(title: NSLocalizedString("Solver", comment: "The solver button on the main screen of the game"), clicked: solverClicked)
                     }).buttonStyle(nilButtonStyle())
                     .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
                         if buttonState == .pressed {
@@ -250,13 +252,13 @@ struct mainView: View {
                     .onHover(perform: { hovering in
                         solverHover=hovering
                     })
-                    .brightness(solverHover ? 0.03 : 0)
+                    .brightness(solverHover ? hoverBrightness : 0)
                 }.padding(.bottom,80)
                 Spacer()
-            }.navigationBarHidden(true)
-            .background(Color.init("bgColor"))
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+            }.background(Color.init("bgColor"))
+            .navigationBarHidden(true)
+        }.navigationViewStyle(StackNavigationViewStyle())
+        .navigationBarHidden(true)
         .onAppear {
             tfengine.updtColorScheme()
             DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
@@ -264,7 +266,9 @@ struct mainView: View {
             }
             canNavBack=false
             print("No nav back")
+            print("Prior card state: \(tfengine.cardsOnScreen)")
             tfengine.cardsOnScreen=false
+            print("Set cards to false")
         }
     }
 }

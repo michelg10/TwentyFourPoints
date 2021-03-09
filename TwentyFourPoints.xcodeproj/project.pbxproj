@@ -17,6 +17,7 @@
 		F02AB9FF25E4AF11008EBE91 /* konamiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9FE25E4AF11008EBE91 /* konamiView.swift */; };
 		F02D3F1225F279800063716D /* generator24.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F02D3F1025F279800063716D /* generator24.cpp */; };
 		F037DB2425F63D5900872526 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F037DB2625F63D5900872526 /* InfoPlist.strings */; };
+		F037DB3325F6466700872526 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F037DB3225F6466700872526 /* GameKit.framework */; };
 		F055928025E8694400688D2C /* AchievementData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F055927F25E8694400688D2C /* AchievementData.swift */; };
 		F060656725F61D1700C62C29 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F060656925F61D1700C62C29 /* Localizable.strings */; };
 		F0A16D9025E76C5600C46C62 /* achievementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A16D8F25E76C5600C46C62 /* achievementView.swift */; };
@@ -75,6 +76,7 @@
 		F037DB1725F63CCB00872526 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F037DB2525F63D5900872526 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F037DB2A25F63D5C00872526 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		F037DB3225F6466700872526 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F055927F25E8694400688D2C /* AchievementData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementData.swift; sourceTree = "<group>"; };
 		F060656825F61D1700C62C29 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F060656A25F61D1E00C62C29 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F037DB3325F6466700872526 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +136,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F037DB3125F6466700872526 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F037DB3225F6466700872526 /* GameKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F0B2E1C925D8D41D007DF20E = {
 			isa = PBXGroup;
 			children = (
@@ -140,6 +151,7 @@
 				F0B2E1E625D8D41F007DF20E /* TwentyFourPointsTests */,
 				F0B2E1F125D8D41F007DF20E /* TwentyFourPointsUITests */,
 				F0B2E1D325D8D41D007DF20E /* Products */,
+				F037DB3125F6466700872526 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -565,7 +577,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 29;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;
@@ -595,7 +607,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 29;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;

@@ -84,6 +84,7 @@ struct achievementListItem: View {
                 let lvlLeftLocalizedText=" • "+NSLocalizedString("achievementListItemLvlLeftPrefix",comment: "")+String(achievement[index].lvlReq-tfengine.levelInfo.lvl)+NSLocalizedString("achievementListItemLvlLeftPostfix",comment: "")
                 Text(NSLocalizedString("achievementListItemLvlReqPrefix",comment:"")+String(achievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReqPostfix",comment:"")+(listType == .complete ? "" : lvlLeftLocalizedText))
                     .foregroundColor(.secondary)
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
             }.padding(.leading,8)
             Spacer()
             if listType == .complete {

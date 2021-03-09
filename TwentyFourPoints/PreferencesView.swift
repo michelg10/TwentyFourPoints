@@ -138,20 +138,13 @@ struct PreferencesView: View {
                 .padding(.top, 13)
                 .padding(.bottom,17)
             List {
-                HStack(spacing:0) {
-                    Text(NSLocalizedString("Haptics", comment: ""))
-                    Spacer()
-                    if CHHapticEngine.capabilitiesForHardware().supportsHaptics {
-                        Toggle("", isOn: Binding(get: {
-                            tfengine.useHaptics
-                        }, set: { (val) in
-                            tfengine.useHaptics=val
-                            tfengine.saveData()
-                        }))
-                    } else {
-                        Text(NSLocalizedString("Unavailable", comment: "The message shown when haptics are unavailable"))
-                            .foregroundColor(.secondary)
-                    }
+                if CHHapticEngine.capabilitiesForHardware().supportsHaptics {
+                    Toggle(NSLocalizedString("Haptics", comment: ""), isOn: Binding(get: {
+                        tfengine.useHaptics
+                    }, set: { (val) in
+                        tfengine.useHaptics=val
+                        tfengine.saveData()
+                    }))
                 }
                 VStack(alignment: .leading,spacing:0) {
                     Text(NSLocalizedString("Appearance", comment: "Title for the section of preferences preferring light or dark mode"))

@@ -74,12 +74,14 @@ class tutorialEngine: ObservableObject, tfCallable {
     
     func doStore() {
         if curState == 14 {
+            hapticGate(hap: .light)
             expr=""
             stored="15"
             updtState()
         }
         if curState == 16 {
             if expr.contains("-") {
+                hapticGate(hap: .light)
                 expr="24"
                 stored=nil
                 updtState()
@@ -90,31 +92,38 @@ class tutorialEngine: ObservableObject, tfCallable {
     func handleNumberPress(index: Int) {
         print("Handling number press at state \(curState)")
         if curState == 4 {
+            hapticGate(hap: .light)
             expr="1"
             updtState()
         }
         if curState == 6 {
+            hapticGate(hap: .light)
             expr="1"
             updtState()
         }
         if curState == 8 {
+            hapticGate(hap: .light)
             expr="2"
             updtState()
         }
         if curState == 10 {
+            hapticGate(hap: .light)
             expr="24"
             updtState()
         }
         if curState == 13 {
             if expr=="" {
                 if index == 2 {
+                    hapticGate(hap: .light)
                     expr="3"
                 } else if index == 3 {
+                    hapticGate(hap: .light)
                     expr="5"
                 }
                 numbButtonsHighlighted[index]=false
             } else {
                 if expr.contains("×") {
+                    hapticGate(hap: .light)
                     expr="15"
                     updtState()
                 }
@@ -123,13 +132,16 @@ class tutorialEngine: ObservableObject, tfCallable {
         if curState == 15 {
             if expr=="" {
                 if index==0 {
+                    hapticGate(hap: .light)
                     expr="13"
                 } else if index == 1 {
+                    hapticGate(hap: .light)
                     expr="3"
                 }
                 numbButtonsHighlighted[index]=false
             } else {
                 if expr.contains("×") {
+                    hapticGate(hap: .light)
                     expr="39"
                     updtState()
                 }
@@ -140,29 +152,35 @@ class tutorialEngine: ObservableObject, tfCallable {
     func handleOprPress(Opr: opr) {
         print("Handling button press at state \(curState)")
         if curState == 5 {
+            hapticGate(hap: .light)
             expr="1×"
             updtState()
         }
         if curState == 7 {
+            hapticGate(hap: .light)
             expr="1×"
             updtState()
         }
         if curState == 9 {
+            hapticGate(hap: .light)
             expr="2×"
             updtState()
         }
         if curState == 13 {
             if expr.firstIndex(of: "×") == nil && expr != "" {
+                hapticGate(hap: .light)
                 expr+="×"
             }
         }
         if curState == 15 {
             if expr.firstIndex(of: "×") == nil && expr != "" {
+                hapticGate(hap: .light)
                 expr+="×"
             }
         }
         if curState == 16 {
             if expr.firstIndex(of: "-") == nil && expr != "" {
+                hapticGate(hap: .light)
                 expr+="-"
             }
         }

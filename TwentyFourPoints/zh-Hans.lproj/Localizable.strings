@@ -29,7 +29,7 @@
 "Appearance" = "外观";
 
 /* No comment provided by engineer. */
-"CloudSyncKonamiLimitationPostfix" = "如果想要降低等级，请在其他设备上更改等级或是点击下方的验证按钮";
+"CloudSyncKonamiLimitationPostfix" = "。如果想要再降低等级，请在其他设备上更改等级或是点击下方的重新验证按钮";
 
 /* No comment provided by engineer. */
 "CloudSyncKonamiLimitationPrefix" = "在此设备上，你的等级至少高于";
@@ -74,7 +74,7 @@
 "New Rank" = "升级";
 
 /* Tutorial tip screen next button */
-"Next" = "下一个";
+"Next" = "下一步";
 
 /* Final level message */
 "noMoreRankMessage" = "你已到达最高等级😎";

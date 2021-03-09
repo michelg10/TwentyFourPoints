@@ -11,11 +11,11 @@ import SwiftUI
 struct TwentyFourPointsApp: App {
     var body: some Scene {
         WindowGroup {
-            if UserDefaults.standard.string(forKey: "deviceID") == nil {
+//            if UserDefaults.standard.string(forKey: "deviceID") == nil {
                 noobView(tuengine: tutorialEngine())
-            } else {
-                mainView(rotationObserver: UIRotationObserver(), tfengine: TFEngine(isPreview: false))
-            }
+//            } else {
+//                mainView(rotationObserver: UIRotationObserver(), tfengine: TFEngine(isPreview: false))
+//            }
         }
     }
 }

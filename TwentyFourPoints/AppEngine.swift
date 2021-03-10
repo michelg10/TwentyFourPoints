@@ -342,9 +342,10 @@ class TFEngine: ObservableObject,tfCallable {
         }
         updtLvlName()
         
-        var csGrab: Data
+        var csGrab: Data?
         if synciCloud {
-            csGrab=icloudstore.object(forKey: "cards") as! Data
+            csGrab=icloudstore.object(forKey: "cards") as? Data
+            
             let icloudHapticVal=icloudstore.object(forKey: "useHaptics")
             if icloudHapticVal != nil {
                 useHaptics=icloudHapticVal as! Bool
@@ -395,7 +396,7 @@ class TFEngine: ObservableObject,tfCallable {
                 print("iCloud use split data not present")
             }
         } else {
-            csGrab=defaults.object(forKey: "cards") as! Data
+            csGrab=defaults.object(forKey: "cards") as? Data
             let localHapticsVal=defaults.object(forKey: "useHaptics")
             if localHapticsVal != nil {
                 useHaptics=localHapticsVal as! Bool
@@ -446,19 +447,23 @@ class TFEngine: ObservableObject,tfCallable {
                 print("iCloud use split data not present")
             }
         }
-        let newcs:[card]=try! PropertyListDecoder().decode(Array<card>.self, from: csGrab)
-        if isIncremental {
-            if cs != newcs {
-                nextCardView(nxtCardSet: newcs)
+        if csGrab != nil {
+            let newcs:[card]=try! PropertyListDecoder().decode(Array<card>.self, from: csGrab!)
+            if isIncremental {
+                if cs != newcs {
+                    nextCardView(nxtCardSet: newcs)
+                }
+            } else {
+                cs=newcs
+                let checkSolution=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])
+                if checkSolution==nil {
+                    getRandomCards()
+                } else {
+                    currentProblemSol=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])!
+                }
             }
         } else {
-            cs=newcs
-            let checkSolution=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])
-            if checkSolution==nil {
-                getRandomCards()
-            } else {
-                currentProblemSol=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])!
-            }
+            nextCardView(nxtCardSet: nil)
         }
         if preferredColorMode != startingAppearance {
             updtColorScheme()

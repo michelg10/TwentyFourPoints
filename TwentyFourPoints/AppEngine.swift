@@ -82,8 +82,8 @@ class TFEngine: ObservableObject,tfCallable {
     }
     
     //MARK: Updaters and Updatees
-    @Published var storedExpr: String?
-    @Published var expr: String = "" //update this from getExpr
+    var storedExpr: String?
+    var expr: String = "" //update this from getExpr
     func updtStoredExpr() {
         if stored != nil {
             storedExpr=dblToString3Precision(x: stored!.value)
@@ -116,9 +116,9 @@ class TFEngine: ObservableObject,tfCallable {
     }
     
     
-    @Published var cs: [card] //card set
+    var cs: [card] //card set
     
-    @Published var cA: [Bool] // which cards are being activated and which are not
+    var cA: [Bool] // which cards are being activated and which are not
     
     var currentProblemSol: String="currentProblemSol"
     
@@ -126,11 +126,11 @@ class TFEngine: ObservableObject,tfCallable {
     
     var cardsOnScreen = false
     
-    @Published var keyboardType: Int
+    var keyboardType: Int
     
-    @Published var showKeyboardTips: Bool
+    var showKeyboardTips: Bool
     
-    @Published var curKeyboardSettings: KeyboardShortcutSet?
+    var curKeyboardSettings: KeyboardShortcutSet?
     
     func getKeyboardSettings() -> KeyboardShortcutSet {
         if curKeyboardSettings == nil {
@@ -147,7 +147,7 @@ class TFEngine: ObservableObject,tfCallable {
         }
     }
     
-    @Published var ultraCompetitive: Bool
+    var ultraCompetitive: Bool
     
     var deviceData = [String: Int]()
     
@@ -259,7 +259,7 @@ class TFEngine: ObservableObject,tfCallable {
         var lvl: Int
         var lvlName: String?
     }
-    @Published var levelInfo: LevelInfo
+    var levelInfo: LevelInfo
     
     func updtLvlName() {
         var newLvl=0 //this gaurentees an atomic lvl update
@@ -285,7 +285,7 @@ class TFEngine: ObservableObject,tfCallable {
     
     var synciCloud: Bool
     
-    @Published var upperBound: Int
+    var upperBound: Int
     
     var uboundSnapshot: Int?
     
@@ -303,13 +303,13 @@ class TFEngine: ObservableObject,tfCallable {
         }
     }
     
-    @Published var curQuestionID: UUID
+    var curQuestionID: UUID
     
     var nxtNumNeg:Bool? //set this as nil when its been applied
     
     @Published var oprButtonActive: Bool = false // activate this when any number is pressed. and thus an opertor could be used.
     
-    @Published var useSplit: Bool
+    var useSplit: Bool
         
     func loadData(isIncremental: Bool) {
         print("Load data")
@@ -534,7 +534,7 @@ class TFEngine: ObservableObject,tfCallable {
         }
     }
     
-    @Published var preferredColorMode: ColorScheme?
+    var preferredColorMode: ColorScheme?
     
     init(isPreview: Bool) {
         icloudstore=NSUbiquitousKeyValueStore.default
@@ -641,15 +641,19 @@ class TFEngine: ObservableObject,tfCallable {
         nxtCards.res.data.deallocate()
     }
         
-    @Published var cardsClickable:Bool
+    var cardsClickable:Bool
     
-    let viewShowDelay = 0.15
+    func refresh() {
+        objectWillChange.send()
+    }
+    
+    let viewShowDelay = 0.12
     let viewShowOrder=[1,3,0,2]
     var inTransition=false
     
-    @Published var incorShowOpacity: Double
-    @Published var incorText:String
-    @Published var rewardScreenVisible: Bool = false
+    var incorShowOpacity: Double
+    var incorText:String
+    var rewardScreenVisible: Bool = false
     
     func playCardsHaptic() {
         for i in 0..<viewShowOrder.count {
@@ -680,6 +684,7 @@ class TFEngine: ObservableObject,tfCallable {
                         inTransition=false
                     }
                     cardsShouldVisible[viewShowOrder[i]]=true
+                    objectWillChange.send()
                 })
             } else {
                 inTransition=false
@@ -744,11 +749,12 @@ class TFEngine: ObservableObject,tfCallable {
             cardsShouldVisible=Array(repeating: false, count: 4)
             curQuestionID=UUID()
         }
+        objectWillChange.send()
     }
     
-    @Published var konamiCheatVisible:Bool=false
+    var konamiCheatVisible:Bool=false
     
-    @Published var cardsShouldVisible:[Bool]=[true,true,true,true]
+    var cardsShouldVisible:[Bool]=[true,true,true,true]
     
     func dismissRank() {
         cardsOnScreen=true
@@ -764,6 +770,7 @@ class TFEngine: ObservableObject,tfCallable {
                     inTransition=false
                 }
                 cardsShouldVisible[viewShowOrder[i]]=true
+                objectWillChange.send()
             })
         }
     }
@@ -791,6 +798,7 @@ class TFEngine: ObservableObject,tfCallable {
                     inTransition=false
                 }
                 cardsShouldVisible[viewShowOrder[i]]=true
+                objectWillChange.send()
             })
         }
     }
@@ -812,6 +820,7 @@ class TFEngine: ObservableObject,tfCallable {
         }
         
         updtExpr()
+        objectWillChange.send()
     }
     let cardAniDur=0.07
             
@@ -887,6 +896,7 @@ class TFEngine: ObservableObject,tfCallable {
             }
         }
         updtExpr()
+        objectWillChange.send()
     }
     
     func respondToFailure() {
@@ -895,9 +905,12 @@ class TFEngine: ObservableObject,tfCallable {
         reset()
         incorText=currentExpr
         let flashDuration=0.2
+        objectWillChange.send()
         incorShowOpacity=0.6
+        objectWillChange.send()
         DispatchQueue.main.asyncAfter(deadline: .now()+flashDuration) { [self] in
             incorShowOpacity=1.0
+            objectWillChange.send()
         }
     }
     
@@ -968,6 +981,7 @@ class TFEngine: ObservableObject,tfCallable {
         updtExpr()
         stored=nil
         updtStoredExpr()
+        objectWillChange.send()
     }
     
     func doStore() {
@@ -1022,16 +1036,17 @@ class TFEngine: ObservableObject,tfCallable {
         
         updtStoredExpr()
         updtExpr()
+        objectWillChange.send()
     }
     
-    @Published var answerShow:String = "888"
-    @Published var answerShowOpacity:Double=0
+    var answerShow:String = "888"
+    var answerShowOpacity:Double=0
     enum NxtState {
         case showingAnswer
         case inTransition
         case ready
     }
-    @Published var nxtState:NxtState = .ready
+    var nxtState:NxtState = .ready
     let ansBrightenTime=0.4
     let ansBlinkTime=0.3
     func nxtButtonPressed() {
@@ -1040,7 +1055,9 @@ class TFEngine: ObservableObject,tfCallable {
             if !inTransition {
                 nxtState = .showingAnswer
                 answerShow=""
+                objectWillChange.send()
             } else {
+                objectWillChange.send()
                 return
             }
         }
@@ -1059,15 +1076,18 @@ class TFEngine: ObservableObject,tfCallable {
             withAnimation(.easeInOut(duration:ansBrightenTime)) {
                 answerShowOpacity = 1.0
             }
+            objectWillChange.send()
             DispatchQueue.main.asyncAfter(deadline: .now()+ansBrightenTime, execute: { [self] in
                 withAnimation(.easeInOut(duration:ansBlinkTime)) {
                     answerShowOpacity = 0.7
                 }
+                objectWillChange.send()
             })
             DispatchQueue.main.asyncAfter(deadline: .now()+ansBrightenTime+ansBlinkTime, execute: { [self] in
                 withAnimation(.easeInOut(duration:ansBlinkTime)) {
                     answerShowOpacity = 1.0
                 }
+                objectWillChange.send()
             })
             DispatchQueue.main.asyncAfter(deadline: .now()+ansBlinkTime*2+ansBrightenTime, execute: { [self] in
                 if nxtState == .inTransition {

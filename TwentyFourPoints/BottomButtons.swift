@@ -23,7 +23,8 @@ struct bottomButtonView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     var body: some View {
-        ZStack {
+        print("Render view \(text)")
+        return ZStack {
             RoundedRectangle(cornerRadius: CGFloat(buttonHei/2.0*buttonRadius),style: .continuous)
                 .fill(fillColor)
                 .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))

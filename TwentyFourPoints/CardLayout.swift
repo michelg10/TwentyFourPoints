@@ -17,7 +17,8 @@ struct cardButtonView: View {
     var index:Int
     var ultraCompetitive:Bool
     var body: some View {
-        ZStack {
+        print("updating card \(index)")
+        return ZStack {
             Button(action: {
                 tfengine.handleNumberPress(index: index)
             }, label: {

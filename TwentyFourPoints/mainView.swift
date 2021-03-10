@@ -125,6 +125,7 @@ struct mainView: View {
                             tfengine.preferredColorMode
                         }, set: { (value) in
                             tfengine.preferredColorMode=value
+                            tfengine.refresh()
                             tfengine.saveData()
                             print("go")
                         }))

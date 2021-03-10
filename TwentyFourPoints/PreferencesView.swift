@@ -143,6 +143,7 @@ struct PreferencesView: View {
                         tfengine.useHaptics
                     }, set: { (val) in
                         tfengine.useHaptics=val
+                        tfengine.refresh()
                         tfengine.saveData()
                     }))
                 }
@@ -182,6 +183,7 @@ struct PreferencesView: View {
                     }, set: { (val) in
                         tfengine.keyboardType=val
                         tfengine.getKeyboardType()
+                        tfengine.refresh()
                         tfengine.saveData()
                     }), label: Text(""), content: {
                         Text("QWERTY").tag(1)
@@ -194,6 +196,7 @@ struct PreferencesView: View {
                         tfengine.useSplit
                     }, set: { (val) in
                         tfengine.useSplit=val
+                        tfengine.refresh()
                         tfengine.saveData()
                     }), label: {
                         Text(NSLocalizedString("Split buttons", comment: "Whether or not to split the buttons in the problem view on iPad"))
@@ -213,6 +216,7 @@ struct PreferencesView: View {
                     !tfengine.ultraCompetitive
                 }, set: { (val) in
                     tfengine.ultraCompetitive = !val
+                    tfengine.refresh()
                     tfengine.saveData()
                 }), label: {
                     Text(NSLocalizedString("Animate number press", comment: "Enabling high performance mode"))
@@ -221,6 +225,7 @@ struct PreferencesView: View {
                     tfengine.synciCloud
                 }, set: { (val) in
                     tfengine.setiCloudSync(val: val)
+                    tfengine.refresh()
                 }), label: {
                     Text(NSLocalizedString("iCloud sync", comment: ""))
                 })
@@ -234,6 +239,7 @@ struct PreferencesView: View {
                         tfengine.upperBound
                     }, set: { (val) in
                         tfengine.upperBound=val
+                        tfengine.refresh()
                         tfengine.saveData()
                     }), label: Text("Number Range").foregroundColor(.init("TextColor")), content: {
                         ForEach((8...24), id:\.self) { index in

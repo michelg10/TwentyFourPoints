@@ -985,7 +985,7 @@ class TFEngine: ObservableObject,tfCallable {
     }
     
     func doStore() {
-        hapticGate(hap: .medium)
+        hapticGate(hap: .light)
         //store can only be called if there's something in store or in the expression
         
         //handle operator selected

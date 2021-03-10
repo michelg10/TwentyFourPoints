@@ -181,6 +181,7 @@ struct PreferencesView: View {
                     Picker(selection: Binding(get: {
                         tfengine.keyboardType
                     }, set: { (val) in
+                        tfengine.hapticGate(hap: .medium)
                         tfengine.keyboardType=val
                         tfengine.getKeyboardType()
                         tfengine.refresh()

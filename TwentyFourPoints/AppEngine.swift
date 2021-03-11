@@ -682,6 +682,7 @@ class TFEngine: ObservableObject,tfCallable {
         curQuestionID=UUID()
         inTransition=true
         playCardsHaptic()
+        objectWillChange.send()
         for i in 0..<viewShowOrder.count {
             if cardsOnScreen {
                 DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in

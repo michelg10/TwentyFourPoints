@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreHaptics
+import GameController
 
 struct icon24: View {
     var appearance: ColorScheme
@@ -202,7 +203,7 @@ struct PreferencesView: View {
                     }), label: {
                         Text(NSLocalizedString("Split buttons", comment: "Whether or not to split the buttons in the problem view on iPad"))
                     })
-                    if tfengine.useSplit {
+                    if tfengine.useSplit && GCKeyboard.coalesced != nil {
                         Toggle(isOn: Binding(get: {
                             tfengine.showKeyboardTips
                         }, set: { (val) in

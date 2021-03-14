@@ -176,22 +176,24 @@ struct PreferencesView: View {
                         Spacer()
                     }
                 }.padding(.bottom,10)
-                HStack {
-                    Text(NSLocalizedString("Keyboard", comment: "Keyboard layout settings in preferences"))
-                    Spacer()
-                    Picker(selection: Binding(get: {
-                        tfengine.keyboardType
-                    }, set: { (val) in
-                        tfengine.hapticGate(hap: .medium)
-                        tfengine.keyboardType=val
-                        tfengine.getKeyboardType()
-                        tfengine.refresh()
-                        tfengine.saveData()
-                    }), label: Text(""), content: {
-                        Text("QWERTY").tag(1)
-                        Text("AZERTY").tag(2)
-                    }).pickerStyle(SegmentedPickerStyle())
-                    .fixedSize()
+                if GCKeyboard.coalesced != nil {
+                    HStack {
+                        Text(NSLocalizedString("Keyboard", comment: "Keyboard layout settings in preferences"))
+                        Spacer()
+                        Picker(selection: Binding(get: {
+                            tfengine.keyboardType
+                        }, set: { (val) in
+                            tfengine.hapticGate(hap: .medium)
+                            tfengine.keyboardType=val
+                            tfengine.getKeyboardType()
+                            tfengine.refresh()
+                            tfengine.saveData()
+                        }), label: Text(""), content: {
+                            Text("QWERTY").tag(1)
+                            Text("AZERTY").tag(2)
+                        }).pickerStyle(SegmentedPickerStyle())
+                        .fixedSize()
+                    }
                 }
                 if UIDevice.current.userInterfaceIdiom == .pad {
                     Toggle(isOn: Binding(get: {

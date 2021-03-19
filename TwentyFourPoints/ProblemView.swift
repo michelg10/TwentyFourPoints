@@ -41,7 +41,7 @@ struct ProblemView: View {
                                     confettiEnabled=true
                                 }
                         } else {
-                            CardLayout(tfengine: tfengine, cA: tfengine.cA, cs: tfengine.cs, cardsShouldVisible: tfengine.cardsShouldVisible, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString, ultraCompetitive: tfengine.getUltraCompetitive(), rotationObserver: rotationObserver)
+                            CardLayout(tfengine: tfengine, cA: tfengine.cA, cs: tfengine.cs, cardsShouldVisible: tfengine.cardsShouldVisible, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString, ultraCompetitive: tfengine.getUltraCompetitive(), instantCompetitive: tfengine.instantCompetitive, rotationObserver: rotationObserver)
                                 .padding(.horizontal,30)
                                 .id("MasterCardLayoutView")
                                 .animation(.spring())

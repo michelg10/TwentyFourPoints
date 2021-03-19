@@ -86,6 +86,8 @@ struct mainView: View {
     @State var playHover: Bool = false
     @State var solverHover: Bool = false
     @State var prefHover: Bool = false
+    @State var gkViewPresented: Bool = false
+    @State var gkHover: Bool = false
     
     @ObservedObject var rotationObserver: UIRotationObserver
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
@@ -96,6 +98,29 @@ struct mainView: View {
         NavigationView {
             VStack {
                 HStack {
+                    Button(action: {
+                        tfengine.hapticGate(hap: .medium)
+                        gkViewPresented=true
+                    }, label: {
+                        ZStack {
+                            Circle()
+                                .foregroundColor(.init("ButtonColorActive"))
+                                .frame(width:horizontalSizeClass == .regular ? 55 : 45,height:horizontalSizeClass == .regular ? 65 : 45)
+                            Image(systemName: "crown.fill")
+                                .animation(nil)
+                                .foregroundColor(.init("TextColor"))
+                                .font(.system(size: horizontalSizeClass == .regular ? 27 : 22,weight: .medium))
+                                .animation(nil)
+                        }
+                    }).buttonStyle(topBarButtonStyle())
+                    .onHover(perform: { (hovering) in
+                        gkHover=hovering
+                    }).brightness(gkHover ? hoverBrightness : 0)
+                    .sheet(isPresented: $gkViewPresented, content: {
+                        leaderboardView()
+                    })
+                    .padding(.horizontal,20)
+                    
                     Spacer()
                     Button(action: {
                         tfengine.snapshotUBound()

@@ -31,6 +31,7 @@ struct SolverView: View {
             
             Text(NSLocalizedString("ProblemSolver", comment: "solver title"))
                 .font(.system(size: 36, weight: .semibold, design: .rounded))
+                .multilineTextAlignment(.center)
             
             HStack(spacing:12) {
                 ForEach((0..<4), id:\.self) { index in

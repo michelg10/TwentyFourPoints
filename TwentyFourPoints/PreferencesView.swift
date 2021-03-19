@@ -226,6 +226,15 @@ struct PreferencesView: View {
                     Text(NSLocalizedString("Animate number press", comment: "Enabling high performance mode"))
                 })
                 Toggle(isOn: Binding(get: {
+                    !tfengine.instantCompetitive
+                }, set: { (val) in
+                    tfengine.instantCompetitive = !val
+                    tfengine.refresh()
+                    tfengine.saveData()
+                }), label: {
+                    Text(NSLocalizedString("Animate cards", comment: "Enabling high performance card mode"))
+                })
+                Toggle(isOn: Binding(get: {
                     tfengine.synciCloud
                 }, set: { (val) in
                     tfengine.setiCloudSync(val: val)

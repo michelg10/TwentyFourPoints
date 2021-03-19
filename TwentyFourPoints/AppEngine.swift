@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import GameKit
 
 enum cardIcon: String, CaseIterable, Codable {
     case heart = "heart"
@@ -70,6 +71,14 @@ enum daBtn:CaseIterable {
     case c2
     case c3
     case c4
+}
+
+enum gameCenterState {
+    case signedOut
+    case operational
+    case error
+    case userNo
+    case pendingLoad
 }
 
 class TFEngine: ObservableObject,tfCallable {
@@ -149,6 +158,8 @@ class TFEngine: ObservableObject,tfCallable {
     
     var ultraCompetitive: Bool
     
+    var instantCompetitive: Bool
+    
     var deviceData = [String: Int]()
     
     let defaults=UserDefaults.standard
@@ -204,6 +215,7 @@ class TFEngine: ObservableObject,tfCallable {
             icloudstore.set(useHaptics, forKey: "useHaptics")
             icloudstore.set(upperBound, forKey: "upperBound")
             icloudstore.set(ultraCompetitive, forKey: "ultraCompetitive")
+            icloudstore.set(instantCompetitive, forKey: "instantCompetitive")
             icloudstore.set(keyboardType, forKey: "keyboardType")
             switch preferredColorMode {
             case .none:
@@ -223,6 +235,7 @@ class TFEngine: ObservableObject,tfCallable {
             defaults.set(useHaptics, forKey: "useHaptics")
             defaults.set(upperBound, forKey: "upperBound")
             defaults.set(ultraCompetitive, forKey: "ultraCompetitive")
+            defaults.set(instantCompetitive, forKey: "instantCompetitive")
             defaults.set(keyboardType, forKey: "keyboardType")
             switch preferredColorMode {
             case .none:
@@ -288,6 +301,8 @@ class TFEngine: ObservableObject,tfCallable {
     var upperBound: Int
     
     var uboundSnapshot: Int?
+    
+    var useGameCenter: gameCenterState
     
     func snapshotUBound() {
         uboundSnapshot=upperBound
@@ -364,6 +379,12 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 print("iCloud ultra competitive data not present")
             }
+            let instantCompetitiveVal=icloudstore.object(forKey: "instantCompetitive")
+            if instantCompetitiveVal != nil {
+                instantCompetitive=instantCompetitiveVal as! Bool
+            } else {
+                print("iCloud instant competitive data not present")
+            }
             let appearanceVal=icloudstore.object(forKey: "appearance")
             if appearanceVal != nil {
                 let tmpAppearanceVal = appearanceVal as! Int
@@ -414,6 +435,12 @@ class TFEngine: ObservableObject,tfCallable {
                 ultraCompetitive=ultraCompetitiveVal as! Bool
             } else {
                 print("Local ultra competitive data not present")
+            }
+            let instantCompetitiveVal=defaults.object(forKey: "instantCompetitive")
+            if instantCompetitiveVal != nil {
+                instantCompetitive=instantCompetitiveVal as! Bool
+            } else {
+                print("Local instant competitive data not present")
             }
             let appearanceVal=defaults.object(forKey: "appearance")
             if appearanceVal != nil {
@@ -565,9 +592,11 @@ class TFEngine: ObservableObject,tfCallable {
         synciCloud=true
         upperBound=13
         ultraCompetitive=false
+        instantCompetitive=false
         keyboardType=1
         showKeyboardTips=true
         useSplit=true
+        useGameCenter = .pendingLoad
         
         if isPreview {
             return
@@ -582,6 +611,24 @@ class TFEngine: ObservableObject,tfCallable {
         
         if synciCloud {
             NotificationCenter.default.addObserver(self, selector: #selector(storeUpdated(notification:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: icloudstore)
+        }
+        
+        GKLocalPlayer.local.authenticateHandler = { [self] viewController, error in
+            if let viewController = viewController {
+                // how about not presenting the view controller since its annoying to the player
+                useGameCenter = .signedOut
+                return
+            }
+            if error != nil {
+                useGameCenter = .error
+                // Player could not be authenticated
+                // Disable Game Center in the game
+                return
+            }
+            if GKLocalPlayer.local.isAuthenticated {
+                useGameCenter = .operational
+            }
+            GKAccessPoint.shared.isActive = GKLocalPlayer.local.isAuthenticated
         }
                 
         // fetch device ID from UserDefaults
@@ -682,16 +729,24 @@ class TFEngine: ObservableObject,tfCallable {
         curQuestionID=UUID()
         inTransition=true
         playCardsHaptic()
-        objectWillChange.send()
+        if !instantCompetitive {
+            objectWillChange.send()
+        }
         for i in 0..<viewShowOrder.count {
             if cardsOnScreen {
-                DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
-                    if i == viewShowOrder.count-1 {
-                        inTransition=false
-                    }
-                    cardsShouldVisible[viewShowOrder[i]]=true
+                if instantCompetitive {
+                    inTransition=false
+                    cardsShouldVisible=Array(repeating: true, count: 4)
                     objectWillChange.send()
-                })
+                } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
+                        if i == viewShowOrder.count-1 {
+                            inTransition=false
+                        }
+                        cardsShouldVisible[viewShowOrder[i]]=true
+                        objectWillChange.send()
+                    })
+                }
             } else {
                 inTransition=false
                 cardsShouldVisible[viewShowOrder[i]]=true

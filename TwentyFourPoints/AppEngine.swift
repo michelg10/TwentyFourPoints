@@ -629,6 +629,9 @@ class TFEngine: ObservableObject,tfCallable {
                 useGameCenter = .operational
             }
             GKAccessPoint.shared.isActive = GKLocalPlayer.local.isAuthenticated
+            print("GC Stats")
+            print(useGameCenter)
+            print(GKLocalPlayer.local.isAuthenticated)
         }
                 
         // fetch device ID from UserDefaults

@@ -117,7 +117,7 @@ struct mainView: View {
                         gkHover=hovering
                     }).brightness(gkHover ? hoverBrightness : 0)
                     .sheet(isPresented: $gkViewPresented, content: {
-                        leaderboardView()
+                        leaderboardView(tfengine: tfengine)
                     })
                     .padding(.horizontal,20)
                     

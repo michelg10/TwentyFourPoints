@@ -735,9 +735,11 @@ class TFEngine: ObservableObject,tfCallable {
         cardsShouldVisible=Array(repeating: false, count: 4)
         curQuestionID=UUID()
         inTransition=true
-        playCardsHaptic()
         if !instantCompetitive {
+            playCardsHaptic()
             objectWillChange.send()
+        } else {
+            hapticGate(hap: .soft)
         }
         for i in 0..<viewShowOrder.count {
             if cardsOnScreen {

@@ -73,14 +73,6 @@ enum daBtn:CaseIterable {
     case c4
 }
 
-enum gameCenterState {
-    case signedOut
-    case operational
-    case error
-    case userNo
-    case pendingLoad
-}
-
 class TFEngine: ObservableObject,tfCallable {
     func getDoSplit() -> Bool {
         return useSplit
@@ -216,6 +208,7 @@ class TFEngine: ObservableObject,tfCallable {
             icloudstore.set(upperBound, forKey: "upperBound")
             icloudstore.set(ultraCompetitive, forKey: "ultraCompetitive")
             icloudstore.set(instantCompetitive, forKey: "instantCompetitive")
+            icloudstore.set(prefersGameCenter, forKey: "prefersGameCenter")
             icloudstore.set(keyboardType, forKey: "keyboardType")
             switch preferredColorMode {
             case .none:
@@ -236,6 +229,7 @@ class TFEngine: ObservableObject,tfCallable {
             defaults.set(upperBound, forKey: "upperBound")
             defaults.set(ultraCompetitive, forKey: "ultraCompetitive")
             defaults.set(instantCompetitive, forKey: "instantCompetitive")
+            defaults.set(prefersGameCenter, forKey: "prefersGameCenter")
             defaults.set(keyboardType, forKey: "keyboardType")
             switch preferredColorMode {
             case .none:
@@ -290,6 +284,18 @@ class TFEngine: ObservableObject,tfCallable {
             nxtLvlName = achievement[myRank].name
         }
         levelInfo=LevelInfo(lvl: newLvl, lvlName: nxtLvlName)
+        reportAchievements()
+        reportScores()
+    }
+    
+    func reportScores() {
+        if (gameCenterState == .success || gameCenterState == .couldNotAuth) && prefersGameCenter {
+            GKLeaderboard.submitScore(levelInfo.lvl, context: -1, player: GKLocalPlayer.local, leaderboardIDs: ["persistLeaderboard"]) { (error: Error?) in
+                if error != nil {
+                    print("Error occured while reporting score \(String(describing: error))")
+                }
+            }
+        }
     }
     
     var selectedOperator : opr?
@@ -302,7 +308,14 @@ class TFEngine: ObservableObject,tfCallable {
     
     var uboundSnapshot: Int?
     
-    var useGameCenter: gameCenterState
+    var prefersGameCenter: Bool
+    
+    func setPrefersGameCenter(val: Bool) {
+        if val==false {
+            GKAccessPoint.shared.isActive=false
+        }
+        prefersGameCenter=val
+    }
     
     func snapshotUBound() {
         uboundSnapshot=upperBound
@@ -325,6 +338,23 @@ class TFEngine: ObservableObject,tfCallable {
     @Published var oprButtonActive: Bool = false // activate this when any number is pressed. and thus an opertor could be used.
     
     var useSplit: Bool
+    
+    enum PersistLocation {
+        case local
+        case icloud
+    }
+    
+    func grabData<T>(toGrab: inout T, id: String, persistLocation: PersistLocation) {
+        var dataVal: Any?
+        if persistLocation == .icloud {
+            dataVal=icloudstore.object(forKey: id)
+        }
+        if dataVal != nil {
+            toGrab=dataVal as! T
+        } else {
+            print(persistLocation == .icloud ? "iCloud" : "Local" + " \(id) data not present")
+        }
+    }
         
     func loadData(isIncremental: Bool) {
         print("Load data")
@@ -361,30 +391,11 @@ class TFEngine: ObservableObject,tfCallable {
         if synciCloud {
             csGrab=icloudstore.object(forKey: "cards") as? Data
             
-            let icloudHapticVal=icloudstore.object(forKey: "useHaptics")
-            if icloudHapticVal != nil {
-                useHaptics=icloudHapticVal as! Bool
-            } else {
-                print("iCloud haptics data not present")
-            }
-            let upperBoundVal=icloudstore.object(forKey: "upperBound")
-            if upperBoundVal != nil {
-                upperBound=upperBoundVal as! Int
-            } else {
-                print("iCloud upper bound data not present")
-            }
-            let ultraCompetitiveVal=icloudstore.object(forKey: "ultraCompetitive")
-            if ultraCompetitiveVal != nil {
-                ultraCompetitive=ultraCompetitiveVal as! Bool
-            } else {
-                print("iCloud ultra competitive data not present")
-            }
-            let instantCompetitiveVal=icloudstore.object(forKey: "instantCompetitive")
-            if instantCompetitiveVal != nil {
-                instantCompetitive=instantCompetitiveVal as! Bool
-            } else {
-                print("iCloud instant competitive data not present")
-            }
+            grabData(toGrab: &useHaptics, id: "useHaptics", persistLocation: .icloud)
+            grabData(toGrab: &upperBound, id: "upperBound", persistLocation: .icloud)
+            grabData(toGrab: &ultraCompetitive, id: "ultraCompetitive", persistLocation: .icloud)
+            grabData(toGrab: &instantCompetitive, id: "instantCompetitive", persistLocation: .icloud)
+            grabData(toGrab: &prefersGameCenter, id: "prefersGameCenter", persistLocation: .icloud)
             let appearanceVal=icloudstore.object(forKey: "appearance")
             if appearanceVal != nil {
                 let tmpAppearanceVal = appearanceVal as! Int
@@ -398,50 +409,16 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 print("iCloud appearance data not present")
             }
-            let keyboardTypeVal=icloudstore.object(forKey: "keyboardType")
-            if keyboardTypeVal != nil {
-                keyboardType=keyboardTypeVal as! Int
-            } else {
-                print("iCloud keyboard type data not present")
-            }
-            let showKeyboardTipsVal=icloudstore.object(forKey: "showKeyboardTips")
-            if showKeyboardTipsVal != nil {
-                showKeyboardTips=showKeyboardTipsVal as! Bool
-            } else {
-                print("iCloud show keyboard tips data not present")
-            }
-            let useSplitVal=icloudstore.object(forKey: "useSplit")
-            if useSplitVal != nil {
-                useSplit=useSplitVal as! Bool
-            } else {
-                print("iCloud use split data not present")
-            }
+            grabData(toGrab: &keyboardType, id: "keyboardType", persistLocation: .icloud)
+            grabData(toGrab: &showKeyboardTips, id: "showKeyboardTips", persistLocation: .icloud)
+            grabData(toGrab: &useSplit, id: "useSplit", persistLocation: .icloud)
         } else {
             csGrab=defaults.object(forKey: "cards") as? Data
-            let localHapticsVal=defaults.object(forKey: "useHaptics")
-            if localHapticsVal != nil {
-                useHaptics=localHapticsVal as! Bool
-            } else {
-                print("Local haptics data not present")
-            }
-            let upperBoundVal=defaults.object(forKey: "upperBound")
-            if upperBoundVal != nil {
-                upperBound=upperBoundVal as! Int
-            } else {
-                print("Local upper bound data not present")
-            }
-            let ultraCompetitiveVal=defaults.object(forKey: "ultraCompetitive")
-            if ultraCompetitiveVal != nil {
-                ultraCompetitive=ultraCompetitiveVal as! Bool
-            } else {
-                print("Local ultra competitive data not present")
-            }
-            let instantCompetitiveVal=defaults.object(forKey: "instantCompetitive")
-            if instantCompetitiveVal != nil {
-                instantCompetitive=instantCompetitiveVal as! Bool
-            } else {
-                print("Local instant competitive data not present")
-            }
+            grabData(toGrab: &useHaptics, id: "useHaptics", persistLocation: .local)
+            grabData(toGrab: &upperBound, id: "upperBound", persistLocation: .local)
+            grabData(toGrab: &ultraCompetitive, id: "ultraCompetitive", persistLocation: .local)
+            grabData(toGrab: &instantCompetitive, id: "instantCompetitive", persistLocation: .local)
+            grabData(toGrab: &prefersGameCenter, id: "prefersGameCenter", persistLocation: .local)
             let appearanceVal=defaults.object(forKey: "appearance")
             if appearanceVal != nil {
                 let tmpAppearanceVal = appearanceVal as! Int
@@ -456,23 +433,12 @@ class TFEngine: ObservableObject,tfCallable {
                 print("Local appearance data not present")
             }
             let keyboardTypeVal=defaults.object(forKey: "keyboardType")
-            if keyboardTypeVal != nil {
-                keyboardType=keyboardTypeVal as! Int
-            } else {
-                print("Local keyboard type data not present")
-            }
-            let showKeyboardTipsVal=defaults.object(forKey: "showKeyboardTips")
-            if showKeyboardTipsVal != nil {
-                showKeyboardTips=showKeyboardTipsVal as! Bool
-            } else {
-                print("Local show keyboard tips data not present")
-            }
-            let useSplitVal=defaults.object(forKey: "useSplit")
-            if useSplitVal != nil {
-                useSplit=useSplitVal as! Bool
-            } else {
-                print("iCloud use split data not present")
-            }
+            grabData(toGrab: &keyboardType, id: "keyboardType", persistLocation: .local)
+            grabData(toGrab: &showKeyboardTips, id: "showKeyboardTips", persistLocation: .local)
+            grabData(toGrab: &useSplit, id: "useSplit", persistLocation: .local)
+        }
+        if !prefersGameCenter {
+            GKAccessPoint.shared.isActive=false
         }
         if csGrab != nil {
             let newcs:[card]=try! PropertyListDecoder().decode(Array<card>.self, from: csGrab!)
@@ -568,6 +534,39 @@ class TFEngine: ObservableObject,tfCallable {
     
     var preferredColorMode: ColorScheme?
     
+    var gameCenterState: gcState
+    
+    enum gcState {
+        case noAuth
+        case success
+        case couldNotAuth
+        case unknown
+    }
+    
+    func reportAchievements() {
+        if (gameCenterState == .success || gameCenterState == .couldNotAuth) && prefersGameCenter {
+            var achievementsToReport: [GKAchievement] = []
+            for i in 0..<achievement.count {
+                let theAch=GKAchievement(identifier: "level"+String(achievement[i].lvlReq))
+                if levelInfo.lvl >= achievement[i].lvlReq {
+                    theAch.percentComplete=100
+                } else {
+                    if i != achievement.count-1 {
+                        theAch.percentComplete=Double(levelInfo.lvl)/Double(achievement[i].lvlReq)*100
+                    }
+                }
+                theAch.showsCompletionBanner=false
+                achievementsToReport.append(theAch)
+            }
+            GKAchievement.report(achievementsToReport) { (error: Error?) in
+                if error != nil {
+                    print("Error occured while reporting achievement \(String(describing: error))")
+                }
+            }
+        }
+        
+    }
+    
     init(isPreview: Bool) {
         icloudstore=NSUbiquitousKeyValueStore.default
         
@@ -596,7 +595,8 @@ class TFEngine: ObservableObject,tfCallable {
         keyboardType=1
         showKeyboardTips=true
         useSplit=true
-        useGameCenter = .pendingLoad
+        prefersGameCenter=true
+        gameCenterState = .unknown
         
         if isPreview {
             return
@@ -611,27 +611,6 @@ class TFEngine: ObservableObject,tfCallable {
         
         if synciCloud {
             NotificationCenter.default.addObserver(self, selector: #selector(storeUpdated(notification:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: icloudstore)
-        }
-        
-        GKLocalPlayer.local.authenticateHandler = { [self] viewController, error in
-            if let viewController = viewController {
-                // how about not presenting the view controller since its annoying to the player
-                useGameCenter = .signedOut
-                return
-            }
-            if error != nil {
-                useGameCenter = .error
-                // Player could not be authenticated
-                // Disable Game Center in the game
-                return
-            }
-            if GKLocalPlayer.local.isAuthenticated {
-                useGameCenter = .operational
-            }
-            GKAccessPoint.shared.isActive = GKLocalPlayer.local.isAuthenticated
-            print("GC Stats")
-            print(useGameCenter)
-            print(GKLocalPlayer.local.isAuthenticated)
         }
                 
         // fetch device ID from UserDefaults
@@ -659,8 +638,33 @@ class TFEngine: ObservableObject,tfCallable {
         print("My id is \(deviceID)")
         saveData()
         
+        setGCAuthHandler()
+        
         updtExpr()
         updtLvlName()
+    }
+    
+    func setAccessPointVisible(visible: Bool) {
+        GKAccessPoint.shared.isActive=visible && prefersGameCenter
+    }
+    
+    func setGCAuthHandler() {
+        GKLocalPlayer.local.authenticateHandler = { [self] viewController, error in
+            if let viewController = viewController {
+                // how about not presenting the view controller since its annoying to the player
+                gameCenterState = .noAuth
+                return
+            }
+            if error != nil {
+                // Player could not be authenticated
+                // Disable Game Center in the game
+                gameCenterState = .couldNotAuth
+                return
+            }
+            if GKLocalPlayer.local.isAuthenticated {
+                gameCenterState = .success
+            }
+        }
     }
     
     var cachedCards: problem24?
@@ -845,7 +849,17 @@ class TFEngine: ObservableObject,tfCallable {
         if (setLvl != nil) {
             //set the level
             if setLvl! >= konamiLimitation() {
+                let devSnapshot=deviceData[deviceID] ?? 0
                 deviceData[deviceID]=setLvl!-konamiLimitation()+1
+                if deviceData[deviceID]!<devSnapshot {
+                    GKAchievement.resetAchievements { [self] (error: Error?) in
+                        if error != nil {
+                            print("Error occured while reporting achievement \(String(describing: error))")
+                        }
+                        reportAchievements()
+                        reportScores()
+                    }
+                }
                 updtLvlName()
                 saveData()
             }

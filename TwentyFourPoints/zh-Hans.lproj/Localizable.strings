@@ -2,28 +2,34 @@
 "24 Points" = "24点";
 
 /* No comment provided by engineer. */
-"achievementListItemLvlLeftPostfix" = "关";
+"achievementListItemLvlLeftPostfix" = "题";
 
 /* No comment provided by engineer. */
 "achievementListItemLvlLeftPrefix" = "还剩";
 
 /* No comment provided by engineer. */
-"achievementListItemLvlReqPostfix" = "关";
+"achievementListItemLvlReqPostfix" = "题";
 
 /* No comment provided by engineer. */
-"achievementListItemLvlReqPrefix" = "达到第";
+"achievementListItemLvlReqPrefix" = "做完";
+
+"achievementListItemLvlReachedPrefix"="完成";
+
+"achievementListItemLvlReachedPostfix"="题";
 
 /* No comment provided by engineer. */
 "achievements" = "成就";
 
 /* No comment provided by engineer. */
-"achievementYetUnlockPostfix" = "关解锁成就";
+"achievementYetUnlockPostfix" = "题以解锁成就";
 
 /* No comment provided by engineer. */
-"achievementYetUnlockPrefix" = "达到第";
+"achievementYetUnlockPrefix" = "做完";
 
 /* Enabling high performance mode */
 "Animate number press" = "按键动画";
+
+"Animate cards" = "卡牌动画";
 
 /* Title for the section of preferences preferring light or dark mode */
 "Appearance" = "外观";
@@ -59,7 +65,7 @@
 "Light" = "浅色";
 
 /* The LEVEL text in the persona detail view */
-"lvlReqPostfix" = "关";
+"lvlReqPostfix" = "题";
 
 /* The LEVEL text in the persona detail view */
 "lvlReqPrefix" = "第";
@@ -143,7 +149,7 @@
 "ProblemSolver" = "解题";
 
 /* The string that goes after the level */
-"questionPostfix" = "关";
+"questionPostfix" = "题";
 
 /* The string that goes in front of the level */
 "questionPrefix" = "第";
@@ -233,14 +239,20 @@
 "UpNext" = "待完成";
 
 /* No comment provided by engineer. */
-"yetToGetToRankPostfixPlural" = "关到下一等级";
+"yetToGetToRankPostfixPlural" = "题到下一等级";
 
 /* No comment provided by engineer. */
-"yetToGetToRankPostfixSingular" = "关到下一等级";
+"yetToGetToRankPostfixSingular" = "题到下一等级";
 
 /* No comment provided by engineer. */
 "yetToGetToRankPrefix" = "还剩";
 
 "RankUpViewLevelPrefix" = "第";
 
-"RankUpViewLevelPostfix" = "关";
+"RankUpViewLevelPostfix" = "题";
+
+"GCSignedOut" = "未登录";
+
+"GCCouldNotAuth" = "连接失败";
+
+"GCError" = "出错";

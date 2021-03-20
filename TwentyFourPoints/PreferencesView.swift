@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreHaptics
 import GameController
+import GameKit
 
 struct icon24: View {
     var appearance: ColorScheme
@@ -120,6 +121,7 @@ struct PreferencesView: View {
                 Button(action: {
                     tfengine.hapticGate(hap: .medium)
                     presentationMode.wrappedValue.dismiss()
+                    tfengine.setAccessPointVisible(visible: true)
                 }, label: {
                     ZStack {
                         Circle()
@@ -239,9 +241,31 @@ struct PreferencesView: View {
                 }, set: { (val) in
                     tfengine.setiCloudSync(val: val)
                     tfengine.refresh()
+                    tfengine.saveData()
                 }), label: {
                     Text(NSLocalizedString("iCloud sync", comment: ""))
                 })
+                HStack(spacing:0) {
+                    Text("Game Center")
+                    Spacer()
+                    if tfengine.gameCenterState == .success || tfengine.gameCenterState == .couldNotAuth {
+                        Toggle(isOn: Binding(get: {
+                            tfengine.prefersGameCenter
+                        }, set: { (val) in
+                            tfengine.setPrefersGameCenter(val: val)
+                            tfengine.refresh()
+                            tfengine.saveData()
+                        }), label: {
+                            EmptyView()
+                        })
+                    } else if tfengine.gameCenterState == .noAuth {
+                        Text(NSLocalizedString("GCSignedOut", comment: "Signed out of Game Center"))
+                            .foregroundColor(.secondary)
+                    } else if tfengine.gameCenterState == .unknown {
+                        Text(NSLocalizedString("GCError", comment: "Unknown error"))
+                            .foregroundColor(.secondary)
+                    }
+                }
                 VStack(alignment: .leading) {
                     HStack {
                         Text(NSLocalizedString("Number Range", comment: "Set the range of the numbers for the problem"))

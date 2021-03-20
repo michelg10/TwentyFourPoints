@@ -81,10 +81,16 @@ struct achievementListItem: View {
                 Text(achievement[index].secret && listType == .upNext ? "???" : achievement[index].name)
                     .font(.system(size: 18, weight: .medium, design: .rounded))
                     .foregroundColor(.init("TextColor"))
-                let lvlLeftLocalizedText=" • "+NSLocalizedString("achievementListItemLvlLeftPrefix",comment: "")+String(achievement[index].lvlReq-tfengine.levelInfo.lvl)+NSLocalizedString("achievementListItemLvlLeftPostfix",comment: "")
-                Text(NSLocalizedString("achievementListItemLvlReqPrefix",comment:"")+String(achievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReqPostfix",comment:"")+(listType == .complete ? "" : lvlLeftLocalizedText))
-                    .foregroundColor(.secondary)
-                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                if listType == .complete {
+                    Text(NSLocalizedString("achievementListItemLvlReachedPrefix",comment:"")+String(achievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReachedPostfix",comment:""))
+                        .foregroundColor(.secondary)
+                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                } else {
+                    let tempText: String=NSLocalizedString("achievementListItemLvlReqPrefix",comment:"")+String(achievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReqPostfix",comment:"")+" • "+NSLocalizedString("achievementListItemLvlLeftPrefix",comment: "")
+                    Text(tempText+String(achievement[index].lvlReq-tfengine.levelInfo.lvl)+NSLocalizedString("achievementListItemLvlLeftPostfix",comment: ""))
+                            .foregroundColor(.secondary)
+                            .font(.system(size: 15, weight: .medium, design: .rounded))
+                }
             }.padding(.leading,8)
             Spacer()
             if listType == .complete {

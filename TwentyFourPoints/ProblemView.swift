@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GameKit
 
 struct ProblemView: View {
     @ObservedObject var tfengine:TFEngine
@@ -81,10 +82,12 @@ struct ProblemView: View {
         }.onAppear {
             print("Nav back")
             canNavBack=true
+            tfengine.setAccessPointVisible(visible: false)
         }.onDisappear {
             print("No nav back")
             tfengine.cardsOnScreen=false
             canNavBack=false
+            tfengine.setAccessPointVisible(visible: true)
         }
     }
 }

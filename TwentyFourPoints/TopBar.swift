@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GameKit
 
 struct topBarButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
@@ -34,6 +35,7 @@ struct topBarButtons: View {
                 presentationMode.wrappedValue.dismiss()
                 tfengine.reset()
                 tfengine.hapticGate(hap: .medium)
+                tfengine.setAccessPointVisible(visible: true)
             }, label: {
                 navBarButton(symbolName: "chevron.backward", active: !konamiCheatVisible && !rewardVisible)
             }).buttonStyle(topBarButtonStyle())
@@ -126,9 +128,7 @@ struct TopBar: View, Equatable {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     var body: some View {
         ZStack(alignment: .top) {
-            HStack {
-                topBarButtons(konamiCheatVisible: konamiCheatVisible, rewardVisible: rewardVisible, tfengine: tfengine)
-            }
+            topBarButtons(konamiCheatVisible: konamiCheatVisible, rewardVisible: rewardVisible, tfengine: tfengine)
             TopBarText(lvl: lvl, lvlName: lvlName, tfengine: tfengine, achPresented: $achPresented)
                 .padding(.top,horizontalSizeClass == .regular ? 0 : 25)
         }.padding(.top, horizontalSizeClass == .regular ? 15 : 0)

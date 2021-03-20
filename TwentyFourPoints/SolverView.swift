@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GameKit
 
 struct SolverView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -21,6 +22,7 @@ struct SolverView: View {
                 Button(action: {
                     tfengine.hapticGate(hap: .medium)
                     presentationMode.wrappedValue.dismiss()
+                    tfengine.setAccessPointVisible(visible: true)
                 }, label: {
                     navBarButton(symbolName: "chevron.backward", active: true)
                 }).buttonStyle(topBarButtonStyle())
@@ -68,9 +70,11 @@ struct SolverView: View {
         .onAppear {
             print("Nav back")
             canNavBack=true
+            tfengine.setAccessPointVisible(visible: false)
         }.onDisappear {
             print("No nav back")
             canNavBack=false
+            tfengine.setAccessPointVisible(visible: true)
         }
     }
 }

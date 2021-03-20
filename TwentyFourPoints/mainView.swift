@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GameKit
 
 struct borederedButton: View {
     let title:String
@@ -86,8 +87,10 @@ struct mainView: View {
     @State var playHover: Bool = false
     @State var solverHover: Bool = false
     @State var prefHover: Bool = false
+    /*
     @State var gkViewPresented: Bool = false
     @State var gkHover: Bool = false
+     */
     
     @ObservedObject var rotationObserver: UIRotationObserver
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
@@ -98,6 +101,7 @@ struct mainView: View {
         NavigationView {
             VStack {
                 HStack {
+                    /*
                     Button(action: {
                         tfengine.hapticGate(hap: .medium)
                         gkViewPresented=true
@@ -120,12 +124,13 @@ struct mainView: View {
                         leaderboardView(tfengine: tfengine)
                     })
                     .padding(.horizontal,20)
-                    
+                    */
                     Spacer()
                     Button(action: {
                         tfengine.snapshotUBound()
                         tfengine.hapticGate(hap: .medium)
                         prefPresented=true
+                        tfengine.setAccessPointVisible(visible: false)
                     }, label: {
                         ZStack {
                             Circle()
@@ -144,6 +149,7 @@ struct mainView: View {
                         prefHover=hovering
                     }).brightness(prefHover ? hoverBrightness : 0)
                     .sheet(isPresented: $prefPresented, onDismiss: {
+                        tfengine.setAccessPointVisible(visible: true)
                         tfengine.commitSnap()
                     }, content: {
                         PreferencesView(tfengine: tfengine, prefColorScheme: Binding(get: {
@@ -186,6 +192,7 @@ struct mainView: View {
                             tfengine.hapticGate(hap: .medium)
                             achPresented=true
                             canNavBack=true
+                            tfengine.setAccessPointVisible(visible: false)
                             print("Nav back")
                         }, label: {
                             ZStack(alignment: .leading) {
@@ -222,6 +229,7 @@ struct mainView: View {
                         .sheet(isPresented: $achPresented,onDismiss: {
                             canNavBack=false
                             print("No nav back")
+                            tfengine.setAccessPointVisible(visible: true)
                         }, content: {
                             achievementView(tfengine: tfengine)
                         })
@@ -286,6 +294,8 @@ struct mainView: View {
         }.navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         .onAppear {
+            GKAccessPoint.shared.location = .topLeading
+            tfengine.setAccessPointVisible(visible: true)
             tfengine.updtColorScheme()
             DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
                 viewDidLoad=true

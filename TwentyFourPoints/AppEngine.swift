@@ -54,6 +54,7 @@ func dblToString3Precision(x:Double) -> String {
 enum mathResult {
     case success
     case failure
+    case divByZero
     case cont
 }
 
@@ -152,7 +153,13 @@ class TFEngine: ObservableObject,tfCallable {
     
     var instantCompetitive: Bool
     
-    var deviceData = [String: Int]()
+    struct devicePersistLevelData {
+        var allTimeData: Int
+        var weeklyData: Int
+        var lastSaved: Date
+    }
+    
+    var deviceData = [String: devicePersistLevelData]()
     
     let defaults=UserDefaults.standard
     
@@ -188,7 +195,9 @@ class TFEngine: ObservableObject,tfCallable {
             icloudstore.removeObject(forKey: "devemptylvl")
         }
         precondition(deviceID != "empty")
-        defaults.setValue(deviceData[deviceID], forKey: "myLvl")
+        defaults.setValue(deviceData[deviceID]!.allTimeData, forKey: "myLvl")
+        defaults.setValue(deviceData[deviceID]!.lastSaved, forKey: "myWkSv")
+        defaults.setValue(deviceData[deviceID]!.weeklyData, forKey: "myWkLvl")
         defaults.setValue(deviceID, forKey: "deviceID")
         defaults.setValue(synciCloud, forKey: "synciCloud")
         deviceData.removeValue(forKey: "empty")
@@ -197,12 +206,9 @@ class TFEngine: ObservableObject,tfCallable {
             let deviceList:[String]=Array(deviceData.keys)
             print(deviceList)
             icloudstore.set(deviceList, forKey: "devices")
-            for (itrDeviceID,itrDeviceLvl) in deviceData {
-                if itrDeviceID == deviceID { // only save my own level as a security (???) measure
-                    print("Saving \(itrDeviceID) as \(itrDeviceLvl)")
-                    icloudstore.set(itrDeviceLvl, forKey: "dev"+itrDeviceID+"lvl")
-                }
-            }
+            icloudstore.set(deviceData[deviceID]!.allTimeData, forKey: "dev"+deviceID+"lvl") // i am only responsible for my own data
+            icloudstore.set(deviceData[deviceID]!.lastSaved, forKey: "dev"+deviceID+"sv")
+            icloudstore.set(deviceData[deviceID]!.weeklyData, forKey: "dev"+deviceID+"wklvl")
             icloudstore.set(try? PropertyListEncoder().encode(cs), forKey: "cards")
             icloudstore.set(useHaptics, forKey: "useHaptics")
             icloudstore.set(upperBound, forKey: "upperBound")
@@ -217,9 +223,12 @@ class TFEngine: ObservableObject,tfCallable {
                 icloudstore.set(1, forKey: "appearance")
             case .dark:
                 icloudstore.set(2, forKey: "appearance")
+            case .some(_):
+                icloudstore.set(0, forKey: "appearance")
             }
             icloudstore.set(showKeyboardTips, forKey: "showKeyboardTips")
             icloudstore.set(useSplit, forKey: "useSplit")
+            icloudstore.set(isShowingAnswer, forKey: "isShowingAnswer")
             NSUbiquitousKeyValueStore.default.synchronize()
         } else {
             // save cards array locally
@@ -238,9 +247,12 @@ class TFEngine: ObservableObject,tfCallable {
                 defaults.set(1, forKey: "appearance")
             case .dark:
                 defaults.set(2, forKey: "appearance")
+            case .some(_):
+                icloudstore.set(0, forKey: "appearance")
             }
             defaults.set(showKeyboardTips, forKey: "showKeyboardTips")
             defaults.set(useSplit, forKey: "useSplit")
+            defaults.set(isShowingAnswer, forKey: "isShowingAnswer")
         }
         defaults.synchronize()
         savingData=false
@@ -273,7 +285,7 @@ class TFEngine: ObservableObject,tfCallable {
         var nxtLvlName: String?
         newLvl=0
         for i in deviceData.values {
-            newLvl+=i-1
+            newLvl+=i.allTimeData-1
         }
         newLvl+=1
         let myRank=getLvlIndex(getLvl: newLvl)
@@ -290,7 +302,7 @@ class TFEngine: ObservableObject,tfCallable {
     
     func reportScores() {
         if (gameCenterState == .success || gameCenterState == .couldNotAuth) && prefersGameCenter {
-            GKLeaderboard.submitScore(levelInfo.lvl, context: -1, player: GKLocalPlayer.local, leaderboardIDs: ["persistLeaderboard"]) { (error: Error?) in
+            GKLeaderboard.submitScore(levelInfo.lvl, context: 0, player: GKLocalPlayer.local, leaderboardIDs: ["persistLeaderboard"]) { (error: Error?) in
                 if error != nil {
                     print("Error occured while reporting score \(String(describing: error))")
                 }
@@ -359,6 +371,7 @@ class TFEngine: ObservableObject,tfCallable {
     func loadData(isIncremental: Bool) {
         print("Load data")
         let startingAppearance=preferredColorMode
+        var hasToShowAnswer=false
         if synciCloud {
             let icloudDevicesVal=icloudstore.array(forKey: "devices")
             if icloudDevicesVal != nil {
@@ -370,7 +383,15 @@ class TFEngine: ObservableObject,tfCallable {
                     let tryDeviceLevel = icloudstore.object(forKey: "dev"+devices[i]+"lvl")
                     if tryDeviceLevel != nil {
                         let deviceLevel=tryDeviceLevel as! Int
-                        deviceData[devices[i]]=deviceLevel
+                        let tryDeviceWeeklyLevel = icloudstore.object(forKey: "dev"+devices[i]+"wklvl")
+                        let tryDeviceWeeklySave = icloudstore.object(forKey: "dev"+devices[i]+"sv")
+                        var deviceWeeklySave=Date.init(timeIntervalSinceNow: 0.0)
+                        var deviceWeeklyLevel=0
+                        if tryDeviceWeeklySave != nil && tryDeviceLevel != nil {
+                            deviceWeeklySave=tryDeviceWeeklySave as! Date
+                            deviceWeeklyLevel=tryDeviceWeeklyLevel as! Int
+                        }
+                        deviceData[devices[i]]=devicePersistLevelData(allTimeData: deviceLevel, weeklyData: deviceWeeklyLevel, lastSaved: deviceWeeklySave)
                         print("Set \(devices[i]) as \(deviceLevel)")
                     }
                 }
@@ -380,10 +401,19 @@ class TFEngine: ObservableObject,tfCallable {
         }
         let defaultsmyLvlVal=defaults.object(forKey: "myLvl")
         if defaultsmyLvlVal != nil {
-            deviceData[deviceID]=(defaults.object(forKey: "myLvl") as! Int)
+            let localDataLevel=defaults.object(forKey: "myLvl") as! Int
+            let tryLocalWeeklyLevel=defaults.object(forKey: "myWkLvl")
+            let tryLocalWeeklySave=defaults.object(forKey: "myWkSv")
+            var localWeeklyLevel=0
+            var localWeeklySave=Date.init(timeIntervalSinceNow: 0.0)
+            if tryLocalWeeklySave != nil && tryLocalWeeklyLevel != nil {
+                localWeeklyLevel=tryLocalWeeklyLevel as! Int
+                localWeeklySave=tryLocalWeeklySave as! Date
+            }
+            deviceData[deviceID]=devicePersistLevelData(allTimeData: localDataLevel, weeklyData: localWeeklyLevel, lastSaved: localWeeklySave)
         } else {
             print("Local level data not present")
-            deviceData[deviceID]=1
+            deviceData[deviceID]=devicePersistLevelData(allTimeData: 1, weeklyData: 0, lastSaved: Date.init(timeIntervalSinceNow: 0.0))
         }
         updtLvlName()
         
@@ -412,6 +442,11 @@ class TFEngine: ObservableObject,tfCallable {
             grabData(toGrab: &keyboardType, id: "keyboardType", persistLocation: .icloud)
             grabData(toGrab: &showKeyboardTips, id: "showKeyboardTips", persistLocation: .icloud)
             grabData(toGrab: &useSplit, id: "useSplit", persistLocation: .icloud)
+            let isShowingAnswerSnapshot=isShowingAnswer
+            grabData(toGrab: &isShowingAnswer, id: "isShowingAnswer", persistLocation: .icloud)
+            if isShowingAnswer && !isShowingAnswerSnapshot {
+                hasToShowAnswer=true
+            }
         } else {
             csGrab=defaults.object(forKey: "cards") as? Data
             grabData(toGrab: &useHaptics, id: "useHaptics", persistLocation: .local)
@@ -432,10 +467,10 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 print("Local appearance data not present")
             }
-            let keyboardTypeVal=defaults.object(forKey: "keyboardType")
             grabData(toGrab: &keyboardType, id: "keyboardType", persistLocation: .local)
             grabData(toGrab: &showKeyboardTips, id: "showKeyboardTips", persistLocation: .local)
             grabData(toGrab: &useSplit, id: "useSplit", persistLocation: .local)
+            grabData(toGrab: &isShowingAnswer, id: "isShowingAnswer", persistLocation: .local)
         }
         if !prefersGameCenter {
             GKAccessPoint.shared.isActive=false
@@ -460,6 +495,9 @@ class TFEngine: ObservableObject,tfCallable {
         }
         if preferredColorMode != startingAppearance {
             updtColorScheme()
+        }
+        if hasToShowAnswer && nxtState == .ready {
+            nxtButtonPressed()
         }
         getKeyboardType()
     }
@@ -597,6 +635,7 @@ class TFEngine: ObservableObject,tfCallable {
         useSplit=true
         prefersGameCenter=true
         gameCenterState = .unknown
+        isShowingAnswer=false
         
         if isPreview {
             return
@@ -608,10 +647,6 @@ class TFEngine: ObservableObject,tfCallable {
         if doesicloudsync != nil {
             synciCloud=doesicloudsync as! Bool
         }
-        
-        if synciCloud {
-            NotificationCenter.default.addObserver(self, selector: #selector(storeUpdated(notification:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: icloudstore)
-        }
                 
         // fetch device ID from UserDefaults
         let readDevID=defaults.string(forKey: "deviceID")
@@ -619,10 +654,14 @@ class TFEngine: ObservableObject,tfCallable {
         
         if readDevID == nil {
             deviceID=UUID().uuidString
-            deviceData[deviceID] = levelInfo.lvl
+            deviceData[deviceID] = devicePersistLevelData(allTimeData: levelInfo.lvl, weeklyData: 0, lastSaved: Date.init(timeIntervalSinceNow: 0.0))
             print("Init \(deviceID)")
         } else {
             deviceID=readDevID!
+        }
+        
+        if synciCloud {
+            NotificationCenter.default.addObserver(self, selector: #selector(storeUpdated(notification:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: icloudstore)
         }
         
         if synciCloud {
@@ -732,6 +771,7 @@ class TFEngine: ObservableObject,tfCallable {
         incorText=""
         answerShow=""
         nxtState = .ready
+        isShowingAnswer=false
         cardsShouldVisible=Array(repeating: false, count: 4)
         curQuestionID=UUID()
         inTransition=true
@@ -800,7 +840,7 @@ class TFEngine: ObservableObject,tfCallable {
         var rturn = 0
         for (itrDeviceID,itrLvl) in deviceData {
             if itrDeviceID != deviceID {
-                rturn+=itrLvl-1
+                rturn+=itrLvl.allTimeData-1
             }
         }
         rturn+=1
@@ -818,8 +858,8 @@ class TFEngine: ObservableObject,tfCallable {
             konamiCheatVisible=true
             cardsShouldVisible=Array(repeating: false, count: 4)
             curQuestionID=UUID()
+            objectWillChange.send()
         }
-        objectWillChange.send()
     }
     
     var konamiCheatVisible:Bool=false
@@ -851,9 +891,9 @@ class TFEngine: ObservableObject,tfCallable {
         if (setLvl != nil) {
             //set the level
             if setLvl! >= konamiLimitation() {
-                let devSnapshot=deviceData[deviceID] ?? 0
-                deviceData[deviceID]=setLvl!-konamiLimitation()+1
-                if deviceData[deviceID]!<devSnapshot {
+                let devSnapshot=deviceData[deviceID]!.allTimeData
+                deviceData[deviceID]!.allTimeData=setLvl!-konamiLimitation()+1
+                if deviceData[deviceID]!.allTimeData<devSnapshot {
                     GKAchievement.resetAchievements { [self] (error: Error?) in
                         if error != nil {
                             print("Error occured while reporting achievement \(String(describing: error))")
@@ -972,21 +1012,28 @@ class TFEngine: ObservableObject,tfCallable {
                     cA[index]=false
                 }
             } else if mathRes == .failure {
-                respondToFailure()
+                respondToFailure(isDivByZero: false)
+            } else if mathRes == .divByZero {
+                respondToFailure(isDivByZero: true)
             }
         }
         updtExpr()
         objectWillChange.send()
     }
     
-    func respondToFailure() {
-        updtExpr()
-        let currentExpr=expr
+    func respondToFailure(isDivByZero: Bool) {
+        var currentExpr: String
+        if isDivByZero {
+            currentExpr=expr+"0"
+        } else {
+            updtExpr()
+            currentExpr=expr
+        }
         reset()
         incorText=currentExpr
         let flashDuration=0.2
         objectWillChange.send()
-        incorShowOpacity=0.6
+        incorShowOpacity=0.4
         objectWillChange.send()
         DispatchQueue.main.asyncAfter(deadline: .now()+flashDuration) { [self] in
             incorShowOpacity=1.0
@@ -998,7 +1045,34 @@ class TFEngine: ObservableObject,tfCallable {
         print("Increment Level")
         // check if rank has changed
         let lastRank = getLvlIndex(getLvl: levelInfo.lvl)
-        deviceData[deviceID]!+=1
+        deviceData[deviceID]!.allTimeData+=1
+        GKLeaderboard.loadLeaderboards(IDs: ["weeklyLeaderboard"]) { [self] (fetchedLBs, error) in
+            guard let lb = fetchedLBs?.first else { return }
+            guard let endDate = lb.startDate?.addingTimeInterval(lb.duration), endDate > Date() else { return }
+            if lb.startDate!<Date() {
+                if deviceData[deviceID]!.lastSaved<lb.startDate! {
+                    deviceData[deviceID]!.weeklyData=0
+                }
+                deviceData[deviceID]!.weeklyData+=1
+                deviceData[deviceID]!.lastSaved=Date()
+                // total it up
+                var totalWeekly=0
+                for devData in deviceData.values {
+                    if devData.lastSaved>=lb.startDate! {
+                        totalWeekly+=devData.weeklyData
+                        print("Totaling weekly data from device - saved \(devData.lastSaved), data \(devData.weeklyData)")
+                    } else {
+                        print("Data not in range - saved \(devData.lastSaved), data \(devData.weeklyData)")
+                    }
+                }
+                lb.submitScore(totalWeekly, context: 0, player: GKLocalPlayer.local) { (error) in
+                    if error != nil {
+                        print("Error occured while reporting weekly score \(String(describing: error))")
+                    }
+                }
+            }
+        }
+        
         updtLvlName()
         let currentRank=getLvlIndex(getLvl: levelInfo.lvl)
         if currentRank != lastRank {
@@ -1020,7 +1094,7 @@ class TFEngine: ObservableObject,tfCallable {
         if selectedOperator == .div && doubleEquality(a: addendB, b: 0) {
             mainVal!.value=0
             selectedOperator = nil
-            return .failure
+            return .divByZero
         }
         switch selectedOperator! {
         case .add:
@@ -1108,7 +1182,9 @@ class TFEngine: ObservableObject,tfCallable {
                         nextCardView(nxtCardSet: nil)
                         incrementLvl()
                     } else if mathRturn == .failure {
-                        respondToFailure()
+                        respondToFailure(isDivByZero: false)
+                    } else if mathRturn == .divByZero {
+                        respondToFailure(isDivByZero: true)
                     }
                 }
             }
@@ -1129,12 +1205,14 @@ class TFEngine: ObservableObject,tfCallable {
     var nxtState:NxtState = .ready
     let ansBrightenTime=0.4
     let ansBlinkTime=0.3
+    var isShowingAnswer: Bool
     func nxtButtonPressed() {
         incorText=""
         if nxtState == .inTransition {
             if !inTransition {
                 nxtState = .showingAnswer
                 answerShow=""
+                isShowingAnswer=false
                 objectWillChange.send()
             } else {
                 objectWillChange.send()
@@ -1142,40 +1220,45 @@ class TFEngine: ObservableObject,tfCallable {
             }
         }
         if nxtState == .ready {
-            hapticGate(hap: .soft)
+            if cardsOnScreen {
+                hapticGate(hap: .soft)
+            }
             expr=""
             // show the answer
             nxtState = .inTransition
-            var ansCs=Array(repeating: 0, count: 4)
-            for i in 0..<4 {
-                ansCs[i]=cs[i].numb-1
-            }
-            ansCs=ansCs.sorted()
             answerShowOpacity=0
             answerShow = currentProblemSol
-            withAnimation(.easeInOut(duration:ansBrightenTime)) {
-                answerShowOpacity = 1.0
-            }
-            objectWillChange.send()
-            DispatchQueue.main.asyncAfter(deadline: .now()+ansBrightenTime, execute: { [self] in
-                withAnimation(.easeInOut(duration:ansBlinkTime)) {
-                    answerShowOpacity = 0.7
-                }
-                objectWillChange.send()
-            })
-            DispatchQueue.main.asyncAfter(deadline: .now()+ansBrightenTime+ansBlinkTime, execute: { [self] in
-                withAnimation(.easeInOut(duration:ansBlinkTime)) {
+            isShowingAnswer=true
+            saveData()
+            if cardsOnScreen {
+                withAnimation(.easeInOut(duration:ansBrightenTime)) {
                     answerShowOpacity = 1.0
                 }
                 objectWillChange.send()
-            })
-            DispatchQueue.main.asyncAfter(deadline: .now()+ansBlinkTime*2+ansBrightenTime, execute: { [self] in
-                if nxtState == .inTransition {
-                    nxtState = .showingAnswer
-                }
-            })
+                DispatchQueue.main.asyncAfter(deadline: .now()+ansBrightenTime, execute: { [self] in
+                    withAnimation(.easeInOut(duration:ansBlinkTime)) {
+                        answerShowOpacity = 0.7
+                    }
+                    objectWillChange.send()
+                })
+                DispatchQueue.main.asyncAfter(deadline: .now()+ansBrightenTime+ansBlinkTime, execute: { [self] in
+                    withAnimation(.easeInOut(duration:ansBlinkTime)) {
+                        answerShowOpacity = 1.0
+                    }
+                    objectWillChange.send()
+                })
+                DispatchQueue.main.asyncAfter(deadline: .now()+ansBlinkTime*2+ansBrightenTime, execute: { [self] in
+                    if nxtState == .inTransition {
+                        nxtState = .showingAnswer
+                    }
+                })
+            } else {
+                answerShowOpacity = 1.0
+                nxtState = .showingAnswer
+                objectWillChange.send()
+            }
         }
-        if nxtState == .showingAnswer && !inTransition {
+        if nxtState == .showingAnswer && !inTransition && cardsOnScreen {
             hapticGate(hap: .medium)
             nxtState = .ready
             nextCardView(nxtCardSet: nil)

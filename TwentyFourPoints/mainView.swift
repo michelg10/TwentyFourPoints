@@ -243,7 +243,7 @@ struct mainView: View {
                             EmptyView()
                         })
                     NavigationLink(
-                        destination: SolverView(tfengine: tfengine),tag: 2,selection: $navAction,
+                        destination: SolverView(solengine: solverEngine(), tfengine: tfengine),tag: 2,selection: $navAction,
                         label: {
                             EmptyView()
                         })

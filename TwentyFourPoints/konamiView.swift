@@ -48,6 +48,7 @@ struct konamiView: View {
                             .foregroundColor(.init("ButtonColorActive"))
                     )
                 Button(action: {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     tfengine.konamiLvl(setLvl: levelInput)
                     tfengine.hapticGate(hap: .medium)
                 }, label: {
@@ -65,6 +66,7 @@ struct konamiView: View {
             Spacer()
             if tfengine.konamiLimitation() != 1 {
                 Button(action: {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     tfengine.softStorageReset()
                     tfengine.hapticGate(hap: .medium)
                 }, label: {

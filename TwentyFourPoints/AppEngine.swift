@@ -204,7 +204,7 @@ class TFEngine: ObservableObject,tfCallable {
         
         if synciCloud {
             let deviceList:[String]=Array(deviceData.keys)
-            print(deviceList)
+            print("Devices: \(deviceList)")
             icloudstore.set(deviceList, forKey: "devices")
             icloudstore.set(deviceData[deviceID]!.allTimeData, forKey: "dev"+deviceID+"lvl") // i am only responsible for my own data
             icloudstore.set(deviceData[deviceID]!.lastSaved, forKey: "dev"+deviceID+"sv")
@@ -390,9 +390,10 @@ class TFEngine: ObservableObject,tfCallable {
                         if tryDeviceWeeklySave != nil && tryDeviceLevel != nil {
                             deviceWeeklySave=tryDeviceWeeklySave as! Date
                             deviceWeeklyLevel=tryDeviceWeeklyLevel as! Int
+                            print("Got device Weekly")
                         }
                         deviceData[devices[i]]=devicePersistLevelData(allTimeData: deviceLevel, weeklyData: deviceWeeklyLevel, lastSaved: deviceWeeklySave)
-                        print("Set \(devices[i]) as \(deviceLevel)")
+                        print("Set \(devices[i]) as \(deviceLevel), weekly \(deviceWeeklyLevel), last saved \(deviceWeeklySave)")
                     }
                 }
             } else {
@@ -511,16 +512,6 @@ class TFEngine: ObservableObject,tfCallable {
         case .dark:
             UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
         }
-    }
-    
-    func solution(problemSet: [Int]) -> String? {
-        let solvedData=solve24(Int32(problemSet[0]), Int32(problemSet[1]), Int32(problemSet[2]), Int32(problemSet[3])).data
-        let solutionToProblem=String(cString: solvedData!)
-        solvedData?.deallocate()
-        if solutionToProblem=="nosol" {
-            return nil
-        }
-        return solutionToProblem
     }
     
     func resetStorage() {
@@ -672,7 +663,6 @@ class TFEngine: ObservableObject,tfCallable {
             getRandomCards()
         } else {
             loadData(isIncremental: false)
-            print("load")
         }
         print("My id is \(deviceID)")
         saveData()
@@ -1049,6 +1039,7 @@ class TFEngine: ObservableObject,tfCallable {
         GKLeaderboard.loadLeaderboards(IDs: ["weeklyLeaderboard"]) { [self] (fetchedLBs, error) in
             guard let lb = fetchedLBs?.first else { return }
             guard let endDate = lb.startDate?.addingTimeInterval(lb.duration), endDate > Date() else { return }
+            print("Leaderboard starts \(lb.startDate!)")
             if lb.startDate!<Date() {
                 if deviceData[deviceID]!.lastSaved<lb.startDate! {
                     deviceData[deviceID]!.weeklyData=0

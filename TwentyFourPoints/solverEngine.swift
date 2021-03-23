@@ -8,22 +8,37 @@
 import Foundation
 
 class solverEngine: ObservableObject {
-    @Published var responderHasFocus: [Bool]
+    @Published var whichResponder: Int
     @Published var cards: [Int]
-    init() {
-        responderHasFocus=[false,false,false,false]
-        cards=[1,1,1,1]
+    @Published var computedSolution: String?
+    @Published var showHints: Bool
+    func computeSolution() {
+        computedSolution = solution(problemSet: cards)
+    }
+    init(isPreview: Bool) {
+        if isPreview {
+            showHints=true
+            cards=[1,2,3,4]
+            whichResponder = -1
+            computedSolution="Preview"
+            return
+        }
+        showHints=true
+        whichResponder = -1
+        cards=[0,0,0,0]
+        
+        computeSolution()
     }
     func nextResponderFocus() {
-        for i in 0..<responderHasFocus.count {
-            if responderHasFocus[i] {
-                responderHasFocus.swapAt(i, (i+1)%4)
-                return
-            }
-        }
+        showHints=false
+        whichResponder=(whichResponder+1)%4
     }
     func setCards(ind: Int,val: String) {
         var myVal=val.filter("0123456789".contains)
+        if myVal == "" {
+            myVal="0"
+        }
+        myVal=String(Int(myVal)!)
         if myVal.count>2 {
             myVal=String(myVal.prefix(2))
             nextResponderFocus()
@@ -41,6 +56,11 @@ class solverEngine: ObservableObject {
         let myValInt=Int(myVal) ?? 0
         if myValInt <= 24 {
             cards[ind]=myValInt
+        }
+        if cards.contains(0) {
+            computedSolution=nil
+        } else {
+            computeSolution()
         }
     }
 }

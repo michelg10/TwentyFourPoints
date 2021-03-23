@@ -16,7 +16,7 @@ class UIRotationObserver:ObservableObject {
             .windowScene?
             .interfaceOrientation
             .isPortrait ?? false
-        print("Update")
+        print("Rotation update")
     }
     init() {
         if UIDevice.current.userInterfaceIdiom == .pad {

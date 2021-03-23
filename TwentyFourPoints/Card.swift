@@ -168,7 +168,6 @@ struct cardView: View {
                         numView(isStationary: isStationary, CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor, ultraCompetitive: ultraCompetitive)
                     }
                 }
-
             )
     }
 }

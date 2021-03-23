@@ -158,7 +158,6 @@ struct mainView: View {
                             tfengine.preferredColorMode=value
                             tfengine.refresh()
                             tfengine.saveData()
-                            print("go")
                         }))
                     }).padding(.horizontal,20)
                 }.padding(.top,20)
@@ -243,7 +242,7 @@ struct mainView: View {
                             EmptyView()
                         })
                     NavigationLink(
-                        destination: SolverView(solengine: solverEngine(), tfengine: tfengine),tag: 2,selection: $navAction,
+                        destination: SolverView(solengine: solverEngine(isPreview: false), tfengine: tfengine),tag: 2,selection: $navAction,
                         label: {
                             EmptyView()
                         })

@@ -97,3 +97,13 @@ extension UINavigationController: UIGestureRecognizerDelegate {
         return viewControllers.count > 1 && canNavBack
     }
 }
+
+func solution(problemSet: [Int]) -> String? {
+    let solvedData=solve24(Int32(problemSet[0]), Int32(problemSet[1]), Int32(problemSet[2]), Int32(problemSet[3])).data
+    let solutionToProblem=String(cString: solvedData!)
+    solvedData?.deallocate()
+    if solutionToProblem=="nosol" {
+        return nil
+    }
+    return solutionToProblem
+}

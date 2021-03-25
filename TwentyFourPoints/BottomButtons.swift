@@ -447,7 +447,7 @@ struct bottomButtons: View {
             
             MiddleButtonRow(colorActive: buttonsDisabled ? Array(repeating: false,count: 4) : tfengine.cA,
                             actionActive: allButtonsDisableSwitch ? Array(repeating: false,count:4) : tfengine.cA,
-                            cards: tfengine.cs,
+                            cards: tfengine.curQ.cs,
                             tfengine: tfengine,
                             ultraCompetitive: tfengine.getUltraCompetitive(),
                             doSplit: doSplit,

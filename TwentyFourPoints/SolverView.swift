@@ -70,7 +70,7 @@ struct responderTextView: UIViewRepresentable {
     
     func makeUIView(context: Context) -> UITextField {
         let rturn=UITextField()
-        rturn.keyboardType = .numberPad
+        rturn.keyboardType = .numbersAndPunctuation
         rturn.text=text
         let roundedFont=UIFont.systemFont(ofSize: textSize, weight: .medium)
         rturn.font=UIFont(descriptor: roundedFont.fontDescriptor.withDesign(.rounded)!, size: textSize)
@@ -182,16 +182,14 @@ struct SolverView: View {
                     .multilineTextAlignment(.center)
                 Spacer()
             }
-            if solengine.showHints {
-                Text("Tap a card to get started")
-                    .font(.system(size: 18, weight: .regular, design: .rounded))
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom,10)
-            }
+            
+            Text(solengine.showHints ? NSLocalizedString("Tap a card to get started", comment: "solver hint") : NSLocalizedString("Tap space to quickly jump to the next card", comment: "solver hint jump"))
+                .font(.system(size: 18, weight: .regular, design: .rounded))
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.bottom,10)
             
             Spacer()
-            
             HStack(spacing:horizontalSizeClass == .regular ? 24 : 12) {
                 ForEach((0..<4), id:\.self) { index in
                     solverCard(numText: Binding(get: {
@@ -210,8 +208,7 @@ struct SolverView: View {
                 }
             }.padding(.horizontal,(horizontalSizeClass == .regular ? 46 : 23))
             
-            Text((solengine.computedSolution ?? "Placeholder").replacingOccurrences(of: "/", with: "÷").replacingOccurrences(of: "*", with: "×"))
-                .foregroundColor(solengine.computedSolution == nil ? Color.clear : Color.primary)
+            Text((solengine.computedSolution ?? NSLocalizedString("NoSolution", comment: "nosol")).replacingOccurrences(of: "/", with: "÷").replacingOccurrences(of: "*", with: "×"))
                 .font(.system(size: 24, weight: .medium, design: .rounded))
                 .padding(.top,15)
             

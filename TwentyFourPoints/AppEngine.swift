@@ -74,6 +74,13 @@ enum daBtn:CaseIterable {
     case c4
 }
 
+struct currentQuestion {
+    var cs: [card]
+    var sol: String
+    var questionGenerated: Date
+    var questionSession: String
+}
+
 class TFEngine: ObservableObject,tfCallable {
     func getDoSplit() -> Bool {
         return useSplit
@@ -82,6 +89,8 @@ class TFEngine: ObservableObject,tfCallable {
     func getUltraCompetitive() -> Bool {
         return ultraCompetitive
     }
+    
+    var curQ: currentQuestion
     
     //MARK: Updaters and Updatees
     var storedExpr: String?
@@ -117,13 +126,8 @@ class TFEngine: ObservableObject,tfCallable {
         }
     }
     
-    
-    var cs: [card] //card set
-    
     var cA: [Bool] // which cards are being activated and which are not
-    
-    var currentProblemSol: String="currentProblemSol"
-    
+        
     var buttonsCanPress=false
     
     var cardsOnScreen = false
@@ -209,7 +213,7 @@ class TFEngine: ObservableObject,tfCallable {
             icloudstore.set(deviceData[deviceID]!.allTimeData, forKey: "dev"+deviceID+"lvl") // i am only responsible for my own data
             icloudstore.set(deviceData[deviceID]!.lastSaved, forKey: "dev"+deviceID+"sv")
             icloudstore.set(deviceData[deviceID]!.weeklyData, forKey: "dev"+deviceID+"wklvl")
-            icloudstore.set(try? PropertyListEncoder().encode(cs), forKey: "cards")
+            icloudstore.set(try? PropertyListEncoder().encode(curQ.cs), forKey: "cards")
             icloudstore.set(useHaptics, forKey: "useHaptics")
             icloudstore.set(upperBound, forKey: "upperBound")
             icloudstore.set(ultraCompetitive, forKey: "ultraCompetitive")
@@ -232,7 +236,7 @@ class TFEngine: ObservableObject,tfCallable {
             NSUbiquitousKeyValueStore.default.synchronize()
         } else {
             // save cards array locally
-            defaults.set(try? PropertyListEncoder().encode(cs), forKey: "cards")
+            defaults.set(try? PropertyListEncoder().encode(curQ.cs), forKey: "cards")
 
             defaults.set(useHaptics, forKey: "useHaptics")
             defaults.set(upperBound, forKey: "upperBound")
@@ -479,16 +483,16 @@ class TFEngine: ObservableObject,tfCallable {
         if csGrab != nil {
             let newcs:[card]=try! PropertyListDecoder().decode(Array<card>.self, from: csGrab!)
             if isIncremental {
-                if cs != newcs {
+                if curQ.cs != newcs {
                     nextCardView(nxtCardSet: newcs)
                 }
             } else {
-                cs=newcs
-                let checkSolution=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])
+                curQ.cs=newcs
+                let checkSolution=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb])
                 if checkSolution==nil {
                     getRandomCards()
                 } else {
-                    currentProblemSol=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])!
+                    curQ.sol=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb])!
                 }
             }
         } else {
@@ -596,10 +600,13 @@ class TFEngine: ObservableObject,tfCallable {
         
     }
     
+    var currentSession: String
+    
     init(isPreview: Bool) {
+        currentSession=UUID().uuidString
         icloudstore=NSUbiquitousKeyValueStore.default
         
-        cs=[card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)]
+        curQ = .init(cs: [card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)], sol: "", questionGenerated: Date(), questionSession: currentSession)
         cA=[true, true, true,true]
         
         if isPreview {
@@ -627,6 +634,8 @@ class TFEngine: ObservableObject,tfCallable {
         prefersGameCenter=true
         gameCenterState = .unknown
         isShowingAnswer=false
+        
+        curQ.sol=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb]) ?? "No Solution"
         
         if isPreview {
             return
@@ -723,9 +732,9 @@ class TFEngine: ObservableObject,tfCallable {
         }
         let nxtCardsList=[nxtCards.c1,nxtCards.c2,nxtCards.c3,nxtCards.c4]
         for i in 0..<4 {
-            cs[i]=card(CardIcon: cardIcon.allCases.randomElement()!, numb: Int(nxtCardsList[i]))
+            curQ.cs[i]=card(CardIcon: cardIcon.allCases.randomElement()!, numb: Int(nxtCardsList[i]))
         }
-        currentProblemSol=String(cString: nxtCards.res.data)
+        curQ.sol=String(cString: nxtCards.res.data)
         nxtCards.res.data.deallocate()
     }
         
@@ -795,12 +804,12 @@ class TFEngine: ObservableObject,tfCallable {
         if nxtCardSet == nil {
             getRandomCards()
         } else {
-            cs=nxtCardSet!
-            let checkSolution=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])
+            curQ.cs=nxtCardSet!
+            let checkSolution=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb])
             if checkSolution==nil {
                 getRandomCards()
             } else {
-                currentProblemSol=solution(problemSet: [cs[0].numb,cs[1].numb,cs[2].numb,cs[3].numb])!
+                curQ.sol=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb])!
             }
         }
 
@@ -948,7 +957,7 @@ class TFEngine: ObservableObject,tfCallable {
                     cA[index]=false
                     oprButtonActive=true
                 }
-                mainVal=storedVal(value: Double(cs[index].numb), source: index)
+                mainVal=storedVal(value: Double(curQ.cs[index].numb), source: index)
             } else {
                 if mainVal!.source == 4 {
                     // put into storage
@@ -982,14 +991,14 @@ class TFEngine: ObservableObject,tfCallable {
                                 cA[mainVal!.source]=true
                                 cA[index]=false
                             }
-                            mainVal=storedVal(value: Double(cs[index].numb), source: index)
+                            mainVal=storedVal(value: Double(curQ.cs[index].numb), source: index)
                         }
                     }
                 }
             }
         } else {
             // do the math
-            let addendB = Double(cs[index].numb)
+            let addendB = Double(curQ.cs[index].numb)
             var pretendcA=cA
             pretendcA[index]=false
             let mathRes:mathResult=doMath(addendB: addendB, noCardsActive: !pretendcA.contains(true))
@@ -1218,7 +1227,7 @@ class TFEngine: ObservableObject,tfCallable {
             // show the answer
             nxtState = .inTransition
             answerShowOpacity=0
-            answerShow = currentProblemSol
+            answerShow = curQ.sol
             isShowingAnswer=true
             saveData()
             if cardsOnScreen {

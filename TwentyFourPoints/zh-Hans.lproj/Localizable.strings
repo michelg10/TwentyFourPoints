@@ -256,3 +256,7 @@
 "GCCouldNotAuth" = "连接失败";
 
 "GCError" = "出错";
+
+"Tap a card to get started" = "点击一个卡牌以开始解题";
+
+"Tap space to quickly jump to the next card" = "点击空格键快速跳到下张卡";

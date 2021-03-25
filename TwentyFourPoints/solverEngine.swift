@@ -32,34 +32,33 @@ class solverEngine: ObservableObject {
     func nextResponderFocus() {
         showHints=false
         whichResponder=(whichResponder+1)%4
+        cards[whichResponder]=0
     }
     func setCards(ind: Int,val: String) {
         var myVal=val.filter("0123456789".contains)
+        if val == myVal+" " {
+            nextResponderFocus()
+            return
+        }
         if myVal == "" {
             myVal="0"
         }
         myVal=String(Int(myVal)!)
-        if myVal.count>2 {
-            myVal=String(myVal.prefix(2))
-            nextResponderFocus()
-            print("Count too big")
-        } else if myVal.count == 2 && cards[ind]<Int(myVal) ?? 0 {
-            nextResponderFocus()
-            print("Count is 2")
-        }
-        if myVal.count == 1 && cards[ind]<Int(myVal) ?? 0 {
-            if !("0"..."2").contains(myVal.first!) {
-                print("Does not contain!")
-                nextResponderFocus()
-            }
-        }
+//        if myVal.count>2 {
+//            myVal=String(myVal.prefix(2))
+//            nextResponderFocus()
+//            print("Count too big")
+//        } else if myVal.count == 2 && cards[ind]<Int(myVal) ?? 0 {
+//            nextResponderFocus()
+//            print("Count is 2")
+//        }
         let myValInt=Int(myVal) ?? 0
         if myValInt <= 24 {
             cards[ind]=myValInt
-        }
-        if cards.contains(0) {
-            computedSolution=nil
         } else {
+            cards[ind]=myValInt/10
+        }
+        if !cards.contains(0) {
             computeSolution()
         }
     }

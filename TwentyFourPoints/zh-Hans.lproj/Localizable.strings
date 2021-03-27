@@ -10,6 +10,8 @@
 /* No comment provided by engineer. */
 "achievementListItemLvlReqPostfix" = "题";
 
+"achievementListItemLvlReqPostfixCompact" = "题";
+
 /* No comment provided by engineer. */
 "achievementListItemLvlReqPrefix" = "做完";
 

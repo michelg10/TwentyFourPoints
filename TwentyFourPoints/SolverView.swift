@@ -148,7 +148,7 @@ struct solverCard: View {
                             .padding(geometry.size.width*0.025)
                         responderTextView(text: $numText, whichResponder: $whichResponder, index: index, textSize: (geometry.size.width)*0.55, textColor: UIColor(foregroundColor))
                             .foregroundColor(Color.white)
-                        solverNumView(CardIcon: cardicon, numberString: getStringNameOfNum(num: Int(numText)!), foregroundColor: foregroundColor)
+                        solverNumView(CardIcon: cardicon, numberString: getStringNameOfNum(num: Int(numText) ?? -1), foregroundColor: foregroundColor)
                     }
                 }
             )
@@ -175,25 +175,27 @@ struct SolverView: View {
                 Spacer()
             }.padding(.top, horizontalSizeClass == .regular ? 15 : 0)
             .padding(.bottom,10)
-            HStack(spacing:0) {
-                Spacer()
+            Button(action:{
+                solengine.randomProblem(upperBound: tfengine.upperBound)
+            }, label: {
                 Text(NSLocalizedString("ProblemSolver", comment: "solver title"))
                     .font(.system(size: 36, weight: .semibold, design: .rounded))
                     .multilineTextAlignment(.center)
-                Spacer()
-            }
+                    .padding(.bottom,3)
+            }).buttonStyle(textButtonStyle())
             
             Text(solengine.showHints ? NSLocalizedString("Tap a card to get started", comment: "solver hint") : NSLocalizedString("Tap space to quickly jump to the next card", comment: "solver hint jump"))
                 .font(.system(size: 18, weight: .regular, design: .rounded))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.bottom,10)
+                .padding(.horizontal,25)
             
             Spacer()
             HStack(spacing:horizontalSizeClass == .regular ? 24 : 12) {
                 ForEach((0..<4), id:\.self) { index in
                     solverCard(numText: Binding(get: {
-                        String(solengine.cards[index])
+                        solengine.cards[index] == 0 ? "" : String(solengine.cards[index])
                     }, set: { (val) in
                         solengine.setCards(ind: index, val: val)
                     }), whichResponder: Binding(get: {

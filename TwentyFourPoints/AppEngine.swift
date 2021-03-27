@@ -77,8 +77,12 @@ enum daBtn:CaseIterable {
 struct currentQuestion {
     var cs: [card]
     var sol: String
-    var questionGenerated: Date
+    var questionShown: Date
     var questionSession: String
+}
+struct bestTime: Codable {
+    var time: Double
+    var qspan: Int
 }
 
 class TFEngine: ObservableObject,tfCallable {
@@ -482,17 +486,19 @@ class TFEngine: ObservableObject,tfCallable {
         }
         if csGrab != nil {
             let newcs:[card]=try! PropertyListDecoder().decode(Array<card>.self, from: csGrab!)
-            if isIncremental {
-                if curQ.cs != newcs {
+            if curQ.cs != newcs {
+                if isIncremental {
                     nextCardView(nxtCardSet: newcs)
-                }
-            } else {
-                curQ.cs=newcs
-                let checkSolution=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb])
-                if checkSolution==nil {
-                    getRandomCards()
                 } else {
-                    curQ.sol=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb])!
+                    curQ.cs=newcs
+                    let checkSolution=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb])
+                    if checkSolution==nil {
+                        getRandomCards()
+                    } else {
+                        curQ.sol=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb])!
+                    }
+                    curQ.questionShown=Date()
+                    curQ.questionSession="OtherDevice"
                 }
             }
         } else {
@@ -606,7 +612,7 @@ class TFEngine: ObservableObject,tfCallable {
         currentSession=UUID().uuidString
         icloudstore=NSUbiquitousKeyValueStore.default
         
-        curQ = .init(cs: [card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)], sol: "", questionGenerated: Date(), questionSession: currentSession)
+        curQ = .init(cs: [card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)], sol: "", questionShown: Date(), questionSession: currentSession)
         cA=[true, true, true,true]
         
         if isPreview {
@@ -636,6 +642,8 @@ class TFEngine: ObservableObject,tfCallable {
         isShowingAnswer=false
         
         curQ.sol=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb]) ?? "No Solution"
+        curQ.questionShown=Date()
+        curQ.questionSession="initSession"
         
         if isPreview {
             return
@@ -735,6 +743,8 @@ class TFEngine: ObservableObject,tfCallable {
             curQ.cs[i]=card(CardIcon: cardIcon.allCases.randomElement()!, numb: Int(nxtCardsList[i]))
         }
         curQ.sol=String(cString: nxtCards.res.data)
+        curQ.questionSession=currentSession
+        curQ.questionShown=Date()
         nxtCards.res.data.deallocate()
     }
         
@@ -811,6 +821,8 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 curQ.sol=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb])!
             }
+            curQ.questionShown=Date()
+            curQ.questionSession="otherDevice"
         }
 
         cA=[true,true,true,true]
@@ -1207,6 +1219,7 @@ class TFEngine: ObservableObject,tfCallable {
     let ansBlinkTime=0.3
     var isShowingAnswer: Bool
     func nxtButtonPressed() {
+        currentSession=UUID().uuidString
         incorText=""
         if nxtState == .inTransition {
             if !inTransition {

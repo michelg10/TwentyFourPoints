@@ -56,6 +56,7 @@ struct ProblemView: View {
                                                             if value.predictedEndTranslation.width > UIApplication.shared.windows.first!.frame.width*(horizontalSizeClass == .regular ? 0.2 : 0.4) {
                                                                 draggedAmt = .zero
                                                                 tfengine.nextCardView(nxtCardSet: nil)
+                                                                tfengine.currentSession=UUID().uuidString
                                                             } else {
                                                                 draggedAmt = .zero
                                                             }
@@ -83,6 +84,7 @@ struct ProblemView: View {
             print("Nav back")
             canNavBack=true
             tfengine.setAccessPointVisible(visible: false)
+            tfengine.currentSession=UUID().uuidString
         }.onDisappear {
             print("No nav back")
             tfengine.cardsOnScreen=false

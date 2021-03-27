@@ -29,6 +29,14 @@ class solverEngine: ObservableObject {
         
         computeSolution()
     }
+    func randomProblem(upperBound: Int) {
+        let prob=generateProblem(Int32(upperBound))
+        cards[0]=Int(prob.c1)
+        cards[1]=Int(prob.c2)
+        cards[2]=Int(prob.c3)
+        cards[3]=Int(prob.c4)
+        computedSolution=String(cString: prob.res.data)
+    }
     func nextResponderFocus() {
         showHints=false
         whichResponder=(whichResponder+1)%4

@@ -57,11 +57,55 @@ struct AchievementList_Previews: PreviewProvider {
     }
 }
 
+struct SizePreferenceKey: PreferenceKey {
+    static var defaultValue: CGSize = .zero
+    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
+}
+
+extension View {
+    func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
+        background(
+            GeometryReader { geometryProxy in
+                Color.clear
+                    .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
+            }
+        )
+        .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
+    }
+}
+
+struct TruncableText: View {
+    let text: Text
+    let lineLimit: Int?
+    @State private var intrinsicSize: CGSize = .zero
+    @State private var truncatedSize: CGSize = .zero
+    let isTruncatedUpdate: (_ isTruncated: Bool) -> Void
+    
+    var body: some View {
+        text
+            .lineLimit(lineLimit)
+            .readSize { size in
+                truncatedSize = size
+                isTruncatedUpdate(truncatedSize != intrinsicSize)
+            }
+            .background(
+                text
+                    .fixedSize(horizontal: false, vertical: true)
+                    .hidden()
+                    .readSize { size in
+                        intrinsicSize = size
+                        isTruncatedUpdate(truncatedSize != intrinsicSize)
+                    }
+            )
+    }
+}
+
 struct achievementListItem: View {
     var index: Int
     var curLvl: Int
     var tfengine:TFEngine
     var listType:ListType
+    @State var isTruncated: Bool=false
     var body: some View {
         HStack {
             if achievement[index].secret && listType == .upNext {
@@ -86,10 +130,28 @@ struct achievementListItem: View {
                         .foregroundColor(.secondary)
                         .font(.system(size: 15, weight: .medium, design: .rounded))
                 } else {
-                    let tempText: String=NSLocalizedString("achievementListItemLvlReqPrefix",comment:"")+String(achievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReqPostfix",comment:"")+" • "+NSLocalizedString("achievementListItemLvlLeftPrefix",comment: "")
-                    Text(tempText+String(achievement[index].lvlReq-tfengine.levelInfo.lvl)+NSLocalizedString("achievementListItemLvlLeftPostfix",comment: ""))
+                    HStack(spacing:0) {
+                        Text(NSLocalizedString("achievementListItemLvlReqPrefix",comment:"")+String(achievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReqPostfixNoflexPre",comment:""))
                             .foregroundColor(.secondary)
                             .font(.system(size: 15, weight: .medium, design: .rounded))
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: true)
+                        if !isTruncated {
+                            TruncableText(text: Text(NSLocalizedString("achievementListItemLvlReqPostfixFlex",comment:""))
+                                            .font(.system(size: 15, weight: .medium, design: .rounded))
+                                            .foregroundColor(.secondary),
+                                          lineLimit: 1
+                            ) {
+                                isTruncated = $0
+                            }
+                        }
+                        let tempText=NSLocalizedString("achievementListItemLvlReqPostfixNoflexPost",comment:"")+" • "
+                        Text(tempText+NSLocalizedString("achievementListItemLvlLeftPrefix",comment: "")+String(achievement[index].lvlReq-tfengine.levelInfo.lvl)+NSLocalizedString("achievementListItemLvlLeftPostfix",comment: ""))
+                            .foregroundColor(.secondary)
+                            .font(.system(size: 15, weight: .medium, design: .rounded))
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: true)
+                    }
                 }
             }.padding(.leading,8)
             Spacer()

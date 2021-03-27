@@ -10,6 +10,8 @@ import SwiftUI
 func getStringNameOfNum(num: Int) -> String {
     if num>=2&&num<=10 {
         return String(num)
+    } else if num<=0 {
+        return ""
     } else {
         switch num {
         case 1:

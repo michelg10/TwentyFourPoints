@@ -9,13 +9,17 @@ import Foundation
 
 class solverEngine: ObservableObject {
     @Published var whichResponder: Int
-    @Published var cards: [Int]
+    @Published var cards: [Int]?
     @Published var computedSolution: String?
     @Published var showHints: Bool
+    weak var tfengine: TFEngine?
     func computeSolution() {
-        computedSolution = solution(problemSet: cards)
+        if cards==nil {
+            return
+        }
+        computedSolution = solution(problemSet: cards!)
     }
-    init(isPreview: Bool) {
+    init(isPreview: Bool, tfEngine: TFEngine?) {
         if isPreview {
             showHints=true
             cards=[1,2,3,4]
@@ -25,24 +29,28 @@ class solverEngine: ObservableObject {
         }
         showHints=true
         whichResponder = -1
-        cards=[0,0,0,0]
+        cards=nil
+        tfengine=tfEngine
         
         computeSolution()
     }
     func randomProblem(upperBound: Int) {
         let prob=generateProblem(Int32(upperBound))
-        cards[0]=Int(prob.c1)
-        cards[1]=Int(prob.c2)
-        cards[2]=Int(prob.c3)
-        cards[3]=Int(prob.c4)
+        cards=[Int(prob.c1),Int(prob.c2),Int(prob.c3),Int(prob.c4)]
         computedSolution=String(cString: prob.res.data)
     }
     func nextResponderFocus() {
+        if cards==nil {
+            return
+        }
         showHints=false
         whichResponder=(whichResponder+1)%4
-        cards[whichResponder]=0
+        cards![whichResponder]=0
     }
     func setCards(ind: Int,val: String) {
+        if cards==nil {
+            return
+        }
         var myVal=val.filter("0123456789".contains)
         if val == myVal+" " {
             nextResponderFocus()
@@ -62,12 +70,13 @@ class solverEngine: ObservableObject {
 //        }
         let myValInt=Int(myVal) ?? 0
         if myValInt <= 24 {
-            cards[ind]=myValInt
+            cards![ind]=myValInt
         } else {
-            cards[ind]=myValInt/10
+            cards![ind]=myValInt/10
         }
-        if !cards.contains(0) {
+        if !cards!.contains(0) {
             computeSolution()
         }
+        tfengine!.saveData()
     }
 }

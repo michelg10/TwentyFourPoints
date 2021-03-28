@@ -29,7 +29,7 @@ struct noobView: View {
                 }
                 Spacer()
                 NavigationLink(
-                    destination: noobLayout(tuengine: tuengine),tag: 1,selection: $goAction,
+                    destination: noobLayout(tuengine: tuengine, tfengine: TFEngine(isPreview: false)),tag: 1,selection: $goAction,
                     label: {
                         EmptyView()
                     })

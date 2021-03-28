@@ -1,9 +1,12 @@
 #include <vector>
 #include <chrono>
 #include <random>
+#include <iostream>
 #include "generator24.hpp"
 using namespace std;
-
+double doubleEq(double a,double b) {
+    return abs(a-b)<0.000001;
+}
 struct expression {
     int mode; //0 for the binary tree, 1 for the weird thing
     int opr1,opr2,opr3;
@@ -61,6 +64,58 @@ double eval(double a,double b,int opr) {
             break;
     }
     return rturn;
+}
+
+double ceval(double a,double b,char opr) {
+    double rturn=0;
+    switch (opr) {
+        case '+':
+            rturn=a+b;
+            break;
+        case '-':
+            rturn=a-b;
+            break;
+        case '*':
+            rturn=a*b;
+            break;
+        case '/':
+            rturn=a/b;
+            break;
+        default:
+            break;
+    }
+    return rturn;
+}
+
+bool isIntuitive(string expr) {
+    double res=0;
+    double cur=0;
+    bool curInit=false;
+    char opr='?';
+    for (int i=0;i<expr.size();i++) {
+        if (expr[i]!='('&&expr[i]!=')') {
+            if (expr[i]>='0'&&expr[i]<='9') {
+                cur=cur*10+expr[i]-'0';
+            } else {
+                if (!curInit) {
+                    curInit=true;
+                    res=cur;
+                    cur=0;
+                } else {
+                    if (opr!='?') {
+                        res=ceval(res, cur, opr);
+                        cur=0;
+                    }
+                }
+                opr=expr[i];
+            }
+        }
+    }
+    if (opr!='?') {
+        res=ceval(res, cur, opr);
+    }
+//    cout<<"Intuitive Eval "<<expr<<" "<<res<<endl;
+    return doubleEq(24, res);
 }
 
 expressionInfo humanfyExpr(expression x) {
@@ -244,11 +299,7 @@ expressionInfo humanfyExpr(expression x) {
             return (expressionInfo){rturn,negs,parens};
         }
     }
-    return (expressionInfo){"nop",negs,parens};;
-}
-
-double doubleEq(double a,double b) {
-    return abs(a-b)<0.000001;
+    return (expressionInfo){"nop",negs,parens};
 }
 
 bool firstIsBetter(const expressionInfo &a, const expressionInfo &b) {
@@ -257,6 +308,13 @@ bool firstIsBetter(const expressionInfo &a, const expressionInfo &b) {
     }
     if (a.parens!=b.parens) {
         return a.parens<b.parens;
+    }
+    bool aIntuitive=isIntuitive(a.expStr);
+    bool bIntuitive=isIntuitive(b.expStr);
+    if (aIntuitive && !bIntuitive) {
+        return true;
+    } else if (bIntuitive && !aIntuitive) {
+        return false;
     }
     if (a.expStr.length()!=b.expStr.length()) {
         return a.expStr.length()<b.expStr.length();
@@ -282,6 +340,7 @@ myString solve24(int a,int b,int c,int d) {
     // then prioritize fully dividing
     // then prioritize non-negatives
     // then prioritize least parentheses
+    // then prioritize order-of-operations
     
     do {
         int curInput[4];

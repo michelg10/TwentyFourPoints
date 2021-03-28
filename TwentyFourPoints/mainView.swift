@@ -97,6 +97,7 @@ struct mainView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     
     @State var tfengine: TFEngine
+    @State var solengine: solverEngine
     var body: some View {
         NavigationView {
             VStack {
@@ -242,7 +243,7 @@ struct mainView: View {
                             EmptyView()
                         })
                     NavigationLink(
-                        destination: SolverView(solengine: solverEngine(isPreview: false), tfengine: tfengine),tag: 2,selection: $navAction,
+                        destination: SolverView(solengine: solengine, tfengine: tfengine),tag: 2,selection: $navAction,
                         label: {
                             EmptyView()
                         })
@@ -310,7 +311,7 @@ struct mainView: View {
 
 struct mainView_Previews: PreviewProvider {
     static var previews: some View {
-        mainView(rotationObserver: UIRotationObserver(), tfengine: TFEngine(isPreview: true))
+        mainView(rotationObserver: UIRotationObserver(), tfengine: TFEngine(isPreview: true), solengine: solverEngine(isPreview: true, tfEngine: TFEngine(isPreview: true)))
             .previewLayout(.device)
             .previewDevice("iPad Pro (11-inch) (2nd generation)")
     }

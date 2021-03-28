@@ -195,7 +195,7 @@ struct SolverView: View {
             HStack(spacing:horizontalSizeClass == .regular ? 24 : 12) {
                 ForEach((0..<4), id:\.self) { index in
                     solverCard(numText: Binding(get: {
-                        solengine.cards[index] == 0 ? "" : String(solengine.cards[index])
+                        solengine.cards![index] == 0 ? "" : String(solengine.cards![index])
                     }, set: { (val) in
                         solengine.setCards(ind: index, val: val)
                     }), whichResponder: Binding(get: {
@@ -232,6 +232,6 @@ struct SolverView: View {
 
 struct SolverView_Previews: PreviewProvider {
     static var previews: some View {
-        SolverView(solengine: solverEngine(isPreview: true), tfengine: TFEngine(isPreview: true))
+        SolverView(solengine: solverEngine(isPreview: true, tfEngine: TFEngine(isPreview: true)), tfengine: TFEngine(isPreview: true))
     }
 }

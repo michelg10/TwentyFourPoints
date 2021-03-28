@@ -79,6 +79,7 @@ struct currentQuestion {
     var sol: String
     var questionShown: Date
     var questionSession: String
+    var ubound: Int
 }
 struct bestTime: Codable {
     var time: Double
@@ -86,6 +87,7 @@ struct bestTime: Codable {
 }
 
 class TFEngine: ObservableObject,tfCallable {
+    var solengine: solverEngine
     func getDoSplit() -> Bool {
         return useSplit
     }
@@ -193,6 +195,14 @@ class TFEngine: ObservableObject,tfCallable {
     
     var savingData: Bool=false
     
+    func storeData<T>(toStore: T, id: String, persistLocation: PersistLocation) {
+        if persistLocation == .icloud {
+            icloudstore.set(toStore, forKey: id)
+        } else {
+            defaults.set(toStore,forKey: id)
+        }
+    }
+    
     func saveData() {
         if savingData {
             return
@@ -210,6 +220,32 @@ class TFEngine: ObservableObject,tfCallable {
         defaults.setValue(synciCloud, forKey: "synciCloud")
         deviceData.removeValue(forKey: "empty")
         
+        let persistLoc = synciCloud ? PersistLocation.icloud : PersistLocation.local
+        
+        storeData(toStore: useHaptics, id: "useHaptics", persistLocation: persistLoc)
+        storeData(toStore: upperBound, id: "upperBound", persistLocation: persistLoc)
+        storeData(toStore: ultraCompetitive, id: "ultraCompetitive", persistLocation: persistLoc)
+        storeData(toStore: instantCompetitive, id: "instantCompetitive", persistLocation: persistLoc)
+        storeData(toStore: prefersGameCenter, id: "prefersGameCenter", persistLocation: persistLoc)
+        storeData(toStore: keyboardType, id: "keyboardType", persistLocation: persistLoc)
+        storeData(toStore: showKeyboardTips, id: "showKeyboardTips", persistLocation: persistLoc)
+        storeData(toStore: useSplit, id: "useSplit", persistLocation: persistLoc)
+        storeData(toStore: solengine.cards, id: "solCards", persistLocation: persistLoc)
+        storeData(toStore: isShowingAnswer, id: "isShowingAnswer", persistLocation: persistLoc)
+        storeData(toStore: try? PropertyListEncoder().encode(curQ.cs), id: "cards", persistLocation: persistLoc)
+        storeData(toStore: { [self] () -> Int in
+            switch preferredColorMode {
+            case .none:
+                return 0
+            case .light:
+                return 1
+            case .dark:
+                return 2
+            case .some(_):
+                return 0
+            }
+        }, id: "appearance", persistLocation: persistLoc)
+        
         if synciCloud {
             let deviceList:[String]=Array(deviceData.keys)
             print("Devices: \(deviceList)")
@@ -217,50 +253,7 @@ class TFEngine: ObservableObject,tfCallable {
             icloudstore.set(deviceData[deviceID]!.allTimeData, forKey: "dev"+deviceID+"lvl") // i am only responsible for my own data
             icloudstore.set(deviceData[deviceID]!.lastSaved, forKey: "dev"+deviceID+"sv")
             icloudstore.set(deviceData[deviceID]!.weeklyData, forKey: "dev"+deviceID+"wklvl")
-            icloudstore.set(try? PropertyListEncoder().encode(curQ.cs), forKey: "cards")
-            icloudstore.set(useHaptics, forKey: "useHaptics")
-            icloudstore.set(upperBound, forKey: "upperBound")
-            icloudstore.set(ultraCompetitive, forKey: "ultraCompetitive")
-            icloudstore.set(instantCompetitive, forKey: "instantCompetitive")
-            icloudstore.set(prefersGameCenter, forKey: "prefersGameCenter")
-            icloudstore.set(keyboardType, forKey: "keyboardType")
-            switch preferredColorMode {
-            case .none:
-                icloudstore.set(0, forKey: "appearance")
-            case .light:
-                icloudstore.set(1, forKey: "appearance")
-            case .dark:
-                icloudstore.set(2, forKey: "appearance")
-            case .some(_):
-                icloudstore.set(0, forKey: "appearance")
-            }
-            icloudstore.set(showKeyboardTips, forKey: "showKeyboardTips")
-            icloudstore.set(useSplit, forKey: "useSplit")
-            icloudstore.set(isShowingAnswer, forKey: "isShowingAnswer")
             NSUbiquitousKeyValueStore.default.synchronize()
-        } else {
-            // save cards array locally
-            defaults.set(try? PropertyListEncoder().encode(curQ.cs), forKey: "cards")
-
-            defaults.set(useHaptics, forKey: "useHaptics")
-            defaults.set(upperBound, forKey: "upperBound")
-            defaults.set(ultraCompetitive, forKey: "ultraCompetitive")
-            defaults.set(instantCompetitive, forKey: "instantCompetitive")
-            defaults.set(prefersGameCenter, forKey: "prefersGameCenter")
-            defaults.set(keyboardType, forKey: "keyboardType")
-            switch preferredColorMode {
-            case .none:
-                defaults.set(0, forKey: "appearance")
-            case .light:
-                defaults.set(1, forKey: "appearance")
-            case .dark:
-                defaults.set(2, forKey: "appearance")
-            case .some(_):
-                icloudstore.set(0, forKey: "appearance")
-            }
-            defaults.set(showKeyboardTips, forKey: "showKeyboardTips")
-            defaults.set(useSplit, forKey: "useSplit")
-            defaults.set(isShowingAnswer, forKey: "isShowingAnswer")
         }
         defaults.synchronize()
         savingData=false
@@ -426,15 +419,28 @@ class TFEngine: ObservableObject,tfCallable {
         }
         updtLvlName()
         
+        let persLoc = synciCloud ? PersistLocation.icloud: PersistLocation.local
+        
+        grabData(toGrab: &useHaptics, id: "useHaptics", persistLocation: persLoc)
+        grabData(toGrab: &upperBound, id: "upperBound", persistLocation: persLoc)
+        grabData(toGrab: &ultraCompetitive, id: "ultraCompetitive", persistLocation: persLoc)
+        grabData(toGrab: &instantCompetitive, id: "instantCompetitive", persistLocation: persLoc)
+        grabData(toGrab: &prefersGameCenter, id: "prefersGameCenter", persistLocation: persLoc)
+        grabData(toGrab: &keyboardType, id: "keyboardType", persistLocation: persLoc)
+        grabData(toGrab: &showKeyboardTips, id: "showKeyboardTips", persistLocation: persLoc)
+        grabData(toGrab: &useSplit, id: "useSplit", persistLocation: persLoc)
+        grabData(toGrab: &solengine.cards, id: "solCards", persistLocation: persLoc)
+        solengine.computeSolution()
+        
         var csGrab: Data?
+        // card data to grab: the cards themselves, the upper bound, the date they were generated
+        var csDate: Date?
+        var csBound: Int?
+        grabData(toGrab: &csGrab, id: "cards", persistLocation: persLoc)
+        grabData(toGrab: &csDate, id: "cardsDate", persistLocation: persLoc)
+        grabData(toGrab: &csBound, id: "cardsBound", persistLocation: persLoc)
+        
         if synciCloud {
-            csGrab=icloudstore.object(forKey: "cards") as? Data
-            
-            grabData(toGrab: &useHaptics, id: "useHaptics", persistLocation: .icloud)
-            grabData(toGrab: &upperBound, id: "upperBound", persistLocation: .icloud)
-            grabData(toGrab: &ultraCompetitive, id: "ultraCompetitive", persistLocation: .icloud)
-            grabData(toGrab: &instantCompetitive, id: "instantCompetitive", persistLocation: .icloud)
-            grabData(toGrab: &prefersGameCenter, id: "prefersGameCenter", persistLocation: .icloud)
             let appearanceVal=icloudstore.object(forKey: "appearance")
             if appearanceVal != nil {
                 let tmpAppearanceVal = appearanceVal as! Int
@@ -448,21 +454,12 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 print("iCloud appearance data not present")
             }
-            grabData(toGrab: &keyboardType, id: "keyboardType", persistLocation: .icloud)
-            grabData(toGrab: &showKeyboardTips, id: "showKeyboardTips", persistLocation: .icloud)
-            grabData(toGrab: &useSplit, id: "useSplit", persistLocation: .icloud)
             let isShowingAnswerSnapshot=isShowingAnswer
             grabData(toGrab: &isShowingAnswer, id: "isShowingAnswer", persistLocation: .icloud)
             if isShowingAnswer && !isShowingAnswerSnapshot {
                 hasToShowAnswer=true
             }
         } else {
-            csGrab=defaults.object(forKey: "cards") as? Data
-            grabData(toGrab: &useHaptics, id: "useHaptics", persistLocation: .local)
-            grabData(toGrab: &upperBound, id: "upperBound", persistLocation: .local)
-            grabData(toGrab: &ultraCompetitive, id: "ultraCompetitive", persistLocation: .local)
-            grabData(toGrab: &instantCompetitive, id: "instantCompetitive", persistLocation: .local)
-            grabData(toGrab: &prefersGameCenter, id: "prefersGameCenter", persistLocation: .local)
             let appearanceVal=defaults.object(forKey: "appearance")
             if appearanceVal != nil {
                 let tmpAppearanceVal = appearanceVal as! Int
@@ -476,9 +473,6 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 print("Local appearance data not present")
             }
-            grabData(toGrab: &keyboardType, id: "keyboardType", persistLocation: .local)
-            grabData(toGrab: &showKeyboardTips, id: "showKeyboardTips", persistLocation: .local)
-            grabData(toGrab: &useSplit, id: "useSplit", persistLocation: .local)
             grabData(toGrab: &isShowingAnswer, id: "isShowingAnswer", persistLocation: .local)
         }
         if !prefersGameCenter {
@@ -489,16 +483,19 @@ class TFEngine: ObservableObject,tfCallable {
             if curQ.cs != newcs {
                 if isIncremental {
                     nextCardView(nxtCardSet: newcs)
+                    curQ.ubound=csBound ?? -1
+                    curQ.questionShown=csDate ?? Date()
                 } else {
-                    curQ.cs=newcs
-                    let checkSolution=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb])
+                    let checkSolution=solution(problemSet: [newcs[0].numb,newcs[1].numb,newcs[2].numb,newcs[3].numb])
                     if checkSolution==nil {
                         getRandomCards()
                     } else {
+                        curQ.cs=newcs
                         curQ.sol=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb])!
+                        curQ.questionShown=csDate ?? Date()
+                        curQ.questionSession="OtherDevice"
+                        curQ.ubound=csBound ?? -1
                     }
-                    curQ.questionShown=Date()
-                    curQ.questionSession="OtherDevice"
                 }
             }
         } else {
@@ -612,7 +609,7 @@ class TFEngine: ObservableObject,tfCallable {
         currentSession=UUID().uuidString
         icloudstore=NSUbiquitousKeyValueStore.default
         
-        curQ = .init(cs: [card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)], sol: "", questionShown: Date(), questionSession: currentSession)
+        curQ = .init(cs: [card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)], sol: "", questionShown: Date(), questionSession: "initSession", ubound: -1)
         cA=[true, true, true,true]
         
         if isPreview {
@@ -642,8 +639,10 @@ class TFEngine: ObservableObject,tfCallable {
         isShowingAnswer=false
         
         curQ.sol=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb]) ?? "No Solution"
-        curQ.questionShown=Date()
-        curQ.questionSession="initSession"
+        
+        solengine=solverEngine(isPreview: false, tfEngine: nil)
+        
+        solengine.tfengine=self
         
         if isPreview {
             return
@@ -682,6 +681,9 @@ class TFEngine: ObservableObject,tfCallable {
             loadData(isIncremental: false)
         }
         print("My id is \(deviceID)")
+        if solengine.cards == nil {
+            solengine.randomProblem(upperBound: upperBound)
+        }
         saveData()
         
         setGCAuthHandler()
@@ -745,6 +747,7 @@ class TFEngine: ObservableObject,tfCallable {
         curQ.sol=String(cString: nxtCards.res.data)
         curQ.questionSession=currentSession
         curQ.questionShown=Date()
+        curQ.ubound=upperBound
         nxtCards.res.data.deallocate()
     }
         
@@ -821,7 +824,6 @@ class TFEngine: ObservableObject,tfCallable {
             } else {
                 curQ.sol=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb])!
             }
-            curQ.questionShown=Date()
             curQ.questionSession="otherDevice"
         }
 

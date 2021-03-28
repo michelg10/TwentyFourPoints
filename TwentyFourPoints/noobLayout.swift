@@ -13,6 +13,7 @@ struct noobLayout: View {
     @State var finishTutorial: Int?
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
+    let tfengine: TFEngine
     
     var body: some View {
         let buttonsPadding=horizontalSizeClass == .regular ? 30.0 : 15.0
@@ -25,7 +26,7 @@ struct noobLayout: View {
                 .font(.system(size: 18, weight: .regular, design: .rounded))
                 .foregroundColor(.init("TextColor"))
             NavigationLink(
-                destination: mainView(rotationObserver: UIRotationObserver(), tfengine: TFEngine(isPreview: false)),
+                destination: mainView(rotationObserver: UIRotationObserver(), tfengine: tfengine, solengine: tfengine.solengine),
                 tag: 1,
                 selection: $finishTutorial,
                 label: {
@@ -87,6 +88,6 @@ struct noobLayout: View {
 
 struct noobLayout_Previews: PreviewProvider {
     static var previews: some View {
-        noobLayout(tuengine: tutorialEngine())
+        noobLayout(tuengine: tutorialEngine(), tfengine: TFEngine(isPreview: true))
     }
 }

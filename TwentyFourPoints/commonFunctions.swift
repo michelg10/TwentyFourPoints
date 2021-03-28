@@ -16,21 +16,6 @@ enum haptic {
     case rigid
 }
 
-enum LeaderboardScope {
-    case global
-    case friends
-}
-
-enum LeaderboardTimeframe {
-    case allTime
-    case thisWeek
-}
-
-enum LeaderboardFocus {
-    case topPlayers
-    case me
-}
-
 var canNavBack: Bool = true
 
 func generateHaptic(hap:haptic) {

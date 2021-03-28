@@ -10,7 +10,6 @@
 		F013E97B25EDE26A00FCBCD4 /* tutorialEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F013E97A25EDE26A00FCBCD4 /* tutorialEngine.swift */; };
 		F013E98325EE607E00FCBCD4 /* commonFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F013E98225EE607E00FCBCD4 /* commonFunctions.swift */; };
 		F019984725EC5E5800946AD8 /* noobView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F019984625EC5E5800946AD8 /* noobView.swift */; };
-		F01B33BF260507E8000665AA /* leaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01B33BE260507E8000665AA /* leaderboardView.swift */; };
 		F01DAD3D25EBEFBC0096740B /* AchievementList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DAD3C25EBEFBC0096740B /* AchievementList.swift */; };
 		F01DAD4925EBF2D00096740B /* personaFocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DAD4825EBF2D00096740B /* personaFocusView.swift */; };
 		F02AB9F525E39EA7008EBE91 /* SolverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F425E39EA7008EBE91 /* SolverView.swift */; };
@@ -68,7 +67,6 @@
 		F013E97A25EDE26A00FCBCD4 /* tutorialEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tutorialEngine.swift; sourceTree = "<group>"; };
 		F013E98225EE607E00FCBCD4 /* commonFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = commonFunctions.swift; sourceTree = "<group>"; };
 		F019984625EC5E5800946AD8 /* noobView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noobView.swift; sourceTree = "<group>"; };
-		F01B33BE260507E8000665AA /* leaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = leaderboardView.swift; sourceTree = "<group>"; };
 		F01DAD3C25EBEFBC0096740B /* AchievementList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementList.swift; sourceTree = "<group>"; };
 		F01DAD4825EBF2D00096740B /* personaFocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = personaFocusView.swift; sourceTree = "<group>"; };
 		F02AB9F425E39EA7008EBE91 /* SolverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolverView.swift; sourceTree = "<group>"; };
@@ -187,7 +185,6 @@
 				F0E7271625DFC7BF00403CDD /* TopBar.swift */,
 				F02AB9F925E39EFD008EBE91 /* navBarButton.swift */,
 				F0B5B44425E28FBE0073606E /* mainView.swift */,
-				F01B33BE260507E8000665AA /* leaderboardView.swift */,
 				F0FF2E8A25F364740097B4A0 /* PreferencesView.swift */,
 				F0A16D8F25E76C5600C46C62 /* achievementView.swift */,
 				F01DAD4825EBF2D00096740B /* personaFocusView.swift */,
@@ -392,7 +389,6 @@
 				F0B2E1D825D8D41D007DF20E /* ProblemView.swift in Sources */,
 				F02D3F1225F279800063716D /* generator24.cpp in Sources */,
 				F08DF54B260733980082458B /* solverEngine.swift in Sources */,
-				F01B33BF260507E8000665AA /* leaderboardView.swift in Sources */,
 				F0B2E20C25D8D496007DF20E /* Card.swift in Sources */,
 				F0A16D9025E76C5600C46C62 /* achievementView.swift in Sources */,
 				F0FFF9B425ECB40000E90620 /* constants.swift in Sources */,

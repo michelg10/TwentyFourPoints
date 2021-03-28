@@ -14,6 +14,7 @@ struct ProblemView: View {
     @State var displaceDrag: CGFloat = .zero
     @State var sID: String=""
     @State var confettiEnabled=false
+    @State var konamikaren=konamiKaren()
     @ObservedObject var rotationObserver: UIRotationObserver
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -30,7 +31,7 @@ struct ProblemView: View {
                         .padding(.bottom,20)
                     ZStack {
                         if tfengine.konamiCheatVisible {
-                            konamiView(tfengine: tfengine, levelInput: tfengine.levelInfo.lvl)
+                            konamiView(tfengine: tfengine, karen: konamikaren)
                                 .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width, y: 0), removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
                                 .animation(springAnimation)
                         } else if (tfengine.rewardScreenVisible) {

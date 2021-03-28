@@ -17,16 +17,78 @@ struct konamiButtonStyle: ButtonStyle {
     }
 }
 
+struct konamiTextView: UIViewRepresentable {
+    
+    class Coordinator: NSObject, UITextFieldDelegate {
+        @Binding var text: String
+        
+        init(text: Binding<String>) {
+            _text = text
+        }
+        
+        func textFieldDidChangeSelection(_ textField: UITextField) {
+            text = textField.text ?? ""
+        }
+        func textFieldDidBeginEditing(_ textField: UITextField) {
+            
+        }
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            
+            return true
+        }
+        func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+            
+            return true
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(text: $text)
+    }
+    
+    func updateUIView(_ uiView: UITextField, context: Context) {
+        print("View update")
+        uiView.text = text
+        let roundedFont=UIFont.systemFont(ofSize: textSize, weight: .medium)
+        uiView.font=UIFont(descriptor: roundedFont.fontDescriptor.withDesign(.rounded)!, size: textSize)
+    }
+    
+    @Binding var text: String
+    var textSize: CGFloat
+    
+    func makeUIView(context: Context) -> UITextField {
+        let rturn=UITextField()
+        rturn.keyboardType = .numbersAndPunctuation
+        rturn.text=text
+        let roundedFont=UIFont.systemFont(ofSize: textSize, weight: .medium)
+        rturn.font=UIFont(descriptor: roundedFont.fontDescriptor.withDesign(.rounded)!, size: textSize)
+        
+        rturn.translatesAutoresizingMaskIntoConstraints=false
+        rturn.textAlignment = .center
+        rturn.placeholder = NSLocalizedString("konamiPlaceholder", comment: "Level")
+        rturn.delegate=context.coordinator
+        return rturn
+    }
+}
+
+class konamiKaren: ObservableObject {
+    @Published var level: Int
+    
+    init() {
+        level=1
+    }
+    
+    func set(val: String) {
+        let cleaned=val.filter("0123456789".contains)
+        level=Int(cleaned) ?? 0
+        print("Level set to \(level)")
+        objectWillChange.send()
+    }
+}
+
 struct konamiView: View {
-    let formatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.usesGroupingSeparator=false
-        formatter.maximum=1000000000
-        return formatter
-    }()
     var tfengine:TFEngine
-    @State var levelInput:Int
+    @ObservedObject var karen: konamiKaren
     var body: some View {
         VStack(alignment: .center) {
             Spacer()
@@ -35,10 +97,12 @@ struct konamiView: View {
                 .multilineTextAlignment(.center)
                 .padding(.bottom,15)
             HStack(spacing:14) {
-                TextField(NSLocalizedString("konamiPlaceholder", comment: "Level"), value: $levelInput, formatter: formatter)
-                    .font(.system(size: 18, weight: .medium, design: .rounded))
-                    .keyboardType(.numbersAndPunctuation)
-                    .multilineTextAlignment(.center)
+                konamiTextView(text: Binding(get: {
+                    String(karen.level)
+                }, set: { (val) in
+                    print("Set")
+                    karen.set(val: val)
+                }), textSize: 18)
                     .padding(3)
                     .padding(.horizontal,15)
                     .frame(maxWidth:350)
@@ -49,7 +113,8 @@ struct konamiView: View {
                     )
                 Button(action: {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    tfengine.konamiLvl(setLvl: levelInput)
+                    tfengine.konamiLvl(setLvl: karen.level)
+                    print("Setting \(karen.level)")
                     tfengine.hapticGate(hap: .medium)
                 }, label: {
                     Circle()
@@ -87,11 +152,14 @@ struct konamiView: View {
                     .multilineTextAlignment(.center)
             }
         }.padding(.horizontal,40)
+        .onAppear {
+            karen.level=tfengine.levelInfo.lvl
+        }
     }
 }
 
 struct konamiView_Previews: PreviewProvider {
     static var previews: some View {
-        konamiView(tfengine: TFEngine(isPreview: true), levelInput: TFEngine(isPreview: true).levelInfo.lvl)
+        konamiView(tfengine: TFEngine(isPreview: true), karen: konamiKaren())
     }
 }

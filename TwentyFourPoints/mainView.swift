@@ -312,7 +312,5 @@ struct mainView: View {
 struct mainView_Previews: PreviewProvider {
     static var previews: some View {
         mainView(rotationObserver: UIRotationObserver(), tfengine: TFEngine(isPreview: true), solengine: solverEngine(isPreview: true, tfEngine: TFEngine(isPreview: true)))
-            .previewLayout(.device)
-            .previewDevice("iPad Pro (11-inch) (2nd generation)")
     }
 }

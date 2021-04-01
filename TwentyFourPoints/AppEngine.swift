@@ -361,6 +361,8 @@ class TFEngine: ObservableObject,tfCallable {
         var dataVal: Any?
         if persistLocation == .icloud {
             dataVal=icloudstore.object(forKey: id)
+        } else if persistLocation == .local {
+            dataVal=defaults.object(forKey: id)
         }
         if dataVal != nil {
             toGrab=dataVal as! T

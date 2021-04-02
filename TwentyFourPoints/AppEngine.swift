@@ -233,18 +233,18 @@ class TFEngine: ObservableObject,tfCallable {
         storeData(toStore: solengine.cards, id: "solCards", persistLocation: persistLoc)
         storeData(toStore: isShowingAnswer, id: "isShowingAnswer", persistLocation: persistLoc)
         storeData(toStore: try? PropertyListEncoder().encode(curQ.cs), id: "cards", persistLocation: persistLoc)
-        storeData(toStore: { [self] () -> Int in
-            switch preferredColorMode {
-            case .none:
-                return 0
-            case .light:
-                return 1
-            case .dark:
-                return 2
-            case .some(_):
-                return 0
-            }
-        }, id: "appearance", persistLocation: persistLoc)
+        let encodedAppearance: Int
+        switch preferredColorMode {
+        case .none:
+            encodedAppearance=0
+        case .light:
+            encodedAppearance=1
+        case .dark:
+            encodedAppearance=2
+        case .some(_):
+            encodedAppearance=0
+        }
+        storeData(toStore: encodedAppearance, id: "appearance", persistLocation: persistLoc)
         
         if synciCloud {
             let deviceList:[String]=Array(deviceData.keys)

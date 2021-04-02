@@ -852,7 +852,6 @@ class TFEngine: ObservableObject,tfCallable {
     }
     
     var konamiLog:[daBtn]=[]
-    ***REMOVED***
     
     func konamiLimitation() -> Int {
         var rturn = 0

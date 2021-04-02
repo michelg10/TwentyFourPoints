@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,7 +20,6 @@
 		F037DB3325F6466700872526 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F037DB3225F6466700872526 /* GameKit.framework */; };
 		F055928025E8694400688D2C /* AchievementData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F055927F25E8694400688D2C /* AchievementData.swift */; };
 		F060656725F61D1700C62C29 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F060656925F61D1700C62C29 /* Localizable.strings */; };
-		F08DF50A260610840082458B /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = F08DF509260610840082458B /* SwiftUIX */; };
 		F08DF54B260733980082458B /* solverEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08DF54A260733980082458B /* solverEngine.swift */; };
 		F0A16D9025E76C5600C46C62 /* achievementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A16D8F25E76C5600C46C62 /* achievementView.swift */; };
 		F0AB4EF825EBDAAE009F53CB /* AchievementPropic.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AB4EF725EBDAAE009F53CB /* AchievementPropic.swift */; };
@@ -38,6 +37,7 @@
 		F0B3469825EF5D13001938A8 /* InGameRankUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B3469025EF5B77001938A8 /* InGameRankUpView.swift */; };
 		F0B346D725F05573001938A8 /* confettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B346D625F05572001938A8 /* confettiView.swift */; };
 		F0B5B44525E28FBE0073606E /* mainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B5B44425E28FBE0073606E /* mainView.swift */; };
+		F0CFB9342617662F00D66135 /* secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CFB9332617662F00D66135 /* secrets.swift */; };
 		F0E5FA6925F4AE4E0010E8A9 /* UIRotationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E5FA6125F4AC9B0010E8A9 /* UIRotationObserver.swift */; };
 		F0E7271725DFC7BF00403CDD /* TopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E7271625DFC7BF00403CDD /* TopBar.swift */; };
 		F0FF2E8B25F364740097B4A0 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF2E8A25F364740097B4A0 /* PreferencesView.swift */; };
@@ -105,6 +105,7 @@
 		F0B3469025EF5B77001938A8 /* InGameRankUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InGameRankUpView.swift; sourceTree = "<group>"; };
 		F0B346D625F05572001938A8 /* confettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = confettiView.swift; sourceTree = "<group>"; };
 		F0B5B44425E28FBE0073606E /* mainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainView.swift; sourceTree = "<group>"; };
+		F0CFB9332617662F00D66135 /* secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = secrets.swift; sourceTree = "<group>"; };
 		F0E5FA6125F4AC9B0010E8A9 /* UIRotationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIRotationObserver.swift; sourceTree = "<group>"; };
 		F0E7271625DFC7BF00403CDD /* TopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBar.swift; sourceTree = "<group>"; };
 		F0FF2E8A25F364740097B4A0 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
@@ -119,7 +120,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F037DB3325F6466700872526 /* GameKit.framework in Frameworks */,
-				F08DF50A260610840082458B /* SwiftUIX in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +179,7 @@
 				F0B346D625F05572001938A8 /* confettiView.swift */,
 				F037DB2625F63D5900872526 /* InfoPlist.strings */,
 				F0B2E21B25D91652007DF20E /* AppEngine.swift */,
+				F0CFB9332617662F00D66135 /* secrets.swift */,
 				F013E98225EE607E00FCBCD4 /* commonFunctions.swift */,
 				F060656925F61D1700C62C29 /* Localizable.strings */,
 				F0B2E1D725D8D41D007DF20E /* ProblemView.swift */,
@@ -256,7 +257,6 @@
 			);
 			name = TwentyFourPoints;
 			packageProductDependencies = (
-				F08DF509260610840082458B /* SwiftUIX */,
 			);
 			productName = TwentyFourPoints;
 			productReference = F0B2E1D225D8D41D007DF20E /* TwentyFourPoints.app */;
@@ -332,7 +332,6 @@
 			);
 			mainGroup = F0B2E1C925D8D41D007DF20E;
 			packageReferences = (
-				F08DF508260610840082458B /* XCRemoteSwiftPackageReference "SwiftUIX" */,
 			);
 			productRefGroup = F0B2E1D325D8D41D007DF20E /* Products */;
 			projectDirPath = "";
@@ -395,6 +394,7 @@
 				F0FF2E8B25F364740097B4A0 /* PreferencesView.swift in Sources */,
 				F02AB9FF25E4AF11008EBE91 /* konamiView.swift in Sources */,
 				F0AB4EF825EBDAAE009F53CB /* AchievementPropic.swift in Sources */,
+				F0CFB9342617662F00D66135 /* secrets.swift in Sources */,
 				F0AB4EFD25EBE422009F53CB /* PersonaDetail.swift in Sources */,
 				F0B2E1D625D8D41D007DF20E /* TwentyFourPointsApp.swift in Sources */,
 				F0B2E21725D91617007DF20E /* CardLayout.swift in Sources */,
@@ -589,7 +589,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;
@@ -620,7 +620,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;
@@ -766,25 +766,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		F08DF508260610840082458B /* XCRemoteSwiftPackageReference "SwiftUIX" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		F08DF509260610840082458B /* SwiftUIX */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F08DF508260610840082458B /* XCRemoteSwiftPackageReference "SwiftUIX" */;
-			productName = SwiftUIX;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F0B2E1CA25D8D41D007DF20E /* Project object */;
 }

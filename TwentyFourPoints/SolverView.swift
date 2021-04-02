@@ -176,6 +176,7 @@ struct SolverView: View {
             }.padding(.top, horizontalSizeClass == .regular ? 15 : 0)
             .padding(.bottom,10)
             Button(action:{
+                tfengine.hapticGate(hap: .medium)
                 solengine.randomProblem(upperBound: tfengine.upperBound)
             }, label: {
                 Text(NSLocalizedString("ProblemSolver", comment: "solver title"))

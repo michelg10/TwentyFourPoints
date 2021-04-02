@@ -540,6 +540,9 @@ class TFEngine: ObservableObject,tfCallable {
     @objc func storeUpdated(notification: Notification) {
         //deal with a store update
         loadData(isIncremental: true)
+        DispatchQueue.main.async { [self] in
+            objectWillChange.send()
+        }
     }
     
     func setiCloudSync(val: Bool) {

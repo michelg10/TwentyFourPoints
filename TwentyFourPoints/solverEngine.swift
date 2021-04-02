@@ -8,10 +8,10 @@
 import Foundation
 
 class solverEngine: ObservableObject {
-    @Published var whichResponder: Int
-    @Published var cards: [Int]?
-    @Published var computedSolution: String?
-    @Published var showHints: Bool
+    var whichResponder: Int
+    var cards: [Int]?
+    var computedSolution: String?
+    var showHints: Bool
     weak var tfengine: TFEngine?
     func computeSolution() {
         if cards==nil {
@@ -38,6 +38,7 @@ class solverEngine: ObservableObject {
         let prob=generateProblem(Int32(upperBound))
         cards=[Int(prob.c1),Int(prob.c2),Int(prob.c3),Int(prob.c4)]
         computedSolution=String(cString: prob.res.data)
+        objectWillChange.send()
     }
     func nextResponderFocus() {
         if cards==nil {
@@ -54,6 +55,7 @@ class solverEngine: ObservableObject {
         var myVal=val.filter("0123456789".contains)
         if val == myVal+" " {
             nextResponderFocus()
+            objectWillChange.send()
             return
         }
         if myVal == "" {
@@ -77,6 +79,9 @@ class solverEngine: ObservableObject {
         if !cards!.contains(0) {
             computeSolution()
         }
-        tfengine!.saveData()
+        DispatchQueue.global().async { [self] in
+            tfengine!.saveData()
+        }
+        objectWillChange.send()
     }
 }

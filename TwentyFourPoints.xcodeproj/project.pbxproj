@@ -603,7 +603,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.TwentyFourPoints;
 				PRODUCT_MODULE_NAME = TwentyFourPoints;
 				PRODUCT_NAME = TwentyFourPoints;
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TwentyFourPoints/TwentyFourPoints-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -634,7 +634,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.TwentyFourPoints;
 				PRODUCT_MODULE_NAME = TwentyFourPoints;
 				PRODUCT_NAME = TwentyFourPoints;
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TwentyFourPoints/TwentyFourPoints-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

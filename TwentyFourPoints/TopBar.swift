@@ -95,11 +95,11 @@ struct TopBarText: View {
                 if lvlName == nil {
                     Text(getQuestionText(lvl: lvl))
                         .font(.system(size: horizontalSizeClass == .regular ? 20 : 18, weight: .regular, design: .rounded))
-                        .foregroundColor(.init("TextColor"))
+                        .foregroundColor(.primary)
                 } else {
                     Text("\(lvlName!) • "+getQuestionText(lvl: lvl))
                         .font(.system(size: horizontalSizeClass == .regular ? 20 : 18, weight: .regular, design: .rounded))
-                        .foregroundColor(.init("TextColor"))
+                        .foregroundColor(.primary)
                 }
             }).buttonStyle(textButtonStyle())
             .disabled(lvlName==nil)

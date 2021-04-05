@@ -85,9 +85,18 @@ struct bestTime: Codable {
     var time: Double
     var qspan: Int
 }
+enum achievementState {
+    case questions
+    case speed
+}
 
 class TFEngine: ObservableObject,tfCallable {
     var solengine: solverEngine
+    
+    var currentAchievementState: achievementState = .questions
+    
+    var speedAchievementsLocked=true
+    
     func getDoSplit() -> Bool {
         return useSplit
     }
@@ -232,6 +241,7 @@ class TFEngine: ObservableObject,tfCallable {
         storeData(toStore: useSplit, id: "useSplit", persistLocation: persistLoc)
         storeData(toStore: solengine.cards, id: "solCards", persistLocation: persistLoc)
         storeData(toStore: isShowingAnswer, id: "isShowingAnswer", persistLocation: persistLoc)
+        storeData(toStore: currentAchievementState, id: "currentAchievementState", persistLocation: persistLoc)
         storeData(toStore: try? PropertyListEncoder().encode(curQ.cs), id: "cards", persistLocation: persistLoc)
         let encodedAppearance: Int
         switch preferredColorMode {
@@ -299,6 +309,9 @@ class TFEngine: ObservableObject,tfCallable {
         levelInfo=LevelInfo(lvl: newLvl, lvlName: nxtLvlName)
         reportAchievements()
         reportScores()
+        if levelInfo.lvl > speedAchievementsLockedThreshold {
+            speedAchievementsLocked=false
+        }
     }
     
     func reportScores() {
@@ -431,6 +444,7 @@ class TFEngine: ObservableObject,tfCallable {
         grabData(toGrab: &keyboardType, id: "keyboardType", persistLocation: persLoc)
         grabData(toGrab: &showKeyboardTips, id: "showKeyboardTips", persistLocation: persLoc)
         grabData(toGrab: &useSplit, id: "useSplit", persistLocation: persLoc)
+        grabData(toGrab: &currentAchievementState, id: "currentAchievementState", persistLocation: persLoc)
         grabData(toGrab: &solengine.cards, id: "solCards", persistLocation: persLoc)
         solengine.computeSolution()
         
@@ -510,6 +524,10 @@ class TFEngine: ObservableObject,tfCallable {
             nxtButtonPressed()
         }
         getKeyboardType()
+        
+        if currentAchievementState == .speed && speedAchievementsLocked {
+            currentAchievementState = .questions
+        }
     }
     
     func updtColorScheme() {
@@ -1057,6 +1075,8 @@ class TFEngine: ObservableObject,tfCallable {
             objectWillChange.send()
         }
     }
+    
+    let speedAchievementsLockedThreshold=100
     
     func incrementLvl() {
         print("Increment Level")

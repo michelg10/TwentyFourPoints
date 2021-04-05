@@ -143,7 +143,7 @@ struct TopButtonsRow: View {
                     Text(expr)
                         .animation(nil)
                         .foregroundColor(.white)
-                        .colorMultiply(Color.init(resetColorEnabled ? "TextColor" : "ButtonInactiveTextColor"))
+                        .colorMultiply(resetColorEnabled ? Color.primary : Color.init("ButtonInactiveTextColor"))
                         .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
                         .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
                         .padding(.leading, CGFloat(textInset*textField*(textInpHei-midSpace)))
@@ -151,7 +151,7 @@ struct TopButtonsRow: View {
                     Text(answerText)
                         .opacity(answerShowOpacity)
                         .animation(.easeInOut(duration: 0.3))
-                        .foregroundColor(Color.init("TextColor"))
+                        .foregroundColor(Color.primary)
                         .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
                         .padding(.leading, CGFloat(textInset*textField*(textInpHei-midSpace)))
                         .padding(.bottom,2)
@@ -206,12 +206,12 @@ struct TopButtonsRow: View {
                                 .frame(height: CGFloat(textInpHei), alignment: .center)
                                 .animation(nil)
                                 .foregroundColor(.white)
-                                .colorMultiply(Color.init(storeTextColorEnabled ? "TextColor" : "ButtonInactiveTextColor"))
+                                .colorMultiply(storeTextColorEnabled ? Color.primary : Color.init("ButtonInactiveTextColor"))
                         } else {
                             Image(systemName: "chevron.down.circle.fill")
                                 .font(.system(size: CGFloat(textFontSize*textInpHei*0.9)))
                                 .foregroundColor(.white)
-                                .colorMultiply(Color.init(storeIconColorEnabled ? "TextColor" : "ButtonInactiveTextColor"))
+                                .colorMultiply(storeIconColorEnabled ? Color.primary : Color.init("ButtonInactiveTextColor"))
                                 .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
                         }
                     }.frame(width: doSplit ? CGFloat(2*maxButtonSize+midSpace) : CGFloat((1-textField)*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .center)
@@ -249,7 +249,7 @@ struct MiddleButtonRow: View {
                     Button(action: {
                         tfengine.handleNumberPress(index: index)
                     }, label: {
-                        bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(colorActive[index] ? "TextColor" : "ButtonInactiveTextColor"), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), id: "BottomButtonNum"+String(index), ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
+                        bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: colorActive[index] ? Color.primary : Color.init("ButtonInactiveTextColor"), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), id: "BottomButtonNum"+String(index), ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
                     }).buttonStyle(bottomButtonStyle())
                     .brightness(numsHover[index] ? hoverBrightness : 0)
                     .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
@@ -289,7 +289,7 @@ struct MiddleButtonRow: View {
                     Button(action: {
                         tfengine.handleNumberPress(index: index)
                     }, label: {
-                        bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: Color.init(colorActive[index] ? "TextColor" : "ButtonInactiveTextColor"), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), id: "BottomButtonNum"+String(index), ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
+                        bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: colorActive[index] ? Color.primary : Color.init("ButtonInactiveTextColor"), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), id: "BottomButtonNum"+String(index), ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
                     }).buttonStyle(bottomButtonStyle())
                     .brightness(numsHover[index] ? hoverBrightness : 0)
                     .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
@@ -310,7 +310,7 @@ func getButtonColor(active: Bool) -> Color {
 }
 
 func getButtonTextColor(active: Bool) -> Color {
-    return Color.init(active ? "TextColor" : "ButtonInactiveTextColor")
+    return active ? .primary : .init("ButtonInactiveTextColor")
 }
 
 struct BottomButtonRow: View {

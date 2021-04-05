@@ -102,30 +102,6 @@ struct mainView: View {
         NavigationView {
             VStack {
                 HStack {
-                    /*
-                    Button(action: {
-                        tfengine.hapticGate(hap: .medium)
-                        gkViewPresented=true
-                    }, label: {
-                        ZStack {
-                            Circle()
-                                .foregroundColor(.init("ButtonColorActive"))
-                                .frame(width:horizontalSizeClass == .regular ? 55 : 45,height:horizontalSizeClass == .regular ? 65 : 45)
-                            Image(systemName: "crown.fill")
-                                .animation(nil)
-                                .foregroundColor(.init("TextColor"))
-                                .font(.system(size: horizontalSizeClass == .regular ? 27 : 22,weight: .medium))
-                                .animation(nil)
-                        }
-                    }).buttonStyle(topBarButtonStyle())
-                    .onHover(perform: { (hovering) in
-                        gkHover=hovering
-                    }).brightness(gkHover ? hoverBrightness : 0)
-                    .sheet(isPresented: $gkViewPresented, content: {
-                        leaderboardView(tfengine: tfengine)
-                    })
-                    .padding(.horizontal,20)
-                    */
                     Spacer()
                     Button(action: {
                         tfengine.snapshotUBound()
@@ -141,7 +117,7 @@ struct mainView: View {
                                 .animation(nil)
                                 .rotationEffect(.init(degrees: prefPresented ? -540:0), anchor: .center)
                                 .animation(viewDidLoad ? springAnimation : nil)
-                                .foregroundColor(.init("TextColor"))
+                                .foregroundColor(.primary)
                                 .font(.system(size: horizontalSizeClass == .regular ? 27 : 22,weight: .medium))
                                 .animation(nil)
                         }
@@ -205,7 +181,7 @@ struct mainView: View {
                                     VStack(alignment: .leading) {
                                         Text(tfengine.levelInfo.lvlName!)
                                             .animation(nil)
-                                            .foregroundColor(.init("TextColor"))
+                                            .foregroundColor(.primary)
                                             .font(.system(size: 18, weight: .medium, design: .rounded))
                                         let myRank=tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl)
                                         Text(myRank == achievement.count-1 ? NSLocalizedString("noMoreRankMessage", comment:"Final level message") : NSLocalizedString("yetToGetToRankPrefix",comment:"")+String(achievement[myRank+1].lvlReq-tfengine.levelInfo.lvl)+(achievement[myRank+1].lvlReq-tfengine.levelInfo.lvl==1 ? NSLocalizedString("yetToGetToRankPostfixSingular",comment:"") : NSLocalizedString("yetToGetToRankPostfixPlural",comment:"")))

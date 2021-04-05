@@ -20,7 +20,7 @@ struct navBarButton: View {
                 .foregroundColor(.init(active ? "ButtonColorActive" : "ButtonColorInactive"))
                 .frame(width:horizontalSizeClass == .regular ? 55 : 45,height:horizontalSizeClass == .regular ? 65 : 45)
             Image(systemName: symbolName)
-                .foregroundColor(.init(active ? "TextColor" : "ButtonInactiveTextColor"))
+                .foregroundColor(active ? .primary : .init("ButtonInactiveTextColor"))
                 .font(.system(size: horizontalSizeClass == .regular ? 27 : 22,weight: .medium))
         }.padding(.horizontal,20)
     }

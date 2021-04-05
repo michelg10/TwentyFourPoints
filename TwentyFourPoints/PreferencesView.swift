@@ -128,7 +128,7 @@ struct PreferencesView: View {
                             .foregroundColor(.init("ButtonColorActive"))
                             .frame(width:horizontalSizeClass == .regular ? 55 : 45,height:horizontalSizeClass == .regular ? 65 : 45)
                         Image(systemName: "chevron.down")
-                            .foregroundColor(.init("TextColor"))
+                            .foregroundColor(.primary)
                             .font(.system(size: horizontalSizeClass == .regular ? 27 : 22,weight: .medium))
                             .padding(.top,horizontalSizeClass == .regular ? 3 : 4)
                     }.padding(.horizontal,20)
@@ -278,7 +278,7 @@ struct PreferencesView: View {
                         tfengine.upperBound=val
                         tfengine.refresh()
                         tfengine.saveData()
-                    }), label: Text("Number Range").foregroundColor(.init("TextColor")), content: {
+                    }), label: Text("Number Range").foregroundColor(.primary), content: {
                         ForEach((8...24), id:\.self) { index in
                             Text("\(String(index))").tag(index)
                         }

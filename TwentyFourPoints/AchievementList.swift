@@ -113,7 +113,7 @@ struct achievementListItem: View {
                     .fill(Color.init("HiddenPictureBg"))
                     .overlay(
                         Text("?")
-                            .foregroundColor(.init("TextColor"))
+                            .foregroundColor(.primary)
                             .font(.system(size: 28, weight: .medium, design: .rounded))
                     )
                     .frame(width: 54, height: 54, alignment: .center)
@@ -124,7 +124,7 @@ struct achievementListItem: View {
             VStack(alignment: .leading) {
                 Text(achievement[index].secret && listType == .upNext ? "???" : achievement[index].name)
                     .font(.system(size: 18, weight: .medium, design: .rounded))
-                    .foregroundColor(.init("TextColor"))
+                    .foregroundColor(.primary)
                 if listType == .complete {
                     Text(NSLocalizedString("achievementListItemLvlReachedPrefix",comment:"")+String(achievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReachedPostfix",comment:""))
                         .foregroundColor(.secondary)

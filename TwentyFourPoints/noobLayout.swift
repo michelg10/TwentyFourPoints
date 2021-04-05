@@ -24,7 +24,7 @@ struct noobLayout: View {
                 .font(.system(size: 32, weight: .bold, design: .rounded))
             Text(NSLocalizedString("Tutorial", comment: ""))
                 .font(.system(size: 18, weight: .regular, design: .rounded))
-                .foregroundColor(.init("TextColor"))
+                .foregroundColor(.primary)
             NavigationLink(
                 destination: mainView(rotationObserver: UIRotationObserver(), tfengine: tfengine, solengine: tfengine.solengine),
                 tag: 1,

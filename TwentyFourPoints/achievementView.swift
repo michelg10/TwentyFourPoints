@@ -36,6 +36,28 @@ struct iconDescView: View {
     }
 }
 
+struct levelAchView: View {
+    var tfengine: TFEngine
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
+    var body: some View {
+        VStack(spacing:0) {
+            let curLvl=tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl)
+            if curLvl != -1 {
+                PersonaDetail(curLvl: curLvl)
+                    .padding(.bottom,20)
+            }
+            if curLvl != achievement.count-1 {
+                AchievementList(curLvl: curLvl, tfengine: tfengine, listType: .upNext)
+            }
+            if curLvl != -1 {
+                AchievementList(curLvl: curLvl, tfengine: tfengine, listType: .complete)
+            }
+        }
+    }
+}
+
 struct achievementView: View {
     @ObservedObject var tfengine: TFEngine
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -69,22 +91,43 @@ struct achievementView: View {
                         .padding(.bottom,21)
                     HStack(spacing:63) {
                         Button(action: {
-                            
+                            if tfengine.currentAchievementState != .questions {
+                                tfengine.currentAchievementState = .questions
+                                tfengine.refresh()
+                            }
                         }, label: {
                             iconDescView(locked: false, desc: "Questions", icon: Image(systemName: "rosette"), selected: tfengine.currentAchievementState == .questions)
-                        })
-                        iconDescView(locked: tfengine.speedAchievementsLocked, desc: "Speed", icon: Image(systemName: "stopwatch"), selected: tfengine.currentAchievementState == .speed)
+                        }).buttonStyle(topBarButtonStyle())
+                        .hoverEffect(.lift)
+                        Button(action: {
+                            if tfengine.currentAchievementState != .speed {
+                                tfengine.currentAchievementState = .speed
+                                tfengine.refresh()
+                            }
+                        }, label: {
+                            iconDescView(locked: tfengine.speedAchievementsLocked, desc: "Speed", icon: Image(systemName: "stopwatch"), selected: tfengine.currentAchievementState == .speed)
+                        }).buttonStyle(topBarButtonStyle())
+                        .hoverEffect(.lift)
+                        .disabled(tfengine.speedAchievementsLocked)
                     }
-                    let curLvl=tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl)
-                    if curLvl != -1 {
-                        PersonaDetail(curLvl: curLvl)
-                            .padding(.bottom,20)
+                    if tfengine.speedAchievementsLocked {
+                        Text("Complete \(tfengine.speedAchievementsLockedThreshold-tfengine.levelInfo.lvl) more questions to unlock speed achievements")
+                            .font(.system(size: 15, weight: .semibold, design: .rounded))
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.init("AchievementBubbleDeselected"))
+                            .padding(.horizontal,55)
+                            .padding(.top,16)
                     }
-                    if curLvl != achievement.count-1 {
-                        AchievementList(curLvl: curLvl, tfengine: tfengine, listType: .upNext)
-                    }
-                    if curLvl != -1 {
-                        AchievementList(curLvl: curLvl, tfengine: tfengine, listType: .complete)
+                    let curAchStateDesc=tfengine.currentAchievementState == .questions ? "You've done \(String(tfengine.levelInfo.lvl)) questions" : "Your best: \(String(tfengine.bestTime.time))s / \(String(tfengine.bestTime.qspan)) Qs"
+                    Text(curAchStateDesc)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.top,21)
+                        .padding(.bottom,39)
+                        .padding(.horizontal,50)
+                        .multilineTextAlignment(.center)
+                        .font(.system(size: 24, weight: .semibold, design: .rounded))
+                    if tfengine.currentAchievementState == .questions {
+                        levelAchView(tfengine: tfengine)
                     }
                 }
             }
@@ -95,7 +138,8 @@ struct achievementView: View {
 
 struct achievementView_Previews: PreviewProvider {
     static var previews: some View {
-        iconDescView(locked: true, desc: "Speed", icon: .init(systemName: "stopwatch"), selected: true)
+        levelAchView(tfengine: TFEngine(isPreview: true))
+            .previewLayout(.sizeThatFits)
         achievementView(tfengine: TFEngine(isPreview: true))
             .previewDevice("iPhone 12")
             .preferredColorScheme(.light)

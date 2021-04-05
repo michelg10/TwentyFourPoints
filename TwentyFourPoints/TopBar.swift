@@ -13,14 +13,12 @@ struct topBarButtonStyle: ButtonStyle {
         configuration.label
             .saturation(configuration.isPressed ? 0.95 : 1)
             .brightness(configuration.isPressed ? 0.03 : 0) //0.05
-            .animation(.easeInOut(duration: 0.14))
     }
 }
 struct textButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
             .opacity(configuration.isPressed ? 0.6 : 1.0)
-            .animation(.easeInOut(duration: 0.14))
     }
 }
 

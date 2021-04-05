@@ -219,15 +219,6 @@ struct PreferencesView: View {
                     }
                 }
                 Toggle(isOn: Binding(get: {
-                    !tfengine.ultraCompetitive
-                }, set: { (val) in
-                    tfengine.ultraCompetitive = !val
-                    tfengine.refresh()
-                    tfengine.saveData()
-                }), label: {
-                    Text(NSLocalizedString("Animate number press", comment: "Enabling high performance mode"))
-                })
-                Toggle(isOn: Binding(get: {
                     !tfengine.instantCompetitive
                 }, set: { (val) in
                     tfengine.instantCompetitive = !val

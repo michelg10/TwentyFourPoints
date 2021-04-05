@@ -81,7 +81,7 @@ struct currentQuestion {
     var questionSession: String
     var ubound: Int
 }
-struct bestTime: Codable {
+struct BestTime: Codable {
     var time: Double
     var qspan: Int
 }
@@ -93,6 +93,8 @@ enum achievementState {
 class TFEngine: ObservableObject,tfCallable {
     var solengine: solverEngine
     
+    var bestTime: BestTime = .init(time: -1, qspan: 30)
+    
     var currentAchievementState: achievementState = .questions
     
     var speedAchievementsLocked=true
@@ -102,7 +104,7 @@ class TFEngine: ObservableObject,tfCallable {
     }
     
     func getUltraCompetitive() -> Bool {
-        return ultraCompetitive
+        return true
     }
     
     var curQ: currentQuestion
@@ -167,9 +169,7 @@ class TFEngine: ObservableObject,tfCallable {
             curKeyboardSettings=azertySet
         }
     }
-    
-    var ultraCompetitive: Bool
-    
+        
     var instantCompetitive: Bool
     
     struct devicePersistLevelData {
@@ -233,7 +233,6 @@ class TFEngine: ObservableObject,tfCallable {
         
         storeData(toStore: useHaptics, id: "useHaptics", persistLocation: persistLoc)
         storeData(toStore: upperBound, id: "upperBound", persistLocation: persistLoc)
-        storeData(toStore: ultraCompetitive, id: "ultraCompetitive", persistLocation: persistLoc)
         storeData(toStore: instantCompetitive, id: "instantCompetitive", persistLocation: persistLoc)
         storeData(toStore: prefersGameCenter, id: "prefersGameCenter", persistLocation: persistLoc)
         storeData(toStore: keyboardType, id: "keyboardType", persistLocation: persistLoc)
@@ -438,7 +437,6 @@ class TFEngine: ObservableObject,tfCallable {
         
         grabData(toGrab: &useHaptics, id: "useHaptics", persistLocation: persLoc)
         grabData(toGrab: &upperBound, id: "upperBound", persistLocation: persLoc)
-        grabData(toGrab: &ultraCompetitive, id: "ultraCompetitive", persistLocation: persLoc)
         grabData(toGrab: &instantCompetitive, id: "instantCompetitive", persistLocation: persLoc)
         grabData(toGrab: &prefersGameCenter, id: "prefersGameCenter", persistLocation: persLoc)
         grabData(toGrab: &keyboardType, id: "keyboardType", persistLocation: persLoc)
@@ -652,7 +650,6 @@ class TFEngine: ObservableObject,tfCallable {
         useHaptics=true
         synciCloud=true
         upperBound=13
-        ultraCompetitive=false
         instantCompetitive=false
         keyboardType=1
         showKeyboardTips=true

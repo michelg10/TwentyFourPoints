@@ -155,7 +155,7 @@ struct mainView: View {
                 }
                 Spacer()
                 if tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl) == -1 {
-                    Text(NSLocalizedString("achievementYetUnlockPrefix",comment: "")+String(achievement[0].lvlReq)+NSLocalizedString("achievementYetUnlockPostfix",comment: ""))
+                    Text(NSLocalizedString("achievementYetUnlockPrefix",comment: "")+String(lvlachievement[0].lvlReq)+NSLocalizedString("achievementYetUnlockPostfix",comment: ""))
                         .font(.system(size: 20, weight: .semibold, design: .rounded))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal,30)
@@ -184,7 +184,7 @@ struct mainView: View {
                                             .foregroundColor(.primary)
                                             .font(.system(size: 18, weight: .medium, design: .rounded))
                                         let myRank=tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl)
-                                        Text(myRank == achievement.count-1 ? NSLocalizedString("noMoreRankMessage", comment:"Final level message") : NSLocalizedString("yetToGetToRankPrefix",comment:"")+String(achievement[myRank+1].lvlReq-tfengine.levelInfo.lvl)+(achievement[myRank+1].lvlReq-tfengine.levelInfo.lvl==1 ? NSLocalizedString("yetToGetToRankPostfixSingular",comment:"") : NSLocalizedString("yetToGetToRankPostfixPlural",comment:"")))
+                                        Text(myRank == lvlachievement.count-1 ? NSLocalizedString("noMoreRankMessage", comment:"Final level message") : NSLocalizedString("yetToGetToRankPrefix",comment:"")+String(lvlachievement[myRank+1].lvlReq-tfengine.levelInfo.lvl)+(lvlachievement[myRank+1].lvlReq-tfengine.levelInfo.lvl==1 ? NSLocalizedString("yetToGetToRankPostfixSingular",comment:"") : NSLocalizedString("yetToGetToRankPostfixPlural",comment:"")))
                                             .animation(nil)
                                             .font(.system(size: 12, weight: .regular, design: .rounded))
                                             .foregroundColor(.secondary)

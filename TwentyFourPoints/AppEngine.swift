@@ -90,6 +90,11 @@ enum achievementState {
     case speed
 }
 
+struct customAchievement {
+    var img: UIImage?
+    var id: String
+}
+
 class TFEngine: ObservableObject,tfCallable {
     var solengine: solverEngine
     
@@ -212,6 +217,39 @@ class TFEngine: ObservableObject,tfCallable {
         }
     }
     
+    // how the image data is going to work: each device will keep a local version of the file.
+    // If iCloud is enabled, then check if there is an update (probably through a sync key with iCloud KVS)
+    // if there is, download it, replace the image in memory, and run the save image function
+    // the incremental image save function: check if the current id of the image matches with the one in icloud. If not, then overwrite the one in icloud
+    // the image save function: is called when the user modifies the image. the function is responsible for
+    // saving the new image to memory, generating a new ID, and saving it to iCloud.
+    
+    // these functions are time intensive, so call them sparingly
+    
+    func saveImageData(newimg: UIImage) {
+        
+    }
+    
+    func saveImageDataIncrementally() {
+        var doesSynciCloud=synciCloud
+        var icloudCont: URL?
+        if doesSynciCloud {
+            DispatchQueue.global().async {
+                icloudCont=FileManager.default.url(forUbiquityContainerIdentifier: nil)
+                if icloudCont == nil {
+                    doesSynciCloud=false
+                }
+            }
+        }
+        if doesSynciCloud {
+            
+        }
+    }
+    
+    func loadImageData() {
+        // save and keep track of the modification date of the icloud and the local image. when loading image data,
+    }
+    
     func saveData() {
         if savingData {
             return
@@ -273,12 +311,12 @@ class TFEngine: ObservableObject,tfCallable {
     var mainVal: storedVal? //put any calculation result into here
     
     func getLvlIndex(getLvl:Int) -> Int {
-        if getLvl < achievement[0].lvlReq {
+        if getLvl < lvlachievement[0].lvlReq {
             return -1
         }
-        for i in 0..<achievement.count {
-            if getLvl >= achievement[achievement.count-i-1].lvlReq {
-                return achievement.count-i-1
+        for i in 0..<lvlachievement.count {
+            if getLvl >= lvlachievement[lvlachievement.count-i-1].lvlReq {
+                return lvlachievement.count-i-1
             }
         }
         return -1
@@ -303,7 +341,7 @@ class TFEngine: ObservableObject,tfCallable {
         if myRank == -1 {
             nxtLvlName=nil
         } else {
-            nxtLvlName = achievement[myRank].name
+            nxtLvlName = lvlachievement[myRank].title
         }
         levelInfo=LevelInfo(lvl: newLvl, lvlName: nxtLvlName)
         reportAchievements()
@@ -603,13 +641,13 @@ class TFEngine: ObservableObject,tfCallable {
     func reportAchievements() {
         if (gameCenterState == .success || gameCenterState == .couldNotAuth) && prefersGameCenter {
             var achievementsToReport: [GKAchievement] = []
-            for i in 0..<achievement.count {
-                let theAch=GKAchievement(identifier: "level"+String(achievement[i].lvlReq))
-                if levelInfo.lvl >= achievement[i].lvlReq {
+            for i in 0..<lvlachievement.count {
+                let theAch=GKAchievement(identifier: "level"+String(lvlachievement[i].lvlReq))
+                if levelInfo.lvl >= lvlachievement[i].lvlReq {
                     theAch.percentComplete=100
                 } else {
-                    if i != achievement.count-1 {
-                        theAch.percentComplete=Double(levelInfo.lvl)/Double(achievement[i].lvlReq)*100
+                    if i != lvlachievement.count-1 {
+                        theAch.percentComplete=Double(levelInfo.lvl)/Double(lvlachievement[i].lvlReq)*100
                     }
                 }
                 theAch.showsCompletionBanner=false
@@ -667,7 +705,7 @@ class TFEngine: ObservableObject,tfCallable {
         if isPreview {
             return
         }
-
+                
         // store locally: Device ID
         // store in the cloud: All level information and card information
         let doesicloudsync=defaults.value(forKey: "synciCloud")

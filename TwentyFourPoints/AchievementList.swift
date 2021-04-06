@@ -15,7 +15,7 @@ struct AchievementList: View {
     var curLvl: Int
     var tfengine:TFEngine
     var listType:ListType
-    @State var isHovering=Array(repeating: false, count: achievement.count)
+    @State var isHovering=Array(repeating: false, count: lvlachievement.count)
     var body: some View {
         VStack {
             HStack {
@@ -24,11 +24,11 @@ struct AchievementList: View {
                 Spacer()
             }.padding(.horizontal,20)
             
-            ForEach((listType == .upNext ? (curLvl+1..<achievement.count) : (0..<curLvl+1)), id: \.self) { index in
+            ForEach((listType == .upNext ? (curLvl+1..<lvlachievement.count) : (0..<curLvl+1)), id: \.self) { index in
                 if listType == .complete {
                     ZStack {
                         NavigationLink(
-                            destination: personaFocusView(tfengine: tfengine, focusIndex: index),tag: index,selection: $navTag,
+                            destination: personaFocusView(tfengine: tfengine, persona: lvlachievement[index]),tag: index,selection: $navTag,
                             label: {
                                 EmptyView()
                             })
@@ -108,7 +108,7 @@ struct achievementListItem: View {
     @State var isTruncated: Bool=false
     var body: some View {
         HStack {
-            if achievement[index].secret && listType == .upNext {
+            if lvlachievement[index].secret && listType == .upNext {
                 Circle()
                     .fill(Color.init("HiddenPictureBg"))
                     .overlay(
@@ -118,20 +118,20 @@ struct achievementListItem: View {
                     )
                     .frame(width: 54, height: 54, alignment: .center)
             } else {
-                AchievementPropic(imageName: achievement[index].name,active:listType == .complete)
+                AchievementPropic(imageName: lvlachievement[index].title,active:listType == .complete)
                     .frame(width: 54, height: 54, alignment: .center)
             }
             VStack(alignment: .leading) {
-                Text(achievement[index].secret && listType == .upNext ? "???" : achievement[index].name)
+                Text(lvlachievement[index].secret && listType == .upNext ? "???" : lvlachievement[index].title)
                     .font(.system(size: 18, weight: .medium, design: .rounded))
                     .foregroundColor(.primary)
                 if listType == .complete {
-                    Text(NSLocalizedString("achievementListItemLvlReachedPrefix",comment:"")+String(achievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReachedPostfix",comment:""))
+                    Text(NSLocalizedString("achievementListItemLvlReachedPrefix",comment:"")+String(lvlachievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReachedPostfix",comment:""))
                         .foregroundColor(.secondary)
                         .font(.system(size: 15, weight: .medium, design: .rounded))
                 } else {
                     HStack(spacing:0) {
-                        Text(NSLocalizedString("achievementListItemLvlReqPrefix",comment:"")+String(achievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReqPostfixNoflexPre",comment:""))
+                        Text(NSLocalizedString("achievementListItemLvlReqPrefix",comment:"")+String(lvlachievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReqPostfixNoflexPre",comment:""))
                             .foregroundColor(.secondary)
                             .font(.system(size: 15, weight: .medium, design: .rounded))
                             .lineLimit(1)
@@ -146,7 +146,7 @@ struct achievementListItem: View {
                             }
                         }
                         let tempText=NSLocalizedString("achievementListItemLvlReqPostfixNoflexPost",comment:"")+" • "
-                        Text(tempText+NSLocalizedString("achievementListItemLvlLeftPrefix",comment: "")+String(achievement[index].lvlReq-tfengine.levelInfo.lvl)+NSLocalizedString("achievementListItemLvlLeftPostfix",comment: ""))
+                        Text(tempText+NSLocalizedString("achievementListItemLvlLeftPrefix",comment: "")+String(lvlachievement[index].lvlReq-tfengine.levelInfo.lvl)+NSLocalizedString("achievementListItemLvlLeftPostfix",comment: ""))
                             .foregroundColor(.secondary)
                             .font(.system(size: 15, weight: .medium, design: .rounded))
                             .lineLimit(1)

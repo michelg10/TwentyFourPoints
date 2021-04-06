@@ -9,7 +9,7 @@ import SwiftUI
 
 struct personaFocusView: View {
     var tfengine:TFEngine
-    var focusIndex: Int
+    var persona: Persona
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var body: some View {
         VStack {
@@ -24,10 +24,10 @@ struct personaFocusView: View {
                 Spacer()
             }.padding(.top,20)
             .padding(.bottom,50)
-            PersonaDetail(curLvl: focusIndex)
+            PersonaDetail(persona: persona)
             Spacer()
-            if achievement[focusIndex].specialThanks != nil {
-                Text(achievement[focusIndex].specialThanks!)
+            if persona.detailSpecialThanks != nil {
+                Text(persona.detailSpecialThanks!)
                     .font(.system(size: 15, weight: .medium, design: .rounded))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal,50)
@@ -40,6 +40,6 @@ struct personaFocusView: View {
 
 struct personaFocusView_Previews: PreviewProvider {
     static var previews: some View {
-        personaFocusView(tfengine: TFEngine(isPreview: true),focusIndex: 7)
+        personaFocusView(tfengine: TFEngine(isPreview: true), persona: lvlachievement[7])
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F0053800261C3BA10063D456 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F00537FF261C3BA10063D456 /* CloudKit.framework */; };
 		F013E97B25EDE26A00FCBCD4 /* tutorialEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F013E97A25EDE26A00FCBCD4 /* tutorialEngine.swift */; };
 		F013E98325EE607E00FCBCD4 /* commonFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F013E98225EE607E00FCBCD4 /* commonFunctions.swift */; };
 		F019984725EC5E5800946AD8 /* noobView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F019984625EC5E5800946AD8 /* noobView.swift */; };
@@ -64,6 +65,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F00537FF261C3BA10063D456 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		F013E97A25EDE26A00FCBCD4 /* tutorialEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tutorialEngine.swift; sourceTree = "<group>"; };
 		F013E98225EE607E00FCBCD4 /* commonFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = commonFunctions.swift; sourceTree = "<group>"; };
 		F019984625EC5E5800946AD8 /* noobView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noobView.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F037DB3325F6466700872526 /* GameKit.framework in Frameworks */,
+				F0053800261C3BA10063D456 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,6 +146,7 @@
 		F037DB3125F6466700872526 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F00537FF261C3BA10063D456 /* CloudKit.framework */,
 				F037DB3225F6466700872526 /* GameKit.framework */,
 			);
 			name = Frameworks;
@@ -593,6 +597,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = TwentyFourPoints/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -624,6 +632,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = TwentyFourPoints/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (

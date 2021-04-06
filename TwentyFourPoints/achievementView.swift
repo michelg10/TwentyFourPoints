@@ -45,10 +45,10 @@ struct levelAchView: View {
         VStack(spacing:0) {
             let curLvl=tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl)
             if curLvl != -1 {
-                PersonaDetail(curLvl: curLvl)
+                PersonaDetail(persona: lvlachievement[curLvl])
                     .padding(.bottom,20)
             }
-            if curLvl != achievement.count-1 {
+            if curLvl != lvlachievement.count-1 {
                 AchievementList(curLvl: curLvl, tfengine: tfengine, listType: .upNext)
             }
             if curLvl != -1 {
@@ -92,6 +92,7 @@ struct achievementView: View {
                     HStack(spacing:63) {
                         Button(action: {
                             if tfengine.currentAchievementState != .questions {
+                                tfengine.hapticGate(hap: .medium)
                                 tfengine.currentAchievementState = .questions
                                 tfengine.refresh()
                             }
@@ -99,8 +100,10 @@ struct achievementView: View {
                             iconDescView(locked: false, desc: "Questions", icon: Image(systemName: "rosette"), selected: tfengine.currentAchievementState == .questions)
                         }).buttonStyle(topBarButtonStyle())
                         .hoverEffect(.lift)
+                        .disabled(tfengine.currentAchievementState == .questions)
                         Button(action: {
                             if tfengine.currentAchievementState != .speed {
+                                tfengine.hapticGate(hap: .medium)
                                 tfengine.currentAchievementState = .speed
                                 tfengine.refresh()
                             }
@@ -108,7 +111,7 @@ struct achievementView: View {
                             iconDescView(locked: tfengine.speedAchievementsLocked, desc: "Speed", icon: Image(systemName: "stopwatch"), selected: tfengine.currentAchievementState == .speed)
                         }).buttonStyle(topBarButtonStyle())
                         .hoverEffect(.lift)
-                        .disabled(tfengine.speedAchievementsLocked)
+                        .disabled(tfengine.speedAchievementsLocked || tfengine.currentAchievementState == .speed)
                     }
                     if tfengine.speedAchievementsLocked {
                         Text("Complete \(tfengine.speedAchievementsLockedThreshold-tfengine.levelInfo.lvl) more questions to unlock speed achievements")

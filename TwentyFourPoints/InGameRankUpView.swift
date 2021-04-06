@@ -17,17 +17,17 @@ struct InGameRankUpView: View {
                 .font(.system(size: 32, weight: .semibold, design: .rounded))
                 .padding(.bottom,10)
             HStack {
-                AchievementPropic(imageName: achievement[newRank].name, active: true)
+                AchievementPropic(imageName: lvlachievement[newRank].title, active: true)
                     .frame(width:72,height:72)
                     .padding(.trailing,10)
                 VStack(alignment:.leading) {
-                    Text(achievement[newRank].name)
+                    Text(lvlachievement[newRank].title)
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
-                    Text(NSLocalizedString("RankUpViewLevelPrefix", comment: "")+String(achievement[newRank].lvlReq)+NSLocalizedString("RankUpViewLevelPostfix", comment: ""))
+                    Text(NSLocalizedString("RankUpViewLevelPrefix", comment: "")+String(lvlachievement[newRank].lvlReq)+NSLocalizedString("RankUpViewLevelPostfix", comment: ""))
                         .font(.system(size: 18, weight: .semibold, design: .rounded))
                 }
             }.padding(.bottom,20)
-            Text(achievement[newRank].description)
+            Text(lvlachievement[newRank].detailDesc)
                 .padding(.horizontal,40)
                 .font(.system(size: 18, weight: .medium, design: .rounded))
                 .multilineTextAlignment(.center)

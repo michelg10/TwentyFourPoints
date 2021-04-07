@@ -36,24 +36,17 @@ struct AchievementList: View {
                             tfengine.hapticGate(hap: .medium)
                             navTag=index
                         }, label: {
-                            achievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)
+                            lvlAchievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)
                         }).buttonStyle(topBarButtonStyle())
                         .onHover { (hovering) in
                             isHovering[index]=hovering
                         }.brightness(isHovering[index] ? 0.03 : 0)
                     }
                 } else {
-                    achievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)
+                    lvlAchievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)
                 }
             }
         }.padding(.bottom,15)
-    }
-}
-
-struct AchievementList_Previews: PreviewProvider {
-    static var previews: some View {
-        AchievementList(curLvl: 7, tfengine: TFEngine(isPreview: true), listType: .upNext)
-        AchievementList(curLvl: 7, tfengine: TFEngine(isPreview: true), listType: .complete)
     }
 }
 
@@ -100,14 +93,45 @@ struct TruncableText: View {
     }
 }
 
-struct achievementListItem: View {
+struct dynamicAdjustText: View {
+    @State var isTruncated: Bool=false
+    var beginTxt: String
+    var flexTxt: String
+    var endTxt: String
+    var font: Font
+    var txtColor: Color
+    var body: some View {
+        HStack(spacing:0) {
+            Text(beginTxt)
+                .foregroundColor(txtColor)
+                .font(font)
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: true)
+            if !isTruncated {
+                TruncableText(text: Text(flexTxt)
+                                .font(font)
+                                .foregroundColor(txtColor),
+                              lineLimit: 1
+                ) {
+                    isTruncated = $0
+                }
+            }
+            Text(endTxt)
+                .foregroundColor(txtColor)
+                .font(font)
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: true)
+        }
+    }
+}
+
+struct lvlAchievementListItem: View {
     var index: Int
     var curLvl: Int
     var tfengine:TFEngine
     var listType:ListType
-    @State var isTruncated: Bool=false
     var body: some View {
-        HStack {
+        HStack(spacing:0) {
             if lvlachievement[index].secret && listType == .upNext {
                 Circle()
                     .fill(Color.init("HiddenPictureBg"))
@@ -121,7 +145,7 @@ struct achievementListItem: View {
                 AchievementPropic(imageName: lvlachievement[index].title,active:listType == .complete)
                     .frame(width: 54, height: 54, alignment: .center)
             }
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing:0) {
                 Text(lvlachievement[index].secret && listType == .upNext ? "???" : lvlachievement[index].title)
                     .font(.system(size: 18, weight: .medium, design: .rounded))
                     .foregroundColor(.primary)
@@ -130,30 +154,14 @@ struct achievementListItem: View {
                         .foregroundColor(.secondary)
                         .font(.system(size: 15, weight: .medium, design: .rounded))
                 } else {
-                    HStack(spacing:0) {
-                        Text(NSLocalizedString("achievementListItemLvlReqPrefix",comment:"")+String(lvlachievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReqPostfixNoflexPre",comment:""))
-                            .foregroundColor(.secondary)
-                            .font(.system(size: 15, weight: .medium, design: .rounded))
-                            .lineLimit(1)
-                            .fixedSize(horizontal: true, vertical: true)
-                        if !isTruncated {
-                            TruncableText(text: Text(NSLocalizedString("achievementListItemLvlReqPostfixFlex",comment:""))
-                                            .font(.system(size: 15, weight: .medium, design: .rounded))
-                                            .foregroundColor(.secondary),
-                                          lineLimit: 1
-                            ) {
-                                isTruncated = $0
-                            }
-                        }
-                        let tempText=NSLocalizedString("achievementListItemLvlReqPostfixNoflexPost",comment:"")+" • "
-                        Text(tempText+NSLocalizedString("achievementListItemLvlLeftPrefix",comment: "")+String(lvlachievement[index].lvlReq-tfengine.levelInfo.lvl)+NSLocalizedString("achievementListItemLvlLeftPostfix",comment: ""))
-                            .foregroundColor(.secondary)
-                            .font(.system(size: 15, weight: .medium, design: .rounded))
-                            .lineLimit(1)
-                            .fixedSize(horizontal: true, vertical: true)
-                    }
+                    dynamicAdjustText(beginTxt: NSLocalizedString("achievementListItemLvlReqPrefix",comment:"")+String(lvlachievement[index].lvlReq)+NSLocalizedString("achievementListItemLvlReqPostfixNoflexPre",comment:""),
+                                      flexTxt: NSLocalizedString("achievementListItemLvlReqPostfixFlex",comment:""),
+                                      endTxt: NSLocalizedString("achievementListItemLvlReqPostfixNoflexPost",comment:"")+" • "+NSLocalizedString("achievementListItemLvlLeftPrefix",comment: "")+String(lvlachievement[index].lvlReq-tfengine.levelInfo.lvl)+NSLocalizedString("achievementListItemLvlLeftPostfix",comment: ""),
+                                      font: .system(size: 15, weight: .medium, design: .rounded),
+                                      txtColor: .secondary
+                    )
                 }
-            }.padding(.leading,8)
+            }.padding(.leading,14)
             Spacer()
             if listType == .complete {
                 Image(systemName: "chevron.forward")
@@ -163,5 +171,12 @@ struct achievementListItem: View {
         }.background(Color.white.opacity(0.001))
         .padding(.bottom,8)
         .padding(.horizontal,30)
+    }
+}
+
+struct AchievementList_Previews: PreviewProvider {
+    static var previews: some View {
+        AchievementList(curLvl: 7, tfengine: TFEngine(isPreview: true), listType: .upNext)
+        AchievementList(curLvl: 7, tfengine: TFEngine(isPreview: true), listType: .complete)
     }
 }

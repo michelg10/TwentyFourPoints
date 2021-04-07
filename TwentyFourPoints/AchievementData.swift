@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 protocol Persona {
     var title: String { get }
@@ -50,6 +51,20 @@ struct SpeedAchievement {
     var description: String
     var specialThanks: String?
 }
+
+func speedGroups() -> [[SpeedAchievement]] {
+    var rturn: [[SpeedAchievement]] = [[]]
+    var curGrp: [SpeedAchievement]=[speedAchievement[0]]
+    for i in 1..<speedAchievement.count {
+        if speedAchievement[i-1].qsReq != speedAchievement[i].qsReq {
+            rturn.append(curGrp)
+            curGrp.removeAll()
+        }
+        curGrp.append(speedAchievement[i])
+    }
+    return rturn
+}
+
 var speedAchievement: [SpeedAchievement] = [
     .init(name: "Kevin", speedReq: 30, qsReq: 10, description: NSLocalizedString("PersonaDescKevin", comment: "")),
     .init(name: "Derek", speedReq: 20, qsReq: 10, description: NSLocalizedString("PersonaDescDerek", comment: "")),

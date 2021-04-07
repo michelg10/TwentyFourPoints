@@ -147,7 +147,9 @@ struct PreferencesView: View {
                     }, set: { (val) in
                         tfengine.useHaptics=val
                         tfengine.refresh()
-                        tfengine.saveData()
+                        DispatchQueue.global().async {
+                            tfengine.saveData()
+                        }
                     }))
                 }
                 VStack(alignment: .leading,spacing:0) {
@@ -189,7 +191,9 @@ struct PreferencesView: View {
                             tfengine.keyboardType=val
                             tfengine.getKeyboardType()
                             tfengine.refresh()
-                            tfengine.saveData()
+                            DispatchQueue.global().async {
+                                tfengine.saveData()
+                            }
                         }), label: Text(""), content: {
                             Text("QWERTY").tag(1)
                             Text("AZERTY").tag(2)
@@ -203,7 +207,9 @@ struct PreferencesView: View {
                     }, set: { (val) in
                         tfengine.useSplit=val
                         tfengine.refresh()
-                        tfengine.saveData()
+                        DispatchQueue.global().async {
+                            tfengine.saveData()
+                        }
                     }), label: {
                         Text(NSLocalizedString("Split buttons", comment: "Whether or not to split the buttons in the problem view on iPad"))
                     })
@@ -212,7 +218,9 @@ struct PreferencesView: View {
                             tfengine.showKeyboardTips
                         }, set: { (val) in
                             tfengine.showKeyboardTips=val
-                            tfengine.saveData()
+                            DispatchQueue.global().async {
+                                tfengine.saveData()
+                            }
                         }), label: {
                             Text(NSLocalizedString("Show keyboard tips", comment: "Whether or not to show keyboard tips when an external keyboard is connected"))
                         }).padding(.leading,10)
@@ -223,7 +231,9 @@ struct PreferencesView: View {
                 }, set: { (val) in
                     tfengine.instantCompetitive = !val
                     tfengine.refresh()
-                    tfengine.saveData()
+                    DispatchQueue.global().async {
+                        tfengine.saveData()
+                    }
                 }), label: {
                     Text(NSLocalizedString("Animate cards", comment: "Enabling high performance card mode"))
                 })
@@ -232,7 +242,9 @@ struct PreferencesView: View {
                 }, set: { (val) in
                     tfengine.setiCloudSync(val: val)
                     tfengine.refresh()
-                    tfengine.saveData()
+                    DispatchQueue.global().async {
+                        tfengine.saveData()
+                    }
                 }), label: {
                     Text(NSLocalizedString("iCloud sync", comment: ""))
                 })
@@ -245,7 +257,9 @@ struct PreferencesView: View {
                         }, set: { (val) in
                             tfengine.setPrefersGameCenter(val: val)
                             tfengine.refresh()
-                            tfengine.saveData()
+                            DispatchQueue.global().async {
+                                tfengine.saveData()
+                            }
                         }), label: {
                             EmptyView()
                         })
@@ -268,7 +282,9 @@ struct PreferencesView: View {
                     }, set: { (val) in
                         tfengine.upperBound=val
                         tfengine.refresh()
-                        tfengine.saveData()
+                        DispatchQueue.global().async {
+                            tfengine.saveData()
+                        }
                     }), label: Text("Number Range").foregroundColor(.primary), content: {
                         ForEach((8...24), id:\.self) { index in
                             Text("\(String(index))").tag(index)

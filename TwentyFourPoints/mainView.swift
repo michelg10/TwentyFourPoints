@@ -134,7 +134,9 @@ struct mainView: View {
                         }, set: { (value) in
                             tfengine.preferredColorMode=value
                             tfengine.refresh()
-                            tfengine.saveData()
+                            DispatchQueue.global().async {
+                                tfengine.saveData()
+                            }
                         }))
                     }).padding(.horizontal,20)
                 }.padding(.top,20)

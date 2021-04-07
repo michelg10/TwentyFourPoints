@@ -38,9 +38,6 @@ struct iconDescView: View {
 
 struct levelAchView: View {
     var tfengine: TFEngine
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     var body: some View {
         VStack(spacing:0) {
             let curLvl=tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl)
@@ -54,6 +51,15 @@ struct levelAchView: View {
             if curLvl != -1 {
                 AchievementList(curLvl: curLvl, tfengine: tfengine, listType: .complete)
             }
+        }
+    }
+}
+
+struct speedAchView: View {
+    var tfengine: TFEngine
+    var body: some View {
+        VStack(spacing:0) {
+            
         }
     }
 }
@@ -94,6 +100,9 @@ struct achievementView: View {
                             if tfengine.currentAchievementState != .questions {
                                 tfengine.hapticGate(hap: .medium)
                                 tfengine.currentAchievementState = .questions
+                                DispatchQueue.global().async {
+                                    tfengine.saveData()
+                                }
                                 tfengine.refresh()
                             }
                         }, label: {
@@ -105,6 +114,9 @@ struct achievementView: View {
                             if tfengine.currentAchievementState != .speed {
                                 tfengine.hapticGate(hap: .medium)
                                 tfengine.currentAchievementState = .speed
+                                DispatchQueue.global().async {
+                                    tfengine.saveData()
+                                }
                                 tfengine.refresh()
                             }
                         }, label: {

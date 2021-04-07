@@ -85,9 +85,9 @@ struct BestTime: Codable {
     var time: Double
     var qspan: Int
 }
-enum achievementState {
-    case questions
-    case speed
+enum achievementState: String,Codable {
+    case questions="questions"
+    case speed="speed"
 }
 
 struct customAchievement {
@@ -278,8 +278,11 @@ class TFEngine: ObservableObject,tfCallable {
         storeData(toStore: useSplit, id: "useSplit", persistLocation: persistLoc)
         storeData(toStore: solengine.cards, id: "solCards", persistLocation: persistLoc)
         storeData(toStore: isShowingAnswer, id: "isShowingAnswer", persistLocation: persistLoc)
-        storeData(toStore: currentAchievementState, id: "currentAchievementState", persistLocation: persistLoc)
+        let tmpCurAchState: String=currentAchievementState.rawValue
+        storeData(toStore: tmpCurAchState, id: "curAchState", persistLocation: persistLoc)
         storeData(toStore: try? PropertyListEncoder().encode(curQ.cs), id: "cards", persistLocation: persistLoc)
+        storeData(toStore: curQ.questionShown, id: "cardsDate", persistLocation: persistLoc)
+        storeData(toStore: curQ.ubound, id: "cardsBound", persistLocation: persistLoc)
         let encodedAppearance: Int
         switch preferredColorMode {
         case .none:
@@ -417,7 +420,7 @@ class TFEngine: ObservableObject,tfCallable {
         if dataVal != nil {
             toGrab=dataVal as! T
         } else {
-            print(persistLocation == .icloud ? "iCloud" : "Local" + " \(id) data not present")
+            print((persistLocation == .icloud ? "iCloud" : "Local") + " \(id) data not present")
         }
     }
         
@@ -480,7 +483,9 @@ class TFEngine: ObservableObject,tfCallable {
         grabData(toGrab: &keyboardType, id: "keyboardType", persistLocation: persLoc)
         grabData(toGrab: &showKeyboardTips, id: "showKeyboardTips", persistLocation: persLoc)
         grabData(toGrab: &useSplit, id: "useSplit", persistLocation: persLoc)
-        grabData(toGrab: &currentAchievementState, id: "currentAchievementState", persistLocation: persLoc)
+        var tmpCurAchState=""
+        grabData(toGrab: &tmpCurAchState, id: "curAchState", persistLocation: persLoc)
+        currentAchievementState=achievementState.init(rawValue: tmpCurAchState) ?? .questions
         grabData(toGrab: &solengine.cards, id: "solCards", persistLocation: persLoc)
         solengine.computeSolution()
         
@@ -606,11 +611,12 @@ class TFEngine: ObservableObject,tfCallable {
         if val==true {
             NotificationCenter.default.addObserver(self, selector: #selector(storeUpdated(notification:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: icloudstore)
             synciCloud=val
-            saveData()
             loadData(isIncremental: false)
         } else {
             NotificationCenter.default.removeObserver(self, name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: icloudstore)
             icloudstore.removeObject(forKey: "dev"+deviceID+"lvl")
+            icloudstore.removeObject(forKey: "dev"+deviceID+"wklvl")
+            icloudstore.removeObject(forKey: "dev"+deviceID+"sv")
             icloudstore.synchronize()
             let myData=deviceData[deviceID]
             deviceData.removeAll()
@@ -705,7 +711,7 @@ class TFEngine: ObservableObject,tfCallable {
         if isPreview {
             return
         }
-                
+                        
         // store locally: Device ID
         // store in the cloud: All level information and card information
         let doesicloudsync=defaults.value(forKey: "synciCloud")
@@ -901,7 +907,9 @@ class TFEngine: ObservableObject,tfCallable {
         stored=nil
         updtStoredExpr()
         
-        saveData()
+        DispatchQueue.global().async {
+            self.saveData()
+        }
     }
     
     var konamiLog:[daBtn]=[]
@@ -1159,7 +1167,9 @@ class TFEngine: ObservableObject,tfCallable {
             cardsShouldVisible=Array(repeating: false, count: 4)
             curQuestionID=UUID()
         }
-        saveData()
+        DispatchQueue.global().async {
+            self.saveData()
+        }
     }
     
     func doMath(addendB: Double, noCardsActive: Bool) -> mathResult {
@@ -1303,7 +1313,9 @@ class TFEngine: ObservableObject,tfCallable {
             answerShowOpacity=0
             answerShow = curQ.sol
             isShowingAnswer=true
-            saveData()
+            DispatchQueue.global().async {
+                self.saveData()
+            }
             if cardsOnScreen {
                 withAnimation(.easeInOut(duration:ansBrightenTime)) {
                     answerShowOpacity = 1.0

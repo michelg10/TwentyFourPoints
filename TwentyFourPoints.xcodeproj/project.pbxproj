@@ -17,6 +17,12 @@
 		F02AB9FA25E39EFD008EBE91 /* navBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F925E39EFD008EBE91 /* navBarButton.swift */; };
 		F02AB9FF25E4AF11008EBE91 /* konamiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9FE25E4AF11008EBE91 /* konamiView.swift */; };
 		F02D3F1225F279800063716D /* generator24.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F02D3F1025F279800063716D /* generator24.cpp */; };
+		F034A34D262196E400528E6F /* MacTwentyFourPointsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034A34C262196E400528E6F /* MacTwentyFourPointsApp.swift */; };
+		F034A34F262196E400528E6F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034A34E262196E400528E6F /* ContentView.swift */; };
+		F034A351262196E500528E6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F034A350262196E500528E6F /* Assets.xcassets */; };
+		F034A354262196E500528E6F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F034A353262196E500528E6F /* Preview Assets.xcassets */; };
+		F034A360262196E500528E6F /* MacTwentyFourPointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034A35F262196E500528E6F /* MacTwentyFourPointsTests.swift */; };
+		F034A36B262196E500528E6F /* MacTwentyFourPointsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034A36A262196E500528E6F /* MacTwentyFourPointsUITests.swift */; };
 		F037DB2425F63D5900872526 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F037DB2625F63D5900872526 /* InfoPlist.strings */; };
 		F037DB3325F6466700872526 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F037DB3225F6466700872526 /* GameKit.framework */; };
 		F055928025E8694400688D2C /* AchievementData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F055927F25E8694400688D2C /* AchievementData.swift */; };
@@ -41,6 +47,7 @@
 		F0CFB9342617662F00D66135 /* secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CFB9332617662F00D66135 /* secrets.swift */; };
 		F0E5FA6925F4AE4E0010E8A9 /* UIRotationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E5FA6125F4AC9B0010E8A9 /* UIRotationObserver.swift */; };
 		F0E7271725DFC7BF00403CDD /* TopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E7271625DFC7BF00403CDD /* TopBar.swift */; };
+		F0F75723264139D800232985 /* whatsnewview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F75722264139D800232985 /* whatsnewview.swift */; };
 		F0FF2E8B25F364740097B4A0 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF2E8A25F364740097B4A0 /* PreferencesView.swift */; };
 		F0FFF9B425ECB40000E90620 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FFF9B325ECB40000E90620 /* constants.swift */; };
 		F0FFF9BC25ECB8F600E90620 /* noobLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FFF9BB25ECB8F600E90620 /* noobLayout.swift */; };
@@ -48,6 +55,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		F034A35C262196E500528E6F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0B2E1CA25D8D41D007DF20E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F034A349262196E400528E6F;
+			remoteInfo = MacTwentyFourPoints;
+		};
+		F034A367262196E500528E6F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0B2E1CA25D8D41D007DF20E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F034A349262196E400528E6F;
+			remoteInfo = MacTwentyFourPoints;
+		};
 		F0B2E1E425D8D41F007DF20E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F0B2E1CA25D8D41D007DF20E /* Project object */;
@@ -77,6 +98,19 @@
 		F02D3F0F25F279800063716D /* TwentyFourPoints-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TwentyFourPoints-Bridging-Header.h"; sourceTree = "<group>"; };
 		F02D3F1025F279800063716D /* generator24.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = generator24.cpp; sourceTree = "<group>"; };
 		F02D3F1125F279800063716D /* generator24.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = generator24.hpp; sourceTree = "<group>"; };
+		F034A34A262196E400528E6F /* MacTwentyFourPoints.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacTwentyFourPoints.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F034A34C262196E400528E6F /* MacTwentyFourPointsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTwentyFourPointsApp.swift; sourceTree = "<group>"; };
+		F034A34E262196E400528E6F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F034A350262196E500528E6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F034A353262196E500528E6F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F034A355262196E500528E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F034A356262196E500528E6F /* MacTwentyFourPoints.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacTwentyFourPoints.entitlements; sourceTree = "<group>"; };
+		F034A35B262196E500528E6F /* MacTwentyFourPointsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacTwentyFourPointsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F034A35F262196E500528E6F /* MacTwentyFourPointsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTwentyFourPointsTests.swift; sourceTree = "<group>"; };
+		F034A361262196E500528E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F034A366262196E500528E6F /* MacTwentyFourPointsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacTwentyFourPointsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F034A36A262196E500528E6F /* MacTwentyFourPointsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTwentyFourPointsUITests.swift; sourceTree = "<group>"; };
+		F034A36C262196E500528E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F037DB1725F63CCB00872526 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F037DB2525F63D5900872526 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F037DB2A25F63D5C00872526 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -89,7 +123,7 @@
 		F0A16D9425E76E6A00C46C62 /* Twenty Four Points.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Twenty Four Points.entitlements"; sourceTree = "<group>"; };
 		F0AB4EF725EBDAAE009F53CB /* AchievementPropic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementPropic.swift; sourceTree = "<group>"; };
 		F0AB4EFC25EBE422009F53CB /* PersonaDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonaDetail.swift; sourceTree = "<group>"; };
-		F0B2E1D225D8D41D007DF20E /* TwentyFourPoints.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwentyFourPoints.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0B2E1D225D8D41D007DF20E /* 24 Points.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "24 Points.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0B2E1D525D8D41D007DF20E /* TwentyFourPointsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwentyFourPointsApp.swift; sourceTree = "<group>"; };
 		F0B2E1D725D8D41D007DF20E /* ProblemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProblemView.swift; sourceTree = "<group>"; };
 		F0B2E1D925D8D41E007DF20E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -110,6 +144,7 @@
 		F0CFB9332617662F00D66135 /* secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = secrets.swift; sourceTree = "<group>"; };
 		F0E5FA6125F4AC9B0010E8A9 /* UIRotationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIRotationObserver.swift; sourceTree = "<group>"; };
 		F0E7271625DFC7BF00403CDD /* TopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBar.swift; sourceTree = "<group>"; };
+		F0F75722264139D800232985 /* whatsnewview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whatsnewview.swift; sourceTree = "<group>"; };
 		F0FF2E8A25F364740097B4A0 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		F0FFF9B325ECB40000E90620 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		F0FFF9BB25ECB8F600E90620 /* noobLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noobLayout.swift; sourceTree = "<group>"; };
@@ -117,6 +152,27 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		F034A347262196E400528E6F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F034A358262196E500528E6F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F034A363262196E500528E6F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F0B2E1CF25D8D41D007DF20E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -143,6 +199,45 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F034A34B262196E400528E6F /* MacTwentyFourPoints */ = {
+			isa = PBXGroup;
+			children = (
+				F034A34C262196E400528E6F /* MacTwentyFourPointsApp.swift */,
+				F034A34E262196E400528E6F /* ContentView.swift */,
+				F034A350262196E500528E6F /* Assets.xcassets */,
+				F034A355262196E500528E6F /* Info.plist */,
+				F034A356262196E500528E6F /* MacTwentyFourPoints.entitlements */,
+				F034A352262196E500528E6F /* Preview Content */,
+			);
+			path = MacTwentyFourPoints;
+			sourceTree = "<group>";
+		};
+		F034A352262196E500528E6F /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				F034A353262196E500528E6F /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F034A35E262196E500528E6F /* MacTwentyFourPointsTests */ = {
+			isa = PBXGroup;
+			children = (
+				F034A35F262196E500528E6F /* MacTwentyFourPointsTests.swift */,
+				F034A361262196E500528E6F /* Info.plist */,
+			);
+			path = MacTwentyFourPointsTests;
+			sourceTree = "<group>";
+		};
+		F034A369262196E500528E6F /* MacTwentyFourPointsUITests */ = {
+			isa = PBXGroup;
+			children = (
+				F034A36A262196E500528E6F /* MacTwentyFourPointsUITests.swift */,
+				F034A36C262196E500528E6F /* Info.plist */,
+			);
+			path = MacTwentyFourPointsUITests;
+			sourceTree = "<group>";
+		};
 		F037DB3125F6466700872526 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,8 +251,11 @@
 			isa = PBXGroup;
 			children = (
 				F0B2E1D425D8D41D007DF20E /* TwentyFourPoints */,
+				F034A34B262196E400528E6F /* MacTwentyFourPoints */,
 				F0B2E1E625D8D41F007DF20E /* TwentyFourPointsTests */,
 				F0B2E1F125D8D41F007DF20E /* TwentyFourPointsUITests */,
+				F034A35E262196E500528E6F /* MacTwentyFourPointsTests */,
+				F034A369262196E500528E6F /* MacTwentyFourPointsUITests */,
 				F0B2E1D325D8D41D007DF20E /* Products */,
 				F037DB3125F6466700872526 /* Frameworks */,
 			);
@@ -166,9 +264,12 @@
 		F0B2E1D325D8D41D007DF20E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F0B2E1D225D8D41D007DF20E /* TwentyFourPoints.app */,
+				F0B2E1D225D8D41D007DF20E /* 24 Points.app */,
 				F0B2E1E325D8D41F007DF20E /* TwentyFourPointsTests.xctest */,
 				F0B2E1EE25D8D41F007DF20E /* TwentyFourPointsUITests.xctest */,
+				F034A34A262196E400528E6F /* MacTwentyFourPoints.app */,
+				F034A35B262196E500528E6F /* MacTwentyFourPointsTests.xctest */,
+				F034A366262196E500528E6F /* MacTwentyFourPointsUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -198,6 +299,7 @@
 				F0AB4EFC25EBE422009F53CB /* PersonaDetail.swift */,
 				F0AB4EF725EBDAAE009F53CB /* AchievementPropic.swift */,
 				F01DAD3C25EBEFBC0096740B /* AchievementList.swift */,
+				F0F75722264139D800232985 /* whatsnewview.swift */,
 				F055927F25E8694400688D2C /* AchievementData.swift */,
 				F08DF54A260733980082458B /* solverEngine.swift */,
 				F02AB9F425E39EA7008EBE91 /* SolverView.swift */,
@@ -247,6 +349,59 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		F034A349262196E400528E6F /* MacTwentyFourPoints */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F034A36D262196E500528E6F /* Build configuration list for PBXNativeTarget "MacTwentyFourPoints" */;
+			buildPhases = (
+				F034A346262196E400528E6F /* Sources */,
+				F034A347262196E400528E6F /* Frameworks */,
+				F034A348262196E400528E6F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MacTwentyFourPoints;
+			productName = MacTwentyFourPoints;
+			productReference = F034A34A262196E400528E6F /* MacTwentyFourPoints.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F034A35A262196E500528E6F /* MacTwentyFourPointsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F034A370262196E500528E6F /* Build configuration list for PBXNativeTarget "MacTwentyFourPointsTests" */;
+			buildPhases = (
+				F034A357262196E500528E6F /* Sources */,
+				F034A358262196E500528E6F /* Frameworks */,
+				F034A359262196E500528E6F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F034A35D262196E500528E6F /* PBXTargetDependency */,
+			);
+			name = MacTwentyFourPointsTests;
+			productName = MacTwentyFourPointsTests;
+			productReference = F034A35B262196E500528E6F /* MacTwentyFourPointsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		F034A365262196E500528E6F /* MacTwentyFourPointsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F034A373262196E500528E6F /* Build configuration list for PBXNativeTarget "MacTwentyFourPointsUITests" */;
+			buildPhases = (
+				F034A362262196E500528E6F /* Sources */,
+				F034A363262196E500528E6F /* Frameworks */,
+				F034A364262196E500528E6F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F034A368262196E500528E6F /* PBXTargetDependency */,
+			);
+			name = MacTwentyFourPointsUITests;
+			productName = MacTwentyFourPointsUITests;
+			productReference = F034A366262196E500528E6F /* MacTwentyFourPointsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		F0B2E1D125D8D41D007DF20E /* TwentyFourPoints */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F0B2E1F725D8D41F007DF20E /* Build configuration list for PBXNativeTarget "TwentyFourPoints" */;
@@ -263,7 +418,7 @@
 			packageProductDependencies = (
 			);
 			productName = TwentyFourPoints;
-			productReference = F0B2E1D225D8D41D007DF20E /* TwentyFourPoints.app */;
+			productReference = F0B2E1D225D8D41D007DF20E /* 24 Points.app */;
 			productType = "com.apple.product-type.application";
 		};
 		F0B2E1E225D8D41F007DF20E /* TwentyFourPointsTests */ = {
@@ -311,6 +466,17 @@
 				LastSwiftUpdateCheck = 1240;
 				LastUpgradeCheck = 1240;
 				TargetAttributes = {
+					F034A349262196E400528E6F = {
+						CreatedOnToolsVersion = 12.4;
+					};
+					F034A35A262196E500528E6F = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = F034A349262196E400528E6F;
+					};
+					F034A365262196E500528E6F = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = F034A349262196E400528E6F;
+					};
 					F0B2E1D125D8D41D007DF20E = {
 						CreatedOnToolsVersion = 12.4;
 						LastSwiftMigration = 1240;
@@ -344,11 +510,37 @@
 				F0B2E1D125D8D41D007DF20E /* TwentyFourPoints */,
 				F0B2E1E225D8D41F007DF20E /* TwentyFourPointsTests */,
 				F0B2E1ED25D8D41F007DF20E /* TwentyFourPointsUITests */,
+				F034A349262196E400528E6F /* MacTwentyFourPoints */,
+				F034A35A262196E500528E6F /* MacTwentyFourPointsTests */,
+				F034A365262196E500528E6F /* MacTwentyFourPointsUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		F034A348262196E400528E6F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F034A354262196E500528E6F /* Preview Assets.xcassets in Resources */,
+				F034A351262196E500528E6F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F034A359262196E500528E6F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F034A364262196E500528E6F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F0B2E1D025D8D41D007DF20E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -377,6 +569,31 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		F034A346262196E400528E6F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F034A34F262196E400528E6F /* ContentView.swift in Sources */,
+				F034A34D262196E400528E6F /* MacTwentyFourPointsApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F034A357262196E500528E6F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F034A360262196E500528E6F /* MacTwentyFourPointsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F034A362262196E500528E6F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F034A36B262196E500528E6F /* MacTwentyFourPointsUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F0B2E1CE25D8D41D007DF20E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -389,6 +606,7 @@
 				F0B346D725F05573001938A8 /* confettiView.swift in Sources */,
 				F0E7271725DFC7BF00403CDD /* TopBar.swift in Sources */,
 				F055928025E8694400688D2C /* AchievementData.swift in Sources */,
+				F0F75723264139D800232985 /* whatsnewview.swift in Sources */,
 				F0B2E1D825D8D41D007DF20E /* ProblemView.swift in Sources */,
 				F02D3F1225F279800063716D /* generator24.cpp in Sources */,
 				F08DF54B260733980082458B /* solverEngine.swift in Sources */,
@@ -433,6 +651,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		F034A35D262196E500528E6F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F034A349262196E400528E6F /* MacTwentyFourPoints */;
+			targetProxy = F034A35C262196E500528E6F /* PBXContainerItemProxy */;
+		};
+		F034A368262196E500528E6F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F034A349262196E400528E6F /* MacTwentyFourPoints */;
+			targetProxy = F034A367262196E500528E6F /* PBXContainerItemProxy */;
+		};
 		F0B2E1E525D8D41F007DF20E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F0B2E1D125D8D41D007DF20E /* TwentyFourPoints */;
@@ -467,6 +695,146 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		F034A36E262196E500528E6F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MacTwentyFourPoints/MacTwentyFourPoints.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"MacTwentyFourPoints/Preview Content\"";
+				DEVELOPMENT_TEAM = 9K2XM38XLK;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = MacTwentyFourPoints/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.TwentyFourPoints;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F034A36F262196E500528E6F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MacTwentyFourPoints/MacTwentyFourPoints.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"MacTwentyFourPoints/Preview Content\"";
+				DEVELOPMENT_TEAM = 9K2XM38XLK;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = MacTwentyFourPoints/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.TwentyFourPoints;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F034A371262196E500528E6F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 9K2XM38XLK;
+				INFOPLIST_FILE = MacTwentyFourPointsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.MacTwentyFourPointsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MacTwentyFourPoints.app/Contents/MacOS/MacTwentyFourPoints";
+			};
+			name = Debug;
+		};
+		F034A372262196E500528E6F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 9K2XM38XLK;
+				INFOPLIST_FILE = MacTwentyFourPointsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.MacTwentyFourPointsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MacTwentyFourPoints.app/Contents/MacOS/MacTwentyFourPoints";
+			};
+			name = Release;
+		};
+		F034A374262196E500528E6F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 9K2XM38XLK;
+				INFOPLIST_FILE = MacTwentyFourPointsUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.MacTwentyFourPointsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = MacTwentyFourPoints;
+			};
+			name = Debug;
+		};
+		F034A375262196E500528E6F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 9K2XM38XLK;
+				INFOPLIST_FILE = MacTwentyFourPointsUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.MacTwentyFourPointsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = MacTwentyFourPoints;
+			};
+			name = Release;
+		};
 		F0B2E1F525D8D41F007DF20E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -610,7 +978,7 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.TwentyFourPoints;
 				PRODUCT_MODULE_NAME = TwentyFourPoints;
-				PRODUCT_NAME = TwentyFourPoints;
+				PRODUCT_NAME = "24 Points";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TwentyFourPoints/TwentyFourPoints-Bridging-Header.h";
@@ -645,7 +1013,7 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.TwentyFourPoints;
 				PRODUCT_MODULE_NAME = TwentyFourPoints;
-				PRODUCT_NAME = TwentyFourPoints;
+				PRODUCT_NAME = "24 Points";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TwentyFourPoints/TwentyFourPoints-Bridging-Header.h";
@@ -741,6 +1109,33 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		F034A36D262196E500528E6F /* Build configuration list for PBXNativeTarget "MacTwentyFourPoints" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F034A36E262196E500528E6F /* Debug */,
+				F034A36F262196E500528E6F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F034A370262196E500528E6F /* Build configuration list for PBXNativeTarget "MacTwentyFourPointsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F034A371262196E500528E6F /* Debug */,
+				F034A372262196E500528E6F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F034A373262196E500528E6F /* Build configuration list for PBXNativeTarget "MacTwentyFourPointsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F034A374262196E500528E6F /* Debug */,
+				F034A375262196E500528E6F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F0B2E1CD25D8D41D007DF20E /* Build configuration list for PBXProject "TwentyFourPoints" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

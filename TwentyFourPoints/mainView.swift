@@ -76,6 +76,19 @@ struct achievementButtonStyle: ButtonStyle {
     }
 }
 
+struct AppLogoTitleView: View {
+    var body: some View {
+        HStack {
+            Image("Icon")
+                .resizable()
+                .frame(width:72,height:72)
+                .padding(.trailing,4)
+            Text(NSLocalizedString("Points", comment: "The points in the title label that appears in the launch screen of the game"))
+                .font(.system(size: 36, weight: .medium, design: .rounded))
+        }
+    }
+}
+
 struct mainView: View {
     @State var playClicked=false
     @State var solverClicked=false
@@ -87,10 +100,6 @@ struct mainView: View {
     @State var playHover: Bool = false
     @State var solverHover: Bool = false
     @State var prefHover: Bool = false
-    /*
-    @State var gkViewPresented: Bool = false
-    @State var gkHover: Bool = false
-     */
     
     @ObservedObject var rotationObserver: UIRotationObserver
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
@@ -142,21 +151,15 @@ struct mainView: View {
                 }.padding(.top,20)
                 Spacer()
                 VStack {
-                    HStack {
-                        Image("Icon")
-                            .resizable()
-                            .frame(width:72,height:72)
-                            .padding(.trailing,4)
-                        Text(NSLocalizedString("Points", comment: "The points in the title label that appears in the launch screen of the game"))
-                            .font(.system(size: 36, weight: .medium, design: .rounded))
-                    }.padding(.bottom,7)
+                    AppLogoTitleView()
+                        .padding(.bottom,7)
                     Text(NSLocalizedString("titleGameDescription", comment: "The short game description that appears in the launch screen of the game"))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 20)
                         .font(.system(size: 24, weight: .medium, design: .rounded))
                 }
                 Spacer()
-                if tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl) == -1 {
+                if tfengine.getQuestionLvlIndex(getLvl: tfengine.levelInfo.lvl) == -1 {
                     Text(NSLocalizedString("achievementYetUnlockPrefix",comment: "")+String(lvlachievement[0].lvlReq)+NSLocalizedString("achievementYetUnlockPostfix",comment: ""))
                         .font(.system(size: 20, weight: .semibold, design: .rounded))
                         .multilineTextAlignment(.center)
@@ -185,7 +188,7 @@ struct mainView: View {
                                             .animation(nil)
                                             .foregroundColor(.primary)
                                             .font(.system(size: 18, weight: .medium, design: .rounded))
-                                        let myRank=tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl)
+                                        let myRank=tfengine.getQuestionLvlIndex(getLvl: tfengine.levelInfo.lvl)
                                         Text(myRank == lvlachievement.count-1 ? NSLocalizedString("noMoreRankMessage", comment:"Final level message") : NSLocalizedString("yetToGetToRankPrefix",comment:"")+String(lvlachievement[myRank+1].lvlReq-tfengine.levelInfo.lvl)+(lvlachievement[myRank+1].lvlReq-tfengine.levelInfo.lvl==1 ? NSLocalizedString("yetToGetToRankPostfixSingular",comment:"") : NSLocalizedString("yetToGetToRankPostfixPlural",comment:"")))
                                             .animation(nil)
                                             .font(.system(size: 12, weight: .regular, design: .rounded))

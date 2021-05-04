@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>MacTwentyFourPoints.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>TwentyFourPoints.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>

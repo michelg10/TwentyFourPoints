@@ -47,7 +47,7 @@ let leaderboardUnlockQsThres=30
 struct SpeedAchievement {
     var name: String
     var speedReq: Double
-    var qsReq: Int // this must be monotonically increasing!
+    var qspan: Int // this must be monotonically increasing!
     var description: String
     var specialThanks: String?
 }
@@ -56,7 +56,7 @@ func speedGroups() -> [[SpeedAchievement]] {
     var rturn: [[SpeedAchievement]] = [[]]
     var curGrp: [SpeedAchievement]=[speedAchievement[0]]
     for i in 1..<speedAchievement.count {
-        if speedAchievement[i-1].qsReq != speedAchievement[i].qsReq {
+        if speedAchievement[i-1].qspan != speedAchievement[i].qspan {
             rturn.append(curGrp)
             curGrp.removeAll()
         }
@@ -66,12 +66,12 @@ func speedGroups() -> [[SpeedAchievement]] {
 }
 
 var speedAchievement: [SpeedAchievement] = [
-    .init(name: "Kevin", speedReq: 30, qsReq: 10, description: NSLocalizedString("PersonaDescKevin", comment: "")),
-    .init(name: "Derek", speedReq: 20, qsReq: 10, description: NSLocalizedString("PersonaDescDerek", comment: "")),
-    .init(name: "Charlie", speedReq: 15, qsReq: 15, description: NSLocalizedString("PersonaDescCharlie", comment: "")),
-    .init(name: "Vic", speedReq: 10, qsReq: 15, description: NSLocalizedString("PersonaDescVic", comment: "")),
-    .init(name: "George", speedReq: 8, qsReq: 30, description: NSLocalizedString("PersonaDescGeorge", comment: ""), specialThanks: NSLocalizedString("GeorgeSpecialThanks", comment: "")),
-    .init(name: "Nikos", speedReq: 6, qsReq: 30, description: NSLocalizedString("PersonaDescNikos", comment: "")),
-    .init(name: "Eric", speedReq: 5, qsReq: 30, description: NSLocalizedString("PersonaDescEric", comment: "")),
-    .init(name: "__userDefinable__", speedReq: 4, qsReq: 30, description: "__userDefinedDesc__", specialThanks: "Special thanks to YOU for playing 24 Points by Michel!"),
+    .init(name: "Kevin", speedReq: 30, qspan: 10, description: NSLocalizedString("PersonaDescKevin", comment: "")),
+    .init(name: "Derek", speedReq: 20, qspan: 10, description: NSLocalizedString("PersonaDescDerek", comment: "")),
+    .init(name: "Charlie", speedReq: 15, qspan: 15, description: NSLocalizedString("PersonaDescCharlie", comment: "")),
+    .init(name: "Vic", speedReq: 10, qspan: 15, description: NSLocalizedString("PersonaDescVic", comment: "")),
+    .init(name: "George", speedReq: 8, qspan: 30, description: NSLocalizedString("PersonaDescGeorge", comment: ""), specialThanks: NSLocalizedString("GeorgeSpecialThanks", comment: "")),
+    .init(name: "Nikos", speedReq: 6, qspan: 30, description: NSLocalizedString("PersonaDescNikos", comment: "")),
+    .init(name: "Eric", speedReq: 5, qspan: 30, description: NSLocalizedString("PersonaDescEric", comment: "")),
+    .init(name: "__userDefinable__", speedReq: 4, qspan: 30, description: "__userDefinedDesc__", specialThanks: "Special thanks to YOU for playing 24 Points by Michel!"),
 ]

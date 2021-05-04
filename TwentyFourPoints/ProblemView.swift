@@ -35,7 +35,7 @@ struct ProblemView: View {
                                 .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width, y: 0), removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
                                 .animation(springAnimation)
                         } else if (tfengine.rewardScreenVisible) {
-                            InGameRankUpView(tfengine: tfengine,newRank: tfengine.getLvlIndex(getLvl: tfengine.levelInfo.lvl))
+                            InGameRankUpView(tfengine: tfengine,newRank: tfengine.getQuestionLvlIndex(getLvl: tfengine.levelInfo.lvl))
                                 .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width, y: 0), removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
                                 .animation(springAnimation)
                                 .onAppear {

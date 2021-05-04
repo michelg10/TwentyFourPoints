@@ -95,10 +95,12 @@ struct customAchievement {
     var id: String
 }
 
+let currentVersion=45
+
 class TFEngine: ObservableObject,tfCallable {
     var solengine: solverEngine
     
-    var bestTime: BestTime = .init(time: -1, qspan: 30)
+    var bestTime = BestTime(time: -1, qspan: 30)
     
     var currentAchievementState: achievementState = .questions
     
@@ -313,13 +315,25 @@ class TFEngine: ObservableObject,tfCallable {
     
     var mainVal: storedVal? //put any calculation result into here
     
-    func getLvlIndex(getLvl:Int) -> Int {
+    func getQuestionLvlIndex(getLvl:Int) -> Int {
         if getLvl < lvlachievement[0].lvlReq {
             return -1
         }
         for i in 0..<lvlachievement.count {
             if getLvl >= lvlachievement[lvlachievement.count-i-1].lvlReq {
                 return lvlachievement.count-i-1
+            }
+        }
+        return -1
+    }
+    
+    func getSpeedLvlIndex(getLvl: Double) -> Int {
+        if getLvl < speedAchievement[0].speedReq {
+            return -1
+        }
+        for i in 0..<lvlachievement.count {
+            if getLvl >= speedAchievement[speedAchievement.count-i-1].speedReq {
+                return speedAchievement.count-i-1
             }
         }
         return -1
@@ -339,7 +353,7 @@ class TFEngine: ObservableObject,tfCallable {
             newLvl+=i.allTimeData-1
         }
         newLvl+=1
-        let myRank=getLvlIndex(getLvl: newLvl)
+        let myRank=getQuestionLvlIndex(getLvl: newLvl)
         print("Rank for \(newLvl) -> \(myRank)")
         if myRank == -1 {
             nxtLvlName=nil
@@ -1124,7 +1138,7 @@ class TFEngine: ObservableObject,tfCallable {
     func incrementLvl() {
         print("Increment Level")
         // check if rank has changed
-        let lastRank = getLvlIndex(getLvl: levelInfo.lvl)
+        let lastRank = getQuestionLvlIndex(getLvl: levelInfo.lvl)
         deviceData[deviceID]!.allTimeData+=1
         GKLeaderboard.loadLeaderboards(IDs: ["weeklyLeaderboard"]) { [self] (fetchedLBs, error) in
             guard let lb = fetchedLBs?.first else { return }
@@ -1155,7 +1169,7 @@ class TFEngine: ObservableObject,tfCallable {
         }
         
         updtLvlName()
-        let currentRank=getLvlIndex(getLvl: levelInfo.lvl)
+        let currentRank=getQuestionLvlIndex(getLvl: levelInfo.lvl)
         if currentRank != lastRank {
             // show
             cardsOnScreen=false

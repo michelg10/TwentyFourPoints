@@ -10,7 +10,46 @@ enum ListType {
     case upNext
     case complete
 }
-struct AchievementList: View {
+struct SpeedAchievementList: View {
+    @State var navTag: Int?
+    var curLvl: Int
+    var tfengine:TFEngine
+    var listType:ListType
+    @State var isHovering=Array(repeating: false, count: lvlachievement.count)
+    var body: some View {
+        VStack {
+            HStack {
+                Text(listType == .upNext ? NSLocalizedString("UpNext", comment: "upnext in the achievements menu") : NSLocalizedString("Complete", comment: "complete in the achievements menu"))
+                    .font(.system(size: 24, weight: .semibold, design: .rounded))
+                Spacer()
+            }.padding(.horizontal,20)
+            
+            ForEach((listType == .upNext ? (curLvl+1..<lvlachievement.count) : (0..<curLvl+1)), id: \.self) { index in
+                if listType == .complete {
+                    ZStack {
+                        NavigationLink(
+                            destination: personaFocusView(tfengine: tfengine, persona: lvlachievement[index]),tag: index,selection: $navTag,
+                            label: {
+                                EmptyView()
+                            })
+                        Button(action: {
+                            tfengine.hapticGate(hap: .medium)
+                            navTag=index
+                        }, label: {
+                            lvlAchievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)
+                        }).buttonStyle(topBarButtonStyle())
+                        .onHover { (hovering) in
+                            isHovering[index]=hovering
+                        }.brightness(isHovering[index] ? 0.03 : 0)
+                    }
+                } else {
+                    lvlAchievementListItem(index: index,curLvl: curLvl, tfengine: tfengine, listType: listType)
+                }
+            }
+        }.padding(.bottom,15)
+    }
+}
+struct LvlAchievementList: View {
     @State var navTag: Int?
     var curLvl: Int
     var tfengine:TFEngine
@@ -176,7 +215,7 @@ struct lvlAchievementListItem: View {
 
 struct AchievementList_Previews: PreviewProvider {
     static var previews: some View {
-        AchievementList(curLvl: 7, tfengine: TFEngine(isPreview: true), listType: .upNext)
-        AchievementList(curLvl: 7, tfengine: TFEngine(isPreview: true), listType: .complete)
+        LvlAchievementList(curLvl: 7, tfengine: TFEngine(isPreview: true), listType: .upNext)
+        LvlAchievementList(curLvl: 7, tfengine: TFEngine(isPreview: true), listType: .complete)
     }
 }

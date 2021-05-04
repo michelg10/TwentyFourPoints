@@ -289,7 +289,7 @@ struct PreferencesView: View {
                         ForEach((8...24), id:\.self) { index in
                             Text("\(String(index))").tag(index)
                         }
-                    }).pickerStyle(InlinePickerStyle())
+                    }).pickerStyle(WheelPickerStyle())
                 }
             }
         }

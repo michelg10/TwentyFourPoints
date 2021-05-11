@@ -12,25 +12,24 @@ struct borederedButton: View {
     let title:String
     let clicked:Bool
     var width: CGFloat?
+    var isOnSheet=false
     var body: some View {
+        let colorPrefix=(isOnSheet ? "Sheet" : "")+"HomeButton"
         ZStack {
             RoundedRectangle(cornerRadius: 11,style: .continuous)
                 .frame(width:width ?? 182,height:53)
                 .foregroundColor(.white)
                 .animation(nil)
-                .colorMultiply(.init(clicked ? "HomeButtonPressed" : "HomeButton"))
-                .animation(.easeInOut(duration: 0.1))
+                .colorMultiply(.init(colorPrefix+(clicked ? "Pressed" : "")))
             RoundedRectangle(cornerRadius: 9,style: .continuous)
                 .stroke(Color.white, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                 .animation(nil)
-                .colorMultiply(Color.init(clicked ? "HomeButtonForegroundActive" : "HomeButtonForegroundInactive"))
-                .animation(.easeInOut(duration: 0.1))
+                .colorMultiply(Color.init(clicked ? (colorPrefix+"ForegroundActive") : (colorPrefix+"ForegroundInactive")))
                 .frame(width:(width ?? 182)-8,height:47)
             Text(title)
                 .foregroundColor(.white)
                 .animation(nil)
-                .colorMultiply(.init(clicked ? "HomeButtonForegroundActive" : "HomeButtonForegroundInactive"))
-                .animation(.easeInOut(duration: 0.1))
+                .colorMultiply(.init(clicked ? (colorPrefix+"ForegroundActive") : (colorPrefix+"ForegroundInactive")))
                 .font(.system(size: 24, weight: .medium, design: .rounded))
         }
     }
@@ -108,10 +107,11 @@ struct mainView: View {
     
     @State var tfengine: TFEngine
     @State var solengine: solverEngine
+    @State var showWhatsNew: Bool
     var body: some View {
         NavigationView {
-            VStack {
-                HStack {
+            VStack(spacing:0) {
+                HStack(spacing:0) {
                     Spacer()
                     Button(action: {
                         tfengine.snapshotUBound()
@@ -151,14 +151,16 @@ struct mainView: View {
                     }).padding(.horizontal,20)
                 }.padding(.top,20)
                 Spacer()
-                VStack {
+                VStack(spacing:0) {
                     AppLogoTitleView()
-                        .padding(.bottom,7)
+                        .padding(.bottom,20)
                     Text(NSLocalizedString("titleGameDescription", comment: "The short game description that appears in the launch screen of the game"))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 20)
                         .font(.system(size: 24, weight: .medium, design: .rounded))
-                }
+                }.sheet(isPresented: $showWhatsNew, content: {
+                    whatsnewview(tfengine: tfengine)
+                })
                 Spacer()
                 if tfengine.getQuestionLvlIndex(getLvl: tfengine.levelInfo.lvl) == -1 {
                     Text(NSLocalizedString("achievementYetUnlockPrefix",comment: "")+String(lvlachievement[0].lvlReq)+NSLocalizedString("achievementYetUnlockPostfix",comment: ""))
@@ -166,10 +168,9 @@ struct mainView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal,30)
                 } else {
-                    VStack {
                         Text(NSLocalizedString("achievements", comment: ""))
                             .font(.system(size: 24, weight: .semibold, design: .rounded))
-                            .offset(x: 0, y: 2)
+                            .padding(.bottom,10)
                         Button(action: {
                             tfengine.hapticGate(hap: .medium)
                             achPresented=true
@@ -196,13 +197,10 @@ struct mainView: View {
                                             .foregroundColor(.secondary)
                                     }
                                 }.padding(.trailing,25)
-                            }.background(
-                                RoundedRectangle(cornerRadius: 9)
-                                    .animation(nil)
-                                    .frame(height:55)
-                                    .foregroundColor(.init("AchievementColor"))
-                            )
-                        })
+                            }
+                        }).frame(height:55)
+                        .background(Color.init("AchievementColor"))
+                        .cornerRadius(9)
                         .onHover(perform: { hovering in
                             achievementHover=hovering
                         })
@@ -215,10 +213,9 @@ struct mainView: View {
                         }, content: {
                             achievementView(tfengine: tfengine)
                         })
-                    }
                 }
                 Spacer()
-                VStack {
+                VStack(spacing:0) {
                     NavigationLink(
                         destination: ProblemView(tfengine: tfengine, rotationObserver: rotationObserver),tag: 1,selection: $navAction,
                         label: {
@@ -293,6 +290,6 @@ struct mainView: View {
 
 struct mainView_Previews: PreviewProvider {
     static var previews: some View {
-        mainView(rotationObserver: UIRotationObserver(), tfengine: TFEngine(isPreview: true), solengine: solverEngine(isPreview: true, tfEngine: TFEngine(isPreview: true)))
+        mainView(rotationObserver: UIRotationObserver(), tfengine: TFEngine(isPreview: true), solengine: solverEngine(isPreview: true, tfEngine: TFEngine(isPreview: true)), showWhatsNew: false)
     }
 }

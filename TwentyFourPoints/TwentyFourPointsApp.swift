@@ -16,7 +16,7 @@ struct TwentyFourPointsApp: App {
                     .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
             } else {
                 let tfengine=TFEngine(isPreview: false)
-                mainView(rotationObserver: UIRotationObserver(), tfengine: tfengine, solengine: tfengine.solengine)
+                mainView(rotationObserver: UIRotationObserver(), tfengine: tfengine, solengine: tfengine.solengine, showWhatsNew: tfengine.showWhatsNewView)
                     .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
             }
         }

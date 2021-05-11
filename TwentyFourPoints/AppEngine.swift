@@ -100,7 +100,11 @@ let currentVersion=45
 class TFEngine: ObservableObject,tfCallable {
     var solengine: solverEngine
     
+    var showWhatsNewView=false
+    
     var bestTime = BestTime(time: -1, qspan: 30)
+    
+    var savedVersion=currentVersion
     
     var currentAchievementState: achievementState = .questions
     
@@ -297,6 +301,8 @@ class TFEngine: ObservableObject,tfCallable {
             encodedAppearance=0
         }
         storeData(toStore: encodedAppearance, id: "appearance", persistLocation: persistLoc)
+        
+        storeData(toStore: savedVersion, id: "savedVersion", persistLocation: .local)
         
         if synciCloud {
             let deviceList:[String]=Array(deviceData.keys)
@@ -510,6 +516,9 @@ class TFEngine: ObservableObject,tfCallable {
         grabData(toGrab: &csGrab, id: "cards", persistLocation: persLoc)
         grabData(toGrab: &csDate, id: "cardsDate", persistLocation: persLoc)
         grabData(toGrab: &csBound, id: "cardsBound", persistLocation: persLoc)
+        
+        savedVersion = -1
+        grabData(toGrab: &savedVersion, id: "savedVersion", persistLocation: .local)
         
         if synciCloud {
             let appearanceVal=icloudstore.object(forKey: "appearance")
@@ -768,6 +777,12 @@ class TFEngine: ObservableObject,tfCallable {
         
         updtExpr()
         updtLvlName()
+        
+        if savedVersion<=currentVersion {
+            savedVersion=currentVersion
+            showWhatsNewView=true
+            saveData()
+        }
     }
     
     func setAccessPointVisible(visible: Bool) {

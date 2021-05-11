@@ -12,7 +12,7 @@ let numFeats=4
 
 struct whatsnewview: View {
     var tfengine: TFEngine
-    @State var continueClicked=true
+    @State var continueClicked=false
     @State var continueHover=false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var body: some View {
@@ -38,8 +38,9 @@ struct whatsnewview: View {
             Button(action: {
                 tfengine.hapticGate(hap: .medium)
                 presentationMode.wrappedValue.dismiss()
+                tfengine.refresh()
             }, label: {
-                borederedButton(title: "Continue", clicked: false, width:190)
+                borederedButton(title: "Continue", clicked: continueClicked, width:190,isOnSheet: true)
             }).buttonStyle(nilButtonStyle())
             .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
                 if buttonState == .pressed {

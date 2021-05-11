@@ -26,7 +26,7 @@ struct noobLayout: View {
                 .font(.system(size: 18, weight: .regular, design: .rounded))
                 .foregroundColor(.primary)
             NavigationLink(
-                destination: mainView(rotationObserver: UIRotationObserver(), tfengine: tfengine, solengine: tfengine.solengine),
+                destination: mainView(rotationObserver: UIRotationObserver(), tfengine: tfengine, solengine: tfengine.solengine, showWhatsNew: false),
                 tag: 1,
                 selection: $finishTutorial,
                 label: {

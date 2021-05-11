@@ -11,10 +11,11 @@ import GameKit
 struct borederedButton: View {
     let title:String
     let clicked:Bool
+    var width: CGFloat?
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 11,style: .continuous)
-                .frame(width:182,height:53)
+                .frame(width:width ?? 182,height:53)
                 .foregroundColor(.white)
                 .animation(nil)
                 .colorMultiply(.init(clicked ? "HomeButtonPressed" : "HomeButton"))
@@ -24,7 +25,7 @@ struct borederedButton: View {
                 .animation(nil)
                 .colorMultiply(Color.init(clicked ? "HomeButtonForegroundActive" : "HomeButtonForegroundInactive"))
                 .animation(.easeInOut(duration: 0.1))
-                .frame(width:176,height:47)
+                .frame(width:(width ?? 182)-8,height:47)
             Text(title)
                 .foregroundColor(.white)
                 .animation(nil)

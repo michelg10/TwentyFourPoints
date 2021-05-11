@@ -10,7 +10,7 @@ enum ListType {
     case upNext
     case complete
 }
-struct SpeedAchievementList: View {
+struct SpeedAchievementListSection: View {
     @State var navTag: Int?
     var curLvl: Int
     var tfengine:TFEngine
@@ -18,7 +18,7 @@ struct SpeedAchievementList: View {
     @State var isHovering=Array(repeating: false, count: lvlachievement.count)
     var body: some View {
         VStack {
-            HStack {
+            HStack(spacing: 0) {
                 Text(listType == .upNext ? NSLocalizedString("UpNext", comment: "upnext in the achievements menu") : NSLocalizedString("Complete", comment: "complete in the achievements menu"))
                     .font(.system(size: 24, weight: .semibold, design: .rounded))
                 Spacer()
@@ -56,8 +56,8 @@ struct LvlAchievementList: View {
     var listType:ListType
     @State var isHovering=Array(repeating: false, count: lvlachievement.count)
     var body: some View {
-        VStack {
-            HStack {
+        VStack() {
+            HStack(spacing:0) {
                 Text(listType == .upNext ? NSLocalizedString("UpNext", comment: "upnext in the achievements menu") : NSLocalizedString("Complete", comment: "complete in the achievements menu"))
                     .font(.system(size: 24, weight: .semibold, design: .rounded))
                 Spacer()

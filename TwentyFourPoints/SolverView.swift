@@ -131,6 +131,11 @@ struct solverCard: View {
     var isStationary=false
     var ultraCompetitive=false
     var active=true
+    var tfengine: TFEngine
+    
+    @State var appliedDragGestureDelta=0
+    //todo: add a buffer feature i.e. dragging for a bit won't do anything then you feel a hard haptic
+    // then you start changing really fast
     var body: some View {
         let foregroundColor:Color=Color.init("CardForeground" + (cardicon == .diamond || cardicon == .heart ? "Red" : "Black") + (active ? "Active" : "Inactive"))
         Rectangle()
@@ -151,7 +156,32 @@ struct solverCard: View {
                         solverNumView(CardIcon: cardicon, numberString: getStringNameOfNum(num: Int(numText) ?? -1), foregroundColor: foregroundColor)
                     }
                 }
-            )
+            ).gesture(DragGesture().onChanged({ val in
+                let shouldDelta=Int(floor(-val.translation.height/100))
+                if shouldDelta != appliedDragGestureDelta {
+                    let numTextVal=Int(numText) ?? 0
+                    var furtherChange=shouldDelta-appliedDragGestureDelta
+                    print("Try applying furtherchange \(furtherChange)")
+                    // clip furtherChange
+                    if (numTextVal-furtherChange<0) {
+                        furtherChange=numTextVal
+                    }
+                    if numTextVal+furtherChange>24 {
+                        furtherChange=24-numTextVal
+                    }
+                    print("Acc apply furtherchange \(furtherChange)")
+                    if numTextVal == -furtherChange {
+                        numText=""
+                    } else {
+                        numText=String((Int(numText) ?? 0)+furtherChange)
+                    }
+                    appliedDragGestureDelta=shouldDelta
+                    tfengine.hapticGate(hap: .light)
+                    appliedDragGestureDelta=shouldDelta
+                }
+            }).onEnded({ _ in
+                appliedDragGestureDelta=0
+            }))
     }
 }
 
@@ -207,7 +237,9 @@ struct SolverView: View {
                     }),
                     index: index,
                     cardicon: cardIcon.allCases[index],
-                    solengine: solengine)
+                    solengine: solengine,
+                    tfengine: tfengine
+                    )
                 }
             }.padding(.horizontal,(horizontalSizeClass == .regular ? 46 : 23))
             

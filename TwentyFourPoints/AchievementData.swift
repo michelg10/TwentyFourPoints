@@ -44,15 +44,19 @@ var lvlachievement: [LvlAchievement] = [
 ]
 
 let leaderboardUnlockQsThres=30
-struct SpeedAchievement {
-    var name: String
+struct SpeedAchievement: Persona {
+    var title: String
     var speedReq: Double
     var qspan: Int // this must be monotonically increasing!
-    var description: String
-    var specialThanks: String?
+    var detailDesc: String
+    var detailSpecialThanks: String?
+    
+    var detailSubtitle: String {
+        return "\(speedReq) / \(qspan) Qs"
+    }
 }
 
-func speedGroups() -> [[SpeedAchievement]] {
+var speedGroups:[[SpeedAchievement]] = {
     var rturn: [[SpeedAchievement]] = [[]]
     var curGrp: [SpeedAchievement]=[speedAchievement[0]]
     for i in 1..<speedAchievement.count {
@@ -63,15 +67,15 @@ func speedGroups() -> [[SpeedAchievement]] {
         curGrp.append(speedAchievement[i])
     }
     return rturn
-}
+}()
 
 var speedAchievement: [SpeedAchievement] = [
-    .init(name: "Kevin", speedReq: 30, qspan: 10, description: NSLocalizedString("PersonaDescKevin", comment: "")),
-    .init(name: "Derek", speedReq: 20, qspan: 10, description: NSLocalizedString("PersonaDescDerek", comment: "")),
-    .init(name: "Charlie", speedReq: 15, qspan: 15, description: NSLocalizedString("PersonaDescCharlie", comment: "")),
-    .init(name: "Vic", speedReq: 10, qspan: 15, description: NSLocalizedString("PersonaDescVic", comment: "")),
-    .init(name: "George", speedReq: 8, qspan: 30, description: NSLocalizedString("PersonaDescGeorge", comment: ""), specialThanks: NSLocalizedString("GeorgeSpecialThanks", comment: "")),
-    .init(name: "Nikos", speedReq: 6, qspan: 30, description: NSLocalizedString("PersonaDescNikos", comment: "")),
-    .init(name: "Eric", speedReq: 5, qspan: 30, description: NSLocalizedString("PersonaDescEric", comment: "")),
-    .init(name: "__userDefinable__", speedReq: 4, qspan: 30, description: "__userDefinedDesc__", specialThanks: "Special thanks to YOU for playing 24 Points by Michel!"),
+    .init(title: "Kevin", speedReq: 30, qspan: 10, detailDesc: NSLocalizedString("PersonaDescKevin", comment: "")),
+    .init(title: "Derek", speedReq: 20, qspan: 10, detailDesc: NSLocalizedString("PersonaDescDerek", comment: "")),
+    .init(title: "Charlie", speedReq: 15, qspan: 15, detailDesc: NSLocalizedString("PersonaDescCharlie", comment: "")),
+    .init(title: "Vic", speedReq: 10, qspan: 15, detailDesc: NSLocalizedString("PersonaDescVic", comment: "")),
+    .init(title: "George", speedReq: 8, qspan: 30, detailDesc: NSLocalizedString("PersonaDescGeorge", comment: ""), detailSpecialThanks: NSLocalizedString("GeorgeSpecialThanks", comment: "")),
+    .init(title: "Nikos", speedReq: 6, qspan: 30, detailDesc: NSLocalizedString("PersonaDescNikos", comment: "")),
+    .init(title: "Eric", speedReq: 5, qspan: 30, detailDesc: NSLocalizedString("PersonaDescEric", comment: "")),
+    .init(title: "__userDefinable__", speedReq: 4, qspan: 30, detailDesc: "__userDefinedDesc__", detailSpecialThanks: "Special thanks to YOU for playing 24 Points by Michel!"),
 ]

@@ -72,7 +72,6 @@ struct achievementButtonStyle: ButtonStyle {
         configuration.label
             .saturation(configuration.isPressed ? 0.95 : 1)
             .brightness(configuration.isPressed ? 0.03 : 0) //0.05
-            .animation(.easeInOut(duration: 0.1))
     }
 }
 
@@ -197,11 +196,10 @@ struct mainView: View {
                                             .foregroundColor(.secondary)
                                     }
                                 }.padding(.trailing,25)
-                            }
-                        }).frame(height:55)
-                        .background(Color.init("AchievementColor"))
-                        .cornerRadius(9)
-                        .onHover(perform: { hovering in
+                            }.frame(height:55)
+                            .background(Color.init("AchievementColor"))
+                            .cornerRadius(9)
+                        }).onHover(perform: { hovering in
                             achievementHover=hovering
                         })
                         .brightness(achievementHover ? hoverBrightness : 0) //0.05

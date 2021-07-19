@@ -274,30 +274,6 @@ class TFEngine: ObservableObject,tfCallable {
         savingData=false
     }
     
-    func getQuestionLvlIndex(getLvl:Int) -> Int {
-        if getLvl < lvlachievement[0].lvlReq {
-            return -1
-        }
-        for i in 0..<lvlachievement.count {
-            if getLvl >= lvlachievement[lvlachievement.count-i-1].lvlReq {
-                return lvlachievement.count-i-1
-            }
-        }
-        return -1
-    }
-    
-    func getSpeedLvlIndex(getLvl: Double) -> Int {
-        if getLvl < speedAchievement[0].speedReq {
-            return -1
-        }
-        for i in 0..<lvlachievement.count {
-            if getLvl >= speedAchievement[speedAchievement.count-i-1].speedReq {
-                return speedAchievement.count-i-1
-            }
-        }
-        return -1
-    }
-    
     struct LevelInfo {
         var lvl: Int
         var lvlName: String?
@@ -607,13 +583,6 @@ class TFEngine: ObservableObject,tfCallable {
     
     var gameCenterState: gcState
     
-    enum gcState {
-        case noAuth
-        case success
-        case couldNotAuth
-        case unknown
-    }
-    
     func reportAchievements() {
         if (gameCenterState == .success || gameCenterState == .couldNotAuth) && prefersGameCenter {
             var achievementsToReport: [GKAchievement] = []
@@ -716,7 +685,7 @@ class TFEngine: ObservableObject,tfCallable {
         }
         saveData()
         
-        setGCAuthHandler()
+        gameCenterState = setGCAuthHandler()
         
         updtLvlName()
         
@@ -729,25 +698,6 @@ class TFEngine: ObservableObject,tfCallable {
     
     func setAccessPointVisible(visible: Bool) {
         GKAccessPoint.shared.isActive=visible && prefersGameCenter
-    }
-    
-    func setGCAuthHandler() {
-        GKLocalPlayer.local.authenticateHandler = { [self] viewController, error in
-            if let viewController = viewController {
-                // how about not presenting the view controller since its annoying to the player
-                gameCenterState = .noAuth
-                return
-            }
-            if error != nil {
-                // Player could not be authenticated
-                // Disable Game Center in the game
-                gameCenterState = .couldNotAuth
-                return
-            }
-            if GKLocalPlayer.local.isAuthenticated {
-                gameCenterState = .success
-            }
-        }
     }
     
     var cachedCards: problem24?

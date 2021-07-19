@@ -28,6 +28,8 @@
 		F037DB2425F63D5900872526 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F037DB2625F63D5900872526 /* InfoPlist.strings */; };
 		F037DB3325F6466700872526 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F037DB3225F6466700872526 /* GameKit.framework */; };
 		F04034E726A5FCEB00E84603 /* CalcEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04034E626A5FCEB00E84603 /* CalcEngine.swift */; };
+		F04034E926A5FE0E00E84603 /* GameCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04034E826A5FE0E00E84603 /* GameCenter.swift */; };
+		F04034EB26A5FF4100E84603 /* utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04034EA26A5FF4100E84603 /* utils.swift */; };
 		F055928025E8694400688D2C /* AchievementData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F055927F25E8694400688D2C /* AchievementData.swift */; };
 		F060656725F61D1700C62C29 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F060656925F61D1700C62C29 /* Localizable.strings */; };
 		F08DF54B260733980082458B /* solverEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08DF54A260733980082458B /* solverEngine.swift */; };
@@ -121,6 +123,8 @@
 		F037DB2A25F63D5C00872526 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		F037DB3225F6466700872526 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F04034E626A5FCEB00E84603 /* CalcEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcEngine.swift; sourceTree = "<group>"; };
+		F04034E826A5FE0E00E84603 /* GameCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenter.swift; sourceTree = "<group>"; };
+		F04034EA26A5FF4100E84603 /* utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = utils.swift; sourceTree = "<group>"; };
 		F055927F25E8694400688D2C /* AchievementData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementData.swift; sourceTree = "<group>"; };
 		F060656825F61D1700C62C29 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F060656A25F61D1E00C62C29 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -257,6 +261,8 @@
 			isa = PBXGroup;
 			children = (
 				F0B2E21B25D91652007DF20E /* AppEngine.swift */,
+				F04034EA26A5FF4100E84603 /* utils.swift */,
+				F04034E826A5FE0E00E84603 /* GameCenter.swift */,
 				F04034E626A5FCEB00E84603 /* CalcEngine.swift */,
 				F013E97A25EDE26A00FCBCD4 /* tutorialEngine.swift */,
 			);
@@ -642,12 +648,14 @@
 				F0B2E21725D91617007DF20E /* CardLayout.swift in Sources */,
 				F013E97B25EDE26A00FCBCD4 /* tutorialEngine.swift in Sources */,
 				F0B2E22A25D9505A007DF20E /* BottomButtons.swift in Sources */,
+				F04034EB26A5FF4100E84603 /* utils.swift in Sources */,
 				F0E5FA6925F4AE4E0010E8A9 /* UIRotationObserver.swift in Sources */,
 				F02AB9F525E39EA7008EBE91 /* SolverView.swift in Sources */,
 				F0B2E21C25D91652007DF20E /* AppEngine.swift in Sources */,
 				F019984725EC5E5800946AD8 /* noobView.swift in Sources */,
 				F01DAD3D25EBEFBC0096740B /* LevelAchievementList.swift in Sources */,
 				F0B3469825EF5D13001938A8 /* InGameRankUpView.swift in Sources */,
+				F04034E926A5FE0E00E84603 /* GameCenter.swift in Sources */,
 				F0FFF9BC25ECB8F600E90620 /* noobLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -45,7 +45,7 @@ struct levelAchView: View {
     var tfengine: TFEngine
     var body: some View {
         VStack(spacing:0) {
-            let curLvl=tfengine.getQuestionLvlIndex(getLvl: tfengine.levelInfo.lvl)
+            let curLvl=getQuestionLvlIndex(getLvl: tfengine.levelInfo.lvl)
             if curLvl != -1 {
                 PersonaDetail(persona: lvlachievement[curLvl])
                     .padding(.bottom,20)
@@ -64,7 +64,7 @@ struct speedAchView: View {
     var tfengine: TFEngine
     var body: some View {
         VStack(spacing:0) {
-            let curLvl=tfengine.getSpeedLvlIndex(getLvl: tfengine.bestTime.time)
+            let curLvl=getSpeedLvlIndex(getLvl: tfengine.bestTime.time)
             if curLvl != -1 {
                 PersonaDetail(persona: lvlachievement[curLvl])
                     .padding(.bottom,20)

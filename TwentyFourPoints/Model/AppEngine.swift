@@ -47,6 +47,13 @@ enum daBtn:CaseIterable {
     case c4
 }
 
+enum gcState {
+    case noAuth
+    case success
+    case couldNotAuth
+    case unknown
+}
+
 struct currentQuestion {
     var cs: [card]
     var sol: String
@@ -685,7 +692,7 @@ class TFEngine: ObservableObject,tfCallable {
         }
         saveData()
         
-        gameCenterState = setGCAuthHandler()
+        setGCAuthHandler()
         
         updtLvlName()
         
@@ -740,6 +747,25 @@ class TFEngine: ObservableObject,tfCallable {
     
     func refresh() {
         objectWillChange.send()
+    }
+    
+    func setGCAuthHandler() {
+        GKLocalPlayer.local.authenticateHandler = { [self] viewController, error in
+            if let viewController = viewController {
+                // how about not presenting the view controller since its annoying to the player
+                gameCenterState = .noAuth
+                return
+            }
+            if error != nil {
+                // Player could not be authenticated
+                // Disable Game Center in the game
+                gameCenterState = .couldNotAuth
+                return
+            }
+            if GKLocalPlayer.local.isAuthenticated {
+                gameCenterState = .success
+            }
+        }
     }
     
     let viewShowDelay = 0.12

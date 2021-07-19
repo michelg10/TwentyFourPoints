@@ -157,26 +157,26 @@ struct solverCard: View {
                     }
                 }
             ).gesture(DragGesture().onChanged({ val in
-                let shouldDelta=Int(floor(-val.translation.height/100))
+                let shouldDelta=Int(floor(-val.translation.height/60))
                 if shouldDelta != appliedDragGestureDelta {
                     let numTextVal=Int(numText) ?? 0
                     var furtherChange=shouldDelta-appliedDragGestureDelta
-                    print("Try applying furtherchange \(furtherChange)")
                     // clip furtherChange
-                    if (numTextVal-furtherChange<0) {
+                    if (numTextVal+furtherChange<0) {
                         furtherChange=numTextVal
                     }
                     if numTextVal+furtherChange>24 {
                         furtherChange=24-numTextVal
                     }
-                    print("Acc apply furtherchange \(furtherChange)")
-                    if numTextVal == -furtherChange {
-                        numText=""
-                    } else {
-                        numText=String((Int(numText) ?? 0)+furtherChange)
+                    if furtherChange != 0 {
+                        if numTextVal == -furtherChange {
+                            numText=""
+                        } else {
+                            numText=String((Int(numText) ?? 0)+furtherChange)
+                        }
+                        tfengine.hapticGate(hap: .light)
                     }
                     appliedDragGestureDelta=shouldDelta
-                    tfengine.hapticGate(hap: .light)
                     appliedDragGestureDelta=shouldDelta
                 }
             }).onEnded({ _ in

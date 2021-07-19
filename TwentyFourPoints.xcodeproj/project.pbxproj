@@ -8,10 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		F0053800261C3BA10063D456 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F00537FF261C3BA10063D456 /* CloudKit.framework */; };
+		F007E804264E80CA00A32358 /* SpeedAchievementList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F007E803264E80CA00A32358 /* SpeedAchievementList.swift */; };
+		F007E806264E812900A32358 /* auxViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F007E805264E812900A32358 /* auxViews.swift */; };
 		F013E97B25EDE26A00FCBCD4 /* tutorialEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F013E97A25EDE26A00FCBCD4 /* tutorialEngine.swift */; };
 		F013E98325EE607E00FCBCD4 /* commonFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F013E98225EE607E00FCBCD4 /* commonFunctions.swift */; };
 		F019984725EC5E5800946AD8 /* noobView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F019984625EC5E5800946AD8 /* noobView.swift */; };
-		F01DAD3D25EBEFBC0096740B /* AchievementList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DAD3C25EBEFBC0096740B /* AchievementList.swift */; };
+		F01DAD3D25EBEFBC0096740B /* LevelAchievementList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DAD3C25EBEFBC0096740B /* LevelAchievementList.swift */; };
 		F01DAD4925EBF2D00096740B /* personaFocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DAD4825EBF2D00096740B /* personaFocusView.swift */; };
 		F02AB9F525E39EA7008EBE91 /* SolverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F425E39EA7008EBE91 /* SolverView.swift */; };
 		F02AB9FA25E39EFD008EBE91 /* navBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F925E39EFD008EBE91 /* navBarButton.swift */; };
@@ -87,10 +89,12 @@
 
 /* Begin PBXFileReference section */
 		F00537FF261C3BA10063D456 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		F007E803264E80CA00A32358 /* SpeedAchievementList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedAchievementList.swift; sourceTree = "<group>"; };
+		F007E805264E812900A32358 /* auxViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = auxViews.swift; sourceTree = "<group>"; };
 		F013E97A25EDE26A00FCBCD4 /* tutorialEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tutorialEngine.swift; sourceTree = "<group>"; };
 		F013E98225EE607E00FCBCD4 /* commonFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = commonFunctions.swift; sourceTree = "<group>"; };
 		F019984625EC5E5800946AD8 /* noobView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noobView.swift; sourceTree = "<group>"; };
-		F01DAD3C25EBEFBC0096740B /* AchievementList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementList.swift; sourceTree = "<group>"; };
+		F01DAD3C25EBEFBC0096740B /* LevelAchievementList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelAchievementList.swift; sourceTree = "<group>"; };
 		F01DAD4825EBF2D00096740B /* personaFocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = personaFocusView.swift; sourceTree = "<group>"; };
 		F02AB9F425E39EA7008EBE91 /* SolverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolverView.swift; sourceTree = "<group>"; };
 		F02AB9F925E39EFD008EBE91 /* navBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = navBarButton.swift; sourceTree = "<group>"; };
@@ -298,7 +302,9 @@
 				F02D3F1125F279800063716D /* generator24.hpp */,
 				F0AB4EFC25EBE422009F53CB /* PersonaDetail.swift */,
 				F0AB4EF725EBDAAE009F53CB /* AchievementPropic.swift */,
-				F01DAD3C25EBEFBC0096740B /* AchievementList.swift */,
+				F01DAD3C25EBEFBC0096740B /* LevelAchievementList.swift */,
+				F007E805264E812900A32358 /* auxViews.swift */,
+				F007E803264E80CA00A32358 /* SpeedAchievementList.swift */,
 				F0F75722264139D800232985 /* whatsnewview.swift */,
 				F055927F25E8694400688D2C /* AchievementData.swift */,
 				F08DF54A260733980082458B /* solverEngine.swift */,
@@ -604,11 +610,13 @@
 				F0FFF9C125ECD84300E90620 /* TutorialTextView.swift in Sources */,
 				F0B5B44525E28FBE0073606E /* mainView.swift in Sources */,
 				F0B346D725F05573001938A8 /* confettiView.swift in Sources */,
+				F007E806264E812900A32358 /* auxViews.swift in Sources */,
 				F0E7271725DFC7BF00403CDD /* TopBar.swift in Sources */,
 				F055928025E8694400688D2C /* AchievementData.swift in Sources */,
 				F0F75723264139D800232985 /* whatsnewview.swift in Sources */,
 				F0B2E1D825D8D41D007DF20E /* ProblemView.swift in Sources */,
 				F02D3F1225F279800063716D /* generator24.cpp in Sources */,
+				F007E804264E80CA00A32358 /* SpeedAchievementList.swift in Sources */,
 				F08DF54B260733980082458B /* solverEngine.swift in Sources */,
 				F0B2E20C25D8D496007DF20E /* Card.swift in Sources */,
 				F0A16D9025E76C5600C46C62 /* achievementView.swift in Sources */,
@@ -626,7 +634,7 @@
 				F02AB9F525E39EA7008EBE91 /* SolverView.swift in Sources */,
 				F0B2E21C25D91652007DF20E /* AppEngine.swift in Sources */,
 				F019984725EC5E5800946AD8 /* noobView.swift in Sources */,
-				F01DAD3D25EBEFBC0096740B /* AchievementList.swift in Sources */,
+				F01DAD3D25EBEFBC0096740B /* LevelAchievementList.swift in Sources */,
 				F0B3469825EF5D13001938A8 /* InGameRankUpView.swift in Sources */,
 				F0FFF9BC25ECB8F600E90620 /* noobLayout.swift in Sources */,
 			);

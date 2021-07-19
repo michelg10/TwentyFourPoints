@@ -778,7 +778,7 @@ class TFEngine: ObservableObject,tfCallable {
         updtExpr()
         updtLvlName()
         
-        if savedVersion<=currentVersion {
+        if savedVersion<currentVersion {
             savedVersion=currentVersion
             showWhatsNewView=true
             saveData()

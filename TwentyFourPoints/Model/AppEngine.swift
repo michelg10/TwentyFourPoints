@@ -16,39 +16,12 @@ enum cardIcon: String, CaseIterable, Codable {
     case spade = "spade"
 }
 
-enum opr {
-    case add
-    case sub
-    case mul
-    case div
-}
-
 let qwertySet=KeyboardShortcutSet(resetButton: .init(" "), storeButton: .init("v"), numsButton: [.init("w"),.init("r"),.init("u"),.init("o")], oprsButton: [.init("s"),.init("f"),.init("j"),.init("l")], skipButton: .return)
 let azertySet=KeyboardShortcutSet(resetButton: .init(" "), storeButton: .init("v"), numsButton: [.init("z"),.init("r"),.init("u"),.init("o")], oprsButton: [.init("s"),.init("f"),.init("j"),.init("l")], skipButton: .return)
 
 struct card:Codable, Equatable {
     var CardIcon:cardIcon
     var numb:Int
-}
-
-struct storedVal {
-    var value:Double
-    var source:Int
-}
-
-func doubleEquality(a:Double, b:Double) -> Bool {
-    if (abs(a-b)<0.00001) {
-        return true
-    }
-    return false
-}
-
-func dblToString3Precision(x:Double) -> String {
-    let testIfInt=Int(x*100000)
-    if testIfInt%100000 == 0 {
-        return String(Int(testIfInt/100000))
-    }
-    return String(round(x*1000)/1000)
 }
 
 enum mathResult {
@@ -98,6 +71,24 @@ struct customAchievement {
 let currentVersion=45
 
 class TFEngine: ObservableObject,tfCallable {
+    
+    // routing everything to TFCalcEngine
+    var calcEngine: TFCalcEngine
+    func reset() {
+        calcEngine.reset()
+    }
+    func doStore() {
+        calcEngine.doStore()
+    }
+    
+    func handleNumberPress(index: Int) {
+        calcEngine.handleNumberPress(index: index)
+    }
+    
+    func handleOprPress(Opr: opr) {
+        calcEngine.handleOprPress(Opr: Opr)
+    }
+    
     var solengine: solverEngine
     
     var showWhatsNewView=false
@@ -121,40 +112,6 @@ class TFEngine: ObservableObject,tfCallable {
     var curQ: currentQuestion
     
     //MARK: Updaters and Updatees
-    var storedExpr: String?
-    var expr: String = "" //update this from getExpr
-    func updtStoredExpr() {
-        if stored != nil {
-            storedExpr=dblToString3Precision(x: stored!.value)
-        } else {
-            storedExpr=nil
-        }
-    }
-    func updtExpr() {
-        expr=""
-        if (nxtNumNeg==true) {
-            expr = "-"
-        }
-        if (mainVal == nil) {
-            return
-        }
-        expr=expr+dblToString3Precision(x: mainVal!.value)
-        if (selectedOperator == nil) {
-            return
-        }
-        switch selectedOperator! {
-        case .add:
-            expr+="+"
-        case .div:
-            expr+="÷"
-        case .mul:
-            expr+="×"
-        case .sub:
-            expr+="-"
-        }
-    }
-    
-    var cA: [Bool] // which cards are being activated and which are not
         
     var buttonsCanPress=false
     
@@ -317,10 +274,6 @@ class TFEngine: ObservableObject,tfCallable {
         savingData=false
     }
     
-    var stored: storedVal?
-    
-    var mainVal: storedVal? //put any calculation result into here
-    
     func getQuestionLvlIndex(getLvl:Int) -> Int {
         if getLvl < lvlachievement[0].lvlReq {
             return -1
@@ -384,8 +337,6 @@ class TFEngine: ObservableObject,tfCallable {
         }
     }
     
-    var selectedOperator : opr?
-    
     var useHaptics: Bool
     
     var synciCloud: Bool
@@ -418,11 +369,7 @@ class TFEngine: ObservableObject,tfCallable {
     }
     
     var curQuestionID: UUID
-    
-    var nxtNumNeg:Bool? //set this as nil when its been applied
-    
-    @Published var oprButtonActive: Bool = false // activate this when any number is pressed. and thus an opertor could be used.
-    
+        
     var useSplit: Bool
     
     enum PersistLocation {
@@ -698,11 +645,9 @@ class TFEngine: ObservableObject,tfCallable {
         icloudstore=NSUbiquitousKeyValueStore.default
         
         curQ = .init(cs: [card(CardIcon: .club, numb: 1),card(CardIcon: .diamond, numb: 5),card(CardIcon: .heart, numb: 10),card(CardIcon: .spade, numb: 12)], sol: "", questionShown: Date(), questionSession: "initSession", ubound: -1)
-        cA=[true, true, true,true]
         
         if isPreview {
             levelInfo=LevelInfo(lvl: 696, lvlName: "Mimi")
-            expr="Expression"
         } else {
             levelInfo=LevelInfo(lvl: 1, lvlName: nil)
         }
@@ -710,10 +655,6 @@ class TFEngine: ObservableObject,tfCallable {
         cardsClickable=true
         
         deviceID="empty"
-        
-        incorText=""
-        incorShowOpacity=1
-        
         useHaptics=true
         synciCloud=true
         upperBound=13
@@ -728,8 +669,10 @@ class TFEngine: ObservableObject,tfCallable {
         curQ.sol=solution(problemSet: [curQ.cs[0].numb,curQ.cs[1].numb,curQ.cs[2].numb,curQ.cs[3].numb]) ?? "No Solution"
         
         solengine=solverEngine(isPreview: false, tfEngine: nil)
+        calcEngine=TFCalcEngine(isPreview: isPreview)
         
         solengine.tfengine=self
+        calcEngine.tfengine=self
         
         if isPreview {
             return
@@ -775,7 +718,6 @@ class TFEngine: ObservableObject,tfCallable {
         
         setGCAuthHandler()
         
-        updtExpr()
         updtLvlName()
         
         if savedVersion<currentVersion {
@@ -854,8 +796,6 @@ class TFEngine: ObservableObject,tfCallable {
     let viewShowOrder=[1,3,0,2]
     var inTransition=false
     
-    var incorShowOpacity: Double
-    var incorText:String
     var rewardScreenVisible: Bool = false
     
     func playCardsHaptic() {
@@ -873,7 +813,6 @@ class TFEngine: ObservableObject,tfCallable {
         if inTransition {
             return
         }
-        incorText=""
         answerShow=""
         nxtState = .ready
         isShowingAnswer=false
@@ -920,21 +859,7 @@ class TFEngine: ObservableObject,tfCallable {
             curQ.questionSession="otherDevice"
         }
 
-        cA=[true,true,true,true]
-
-        selectedOperator=nil
-        if cardsOnScreen {
-            withAnimation(.easeInOut(duration: cardAniDur)) {
-                oprButtonActive=false
-            }
-        } else {
-            oprButtonActive=false
-        }
-        nxtNumNeg=nil
-        mainVal=nil
-        updtExpr()
-        stored=nil
-        updtStoredExpr()
+        reset()
         
         DispatchQueue.global().async {
             self.saveData()
@@ -1030,124 +955,6 @@ class TFEngine: ObservableObject,tfCallable {
         }
     }
     
-    func handleOprPress(Opr:opr) {
-        incorText=""
-        hapticGate(hap: .light)
-        // replace whatever operator is currently in use. if there's nothing in the expression right now, turn the next number negative.
-        
-        if (mainVal == nil) {
-            assert(Opr == .sub)
-            if (nxtNumNeg == nil) {
-                nxtNumNeg = true
-            } else {
-                nxtNumNeg!.toggle()
-            }
-        } else {
-            selectedOperator = Opr
-        }
-        
-        updtExpr()
-        objectWillChange.send()
-    }
-    let cardAniDur=0.07
-            
-    func handleNumberPress(index: Int) {
-        incorText=""
-        hapticGate(hap: .light)
-        
-        if !cA[index] {
-            return
-        }
-        
-        if (selectedOperator == nil) {
-            if (mainVal == nil) {
-                withAnimation(.easeInOut(duration: cardAniDur)) {
-                    cA[index]=false
-                    oprButtonActive=true
-                }
-                mainVal=storedVal(value: Double(curQ.cs[index].numb), source: index)
-            } else {
-                if mainVal!.source == 4 {
-                    // put into storage
-                    if (stored == nil) {
-                        stored=mainVal
-                        mainVal=nil
-                    } else {
-                        precondition(stored!.source != 4)
-                        
-                        withAnimation(.easeInOut(duration: cardAniDur)) {
-                            cA[stored!.source]=true
-                        }
-                        
-                        stored=mainVal
-                        
-                        mainVal=nil
-                    }
-                    
-                    updtStoredExpr()
-                    handleNumberPress(index: index)
-                } else {
-                    if stored == nil {
-                        // push into storage
-                        stored=mainVal
-                        mainVal=nil
-                        updtStoredExpr()
-                        handleNumberPress(index: index)
-                    } else {
-                        if mainVal!.source != index {
-                            withAnimation(.easeInOut(duration: cardAniDur)) {
-                                cA[mainVal!.source]=true
-                                cA[index]=false
-                            }
-                            mainVal=storedVal(value: Double(curQ.cs[index].numb), source: index)
-                        }
-                    }
-                }
-            }
-        } else {
-            // do the math
-            let addendB = Double(curQ.cs[index].numb)
-            var pretendcA=cA
-            pretendcA[index]=false
-            let mathRes:mathResult=doMath(addendB: addendB, noCardsActive: !pretendcA.contains(true))
-            if mathRes == .success {
-                cA[index]=false
-                nextCardView(nxtCardSet: nil)
-                incrementLvl()
-            } else if mathRes == .cont {
-                withAnimation(.easeInOut(duration: cardAniDur)) {
-                    cA[index]=false
-                }
-            } else if mathRes == .failure {
-                respondToFailure(isDivByZero: false)
-            } else if mathRes == .divByZero {
-                respondToFailure(isDivByZero: true)
-            }
-        }
-        updtExpr()
-        objectWillChange.send()
-    }
-    
-    func respondToFailure(isDivByZero: Bool) {
-        var currentExpr: String
-        if isDivByZero {
-            currentExpr=expr+"0"
-        } else {
-            updtExpr()
-            currentExpr=expr
-        }
-        reset()
-        incorText=currentExpr
-        let flashDuration=0.2
-        objectWillChange.send()
-        incorShowOpacity=0.4
-        objectWillChange.send()
-        DispatchQueue.main.asyncAfter(deadline: .now()+flashDuration) { [self] in
-            incorShowOpacity=1.0
-            objectWillChange.send()
-        }
-    }
-    
     let speedAchievementsLockedThreshold=100
     
     func incrementLvl() {
@@ -1201,112 +1008,6 @@ class TFEngine: ObservableObject,tfCallable {
         }
     }
     
-    func doMath(addendB: Double, noCardsActive: Bool) -> mathResult {
-        let addendA = mainVal!.value * (nxtNumNeg == true ? -1 : 1)
-        if selectedOperator == .div && doubleEquality(a: addendB, b: 0) {
-            mainVal!.value=0
-            selectedOperator = nil
-            return .divByZero
-        }
-        switch selectedOperator! {
-        case .add:
-            mainVal!.value=addendA+addendB
-        case .div:
-            mainVal!.value=addendA/addendB
-        case .mul:
-            mainVal!.value=addendA*addendB
-        case .sub:
-            mainVal!.value=addendA-addendB
-        }
-        mainVal!.source=4
-        selectedOperator = nil
-        
-        nxtNumNeg=nil
-        
-        // check for all empty and 24
-        let allEmpty: Bool = noCardsActive && stored == nil
-        if allEmpty {
-            if doubleEquality(a: abs(mainVal!.value),b: 24) {
-                return .success
-            } else {
-                return .failure
-            }
-        }
-        return .cont
-    }
-    
-    func reset() { //deactivate everything and reset engine
-        incorText=""
-        selectedOperator=nil
-        nxtNumNeg=nil
-        withAnimation(.easeInOut(duration: cardAniDur)) {
-            cA=Array(repeating: true, count: 4)
-            oprButtonActive=false
-        }
-        mainVal=nil
-        updtExpr()
-        stored=nil
-        updtStoredExpr()
-        objectWillChange.send()
-    }
-    
-    func doStore() {
-        hapticGate(hap: .light)
-        //store can only be called if there's something in store or in the expression
-        
-        //handle operator selected
-        //handle disabling operator selection and usage
-        
-        if (stored == nil) { //put the mainval into stored. it's now empty.
-            if (mainVal != nil) {
-                if nxtNumNeg == true {
-                    nxtNumNeg=nil
-                    mainVal!.value *= -1
-                }
-                stored=mainVal
-                mainVal=nil
-                selectedOperator=nil
-                oprButtonActive=false
-            }
-        } else {
-            if (mainVal == nil) {
-                if nxtNumNeg == true {
-                    nxtNumNeg=nil
-                    stored!.value *= -1
-                }
-                mainVal=stored
-                withAnimation(.easeInOut(duration: cardAniDur)) {
-                    oprButtonActive=true
-                    stored=nil
-                }
-            } else {
-                if nxtNumNeg == true {
-                    nxtNumNeg=nil
-                    mainVal!.value *= -1
-                }
-                if selectedOperator == nil {
-                    swap(&mainVal,&stored)
-                } else {
-                    let tmp=stored!.value
-                    stored=nil
-                    let mathRturn=doMath(addendB: tmp, noCardsActive: !cA.contains(true))
-                    if mathRturn == .success {
-                        nextCardView(nxtCardSet: nil)
-                        incrementLvl()
-                    } else if mathRturn == .failure {
-                        respondToFailure(isDivByZero: false)
-                    } else if mathRturn == .divByZero {
-                        respondToFailure(isDivByZero: true)
-                    }
-                }
-            }
-        }
-        
-        updtStoredExpr()
-        updtExpr()
-        objectWillChange.send()
-    }
-    
     var answerShow:String = "888"
     var answerShowOpacity:Double=0
     enum NxtState {
@@ -1320,7 +1021,7 @@ class TFEngine: ObservableObject,tfCallable {
     var isShowingAnswer: Bool
     func nxtButtonPressed() {
         currentSession=UUID().uuidString
-        incorText=""
+        calcEngine.incorText=""
         if nxtState == .inTransition {
             if !inTransition {
                 nxtState = .showingAnswer
@@ -1336,7 +1037,7 @@ class TFEngine: ObservableObject,tfCallable {
             if cardsOnScreen {
                 hapticGate(hap: .soft)
             }
-            expr=""
+            calcEngine.expr=""
             // show the answer
             nxtState = .inTransition
             answerShowOpacity=0

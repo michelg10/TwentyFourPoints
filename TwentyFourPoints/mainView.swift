@@ -215,7 +215,7 @@ struct mainView: View {
                 Spacer()
                 VStack(spacing:0) {
                     NavigationLink(
-                        destination: ProblemView(tfengine: tfengine, rotationObserver: rotationObserver),tag: 1,selection: $navAction,
+                        destination: ProblemView(tfengine: tfengine, tfcalcengine: tfengine.calcEngine, rotationObserver: rotationObserver),tag: 1,selection: $navAction,
                         label: {
                             EmptyView()
                         })

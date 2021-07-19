@@ -177,6 +177,5 @@ struct cardView: View {
 struct card_Previews: PreviewProvider {
     static var previews: some View {
         cardView(active: true, card: card(CardIcon: .club, numb: 2), isStationary: false, ultraCompetitive: false)
-//        CardLayout(tfengine: TFEngine(), index: 0, primID: "")
     }
 }

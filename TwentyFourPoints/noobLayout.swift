@@ -33,8 +33,7 @@ struct noobLayout: View {
                     EmptyView()
                 }
             )
-            TutorialTextView(id: "ttv"+String(tuengine.curState),
-                             tutString: curState.stateText,
+            TutorialTextView(tutString: curState.stateText,
                              skippable: curState.tutProperty.skippable && tuengine.curState != tuengine.tutState.count-1,
                              skipVisible: tuengine.curState==0 || tuengine.curState == tuengine.tutState.count-1,
                              tuengine: tuengine,

@@ -27,6 +27,7 @@
 		F034A36B262196E500528E6F /* MacTwentyFourPointsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034A36A262196E500528E6F /* MacTwentyFourPointsUITests.swift */; };
 		F037DB2425F63D5900872526 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F037DB2625F63D5900872526 /* InfoPlist.strings */; };
 		F037DB3325F6466700872526 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F037DB3225F6466700872526 /* GameKit.framework */; };
+		F04034E726A5FCEB00E84603 /* CalcEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04034E626A5FCEB00E84603 /* CalcEngine.swift */; };
 		F055928025E8694400688D2C /* AchievementData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F055927F25E8694400688D2C /* AchievementData.swift */; };
 		F060656725F61D1700C62C29 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F060656925F61D1700C62C29 /* Localizable.strings */; };
 		F08DF54B260733980082458B /* solverEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08DF54A260733980082458B /* solverEngine.swift */; };
@@ -119,6 +120,7 @@
 		F037DB2525F63D5900872526 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F037DB2A25F63D5C00872526 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		F037DB3225F6466700872526 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		F04034E626A5FCEB00E84603 /* CalcEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcEngine.swift; sourceTree = "<group>"; };
 		F055927F25E8694400688D2C /* AchievementData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementData.swift; sourceTree = "<group>"; };
 		F060656825F61D1700C62C29 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F060656A25F61D1E00C62C29 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -251,6 +253,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F04034E526A5FCC700E84603 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F0B2E21B25D91652007DF20E /* AppEngine.swift */,
+				F04034E626A5FCEB00E84603 /* CalcEngine.swift */,
+				F013E97A25EDE26A00FCBCD4 /* tutorialEngine.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		F0B2E1C925D8D41D007DF20E = {
 			isa = PBXGroup;
 			children = (
@@ -287,7 +299,7 @@
 				F0B3469025EF5B77001938A8 /* InGameRankUpView.swift */,
 				F0B346D625F05572001938A8 /* confettiView.swift */,
 				F037DB2625F63D5900872526 /* InfoPlist.strings */,
-				F0B2E21B25D91652007DF20E /* AppEngine.swift */,
+				F04034E526A5FCC700E84603 /* Model */,
 				F0CFB9332617662F00D66135 /* secrets.swift */,
 				F013E98225EE607E00FCBCD4 /* commonFunctions.swift */,
 				F060656925F61D1700C62C29 /* Localizable.strings */,
@@ -315,7 +327,6 @@
 				F037DB1725F63CCB00872526 /* Info.plist */,
 				F0B2E20B25D8D496007DF20E /* Card.swift */,
 				F0FFF9B325ECB40000E90620 /* constants.swift */,
-				F013E97A25EDE26A00FCBCD4 /* tutorialEngine.swift */,
 				F019984625EC5E5800946AD8 /* noobView.swift */,
 				F0FFF9BB25ECB8F600E90620 /* noobLayout.swift */,
 				F0FFF9C025ECD84200E90620 /* TutorialTextView.swift */,
@@ -624,6 +635,7 @@
 				F0FF2E8B25F364740097B4A0 /* PreferencesView.swift in Sources */,
 				F02AB9FF25E4AF11008EBE91 /* konamiView.swift in Sources */,
 				F0AB4EF825EBDAAE009F53CB /* AchievementPropic.swift in Sources */,
+				F04034E726A5FCEB00E84603 /* CalcEngine.swift in Sources */,
 				F0CFB9342617662F00D66135 /* secrets.swift in Sources */,
 				F0AB4EFD25EBE422009F53CB /* PersonaDetail.swift in Sources */,
 				F0B2E1D625D8D41D007DF20E /* TwentyFourPointsApp.swift in Sources */,

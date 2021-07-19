@@ -10,6 +10,7 @@ import GameKit
 
 struct ProblemView: View {
     @ObservedObject var tfengine:TFEngine
+    @ObservedObject var tfcalcengine: TFCalcEngine
     @State var draggedAmt: CGSize = .zero
     @State var displaceDrag: CGFloat = .zero
     @State var sID: String=""
@@ -43,9 +44,8 @@ struct ProblemView: View {
                                     confettiEnabled=true
                                 }
                         } else {
-                            CardLayout(tfengine: tfengine, cA: tfengine.cA, cs: tfengine.curQ.cs, cardsShouldVisible: tfengine.cardsShouldVisible, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString, ultraCompetitive: tfengine.getUltraCompetitive(), instantCompetitive: tfengine.instantCompetitive, rotationObserver: rotationObserver)
+                            CardLayout(tfengine: tfengine, cA: tfcalcengine.cA, cs: tfengine.curQ.cs, cardsShouldVisible: tfengine.cardsShouldVisible, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString, ultraCompetitive: tfengine.getUltraCompetitive(), instantCompetitive: tfengine.instantCompetitive, rotationObserver: rotationObserver)
                                 .padding(.horizontal,30)
-                                .id("MasterCardLayoutView")
                                 .animation(.spring())
                                 .offset(x: (draggedAmt.width < 0 ? -2*sqrt(-draggedAmt.width) : draggedAmt.width) + displaceDrag, y: 0)
                                 .background(Color.init(white: 0,opacity: 0.0001))
@@ -65,7 +65,7 @@ struct ProblemView: View {
                                                         }))
                         }
                     }
-                    bottomButtons(rotationObserver: rotationObserver, tfengine: tfengine, buttonsDisabled: tfengine.konamiCheatVisible || tfengine.rewardScreenVisible, buttonsPadding: buttonsPadding)
+                    bottomButtons(rotationObserver: rotationObserver, tfengine: tfengine, tfcalcengine: tfcalcengine, buttonsDisabled: tfengine.konamiCheatVisible || tfengine.rewardScreenVisible, buttonsPadding: buttonsPadding)
                         .padding(.horizontal,CGFloat(buttonsPadding))
                         .padding(.bottom,horizontalSizeClass == .regular ? 80.0 : 50.0)
                         .padding(.top,23)
@@ -99,7 +99,7 @@ struct ProblemView_Previews: PreviewProvider {
     static var previews: some View {
         //        ProblemView(tfengine: TFEngine())
         //            .previewDevice("iPhone 8")
-        ProblemView(tfengine: TFEngine(isPreview: true), rotationObserver: UIRotationObserver())
+        ProblemView(tfengine: TFEngine(isPreview: true), tfcalcengine: TFCalcEngine(isPreview: true), rotationObserver: UIRotationObserver())
             .previewLayout(.fixed(width: 1194, height: 834))
             .environment(\.horizontalSizeClass, .regular)
             .environment(\.verticalSizeClass, .regular)

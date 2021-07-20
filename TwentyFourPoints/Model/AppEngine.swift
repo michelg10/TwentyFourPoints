@@ -100,13 +100,48 @@ class TFEngine: ObservableObject,tfCallable {
     
     var showWhatsNewView=false
     
+    //All the speed achievement stuff
+    /*
     var bestTime = BestTime(time: -1, qspan: 30)
+    var speedAchievementsLocked=true
+    
+    // how the image data is going to work: each device will keep a local version of the file.
+    // If iCloud is enabled, then check if there is an update (probably through a sync key with iCloud KVS)
+    // if there is, download it, replace the image in memory, and run the save image function
+    // the incremental image save function: check if the current id of the image matches with the one in icloud. If not, then overwrite the one in icloud
+    // the image save function: is called when the user modifies the image. the function is responsible for
+    // saving the new image to memory, generating a new ID, and saving it to iCloud.
+    
+    // these functions are time intensive, so call them sparingly
+    
+    func saveImageData(newimg: UIImage) {
+        
+    }
+    
+    func saveImageDataIncrementally() {
+        var doesSynciCloud=synciCloud
+        var icloudCont: URL?
+        if doesSynciCloud {
+            DispatchQueue.global().async {
+                icloudCont=FileManager.default.url(forUbiquityContainerIdentifier: nil)
+                if icloudCont == nil {
+                    doesSynciCloud=false
+                }
+            }
+        }
+        if doesSynciCloud {
+            
+        }
+    }
+    
+    func loadImageData() {
+        // save and keep track of the modification date of the icloud and the local image. when loading image data,
+    }
+     */
     
     var savedVersion=currentVersion
     
     var currentAchievementState: achievementState = .questions
-    
-    var speedAchievementsLocked=true
     
     func getDoSplit() -> Bool {
         return useSplit
@@ -185,39 +220,6 @@ class TFEngine: ObservableObject,tfCallable {
         } else {
             defaults.set(toStore,forKey: id)
         }
-    }
-    
-    // how the image data is going to work: each device will keep a local version of the file.
-    // If iCloud is enabled, then check if there is an update (probably through a sync key with iCloud KVS)
-    // if there is, download it, replace the image in memory, and run the save image function
-    // the incremental image save function: check if the current id of the image matches with the one in icloud. If not, then overwrite the one in icloud
-    // the image save function: is called when the user modifies the image. the function is responsible for
-    // saving the new image to memory, generating a new ID, and saving it to iCloud.
-    
-    // these functions are time intensive, so call them sparingly
-    
-    func saveImageData(newimg: UIImage) {
-        
-    }
-    
-    func saveImageDataIncrementally() {
-        var doesSynciCloud=synciCloud
-        var icloudCont: URL?
-        if doesSynciCloud {
-            DispatchQueue.global().async {
-                icloudCont=FileManager.default.url(forUbiquityContainerIdentifier: nil)
-                if icloudCont == nil {
-                    doesSynciCloud=false
-                }
-            }
-        }
-        if doesSynciCloud {
-            
-        }
-    }
-    
-    func loadImageData() {
-        // save and keep track of the modification date of the icloud and the local image. when loading image data,
     }
     
     func saveData() {
@@ -305,9 +307,12 @@ class TFEngine: ObservableObject,tfCallable {
         levelInfo=LevelInfo(lvl: newLvl, lvlName: nxtLvlName)
         reportAchievements()
         reportScores()
+        
+        /*
         if levelInfo.lvl > speedAchievementsLockedThreshold {
             speedAchievementsLocked=false
         }
+         */
     }
     
     func reportScores() {
@@ -519,9 +524,12 @@ class TFEngine: ObservableObject,tfCallable {
         }
         getKeyboardType()
         
+        currentAchievementState = .questions
+        /*
         if currentAchievementState == .speed && speedAchievementsLocked {
             currentAchievementState = .questions
         }
+         */
     }
     
     func updtColorScheme() {

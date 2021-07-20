@@ -60,6 +60,7 @@ struct levelAchView: View {
     }
 }
 
+/*
 struct speedAchView: View {
     var tfengine: TFEngine
     var body: some View {
@@ -78,6 +79,7 @@ struct speedAchView: View {
         }
     }
 }
+ */
 
 struct achievementView: View {
     @ObservedObject var tfengine: TFEngine
@@ -110,6 +112,7 @@ struct achievementView: View {
                         .font(.system(size: 36, weight: .semibold, design: .rounded))
                         .padding(.top, 13)
                         .padding(.bottom,31)
+                    /*
                     HStack(spacing:48) {
                         VStack(spacing:0) {
                             Button(action: {
@@ -162,6 +165,7 @@ struct achievementView: View {
                             .padding(.horizontal,55)
                             .padding(.top,16)
                     }
+                     */
                     Group {
                         if tfengine.currentAchievementState == .questions {
                             levelAchView(tfengine: tfengine)

@@ -185,7 +185,7 @@ struct solverCard: View {
     }
 }
 
-struct SolverView: View {
+struct SolverTopBar: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var solengine: solverEngine
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
@@ -193,18 +193,18 @@ struct SolverView: View {
     
     var tfengine:TFEngine
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Button(action: {
-                    tfengine.hapticGate(hap: .medium)
-                    presentationMode.wrappedValue.dismiss()
-                    tfengine.setAccessPointVisible(visible: true)
-                }, label: {
-                    navBarButton(symbolName: "chevron.backward", active: true)
-                }).buttonStyle(topBarButtonStyle())
-                Spacer()
-            }.padding(.top, horizontalSizeClass == .regular ? 15 : 0)
-            .padding(.bottom,10)
+        HStack {
+            Button(action: {
+                tfengine.hapticGate(hap: .medium)
+                presentationMode.wrappedValue.dismiss()
+                tfengine.setAccessPointVisible(visible: true)
+            }, label: {
+                navBarButton(symbolName: "chevron.backward", active: true)
+            }).buttonStyle(topBarButtonStyle())
+            Spacer()
+        }.padding(.top, horizontalSizeClass == .regular ? 15 : 0)
+        .padding(.bottom,10)
+        VStack(spacing:0) {
             Button(action:{
                 tfengine.hapticGate(hap: .medium)
                 solengine.randomProblem(upperBound: tfengine.upperBound)
@@ -214,15 +214,35 @@ struct SolverView: View {
                     .multilineTextAlignment(.center)
                     .padding(.bottom,3)
             }).buttonStyle(textButtonStyle())
-            
             Text(solengine.showHints ? NSLocalizedString("Tap a card to get started", comment: "solver hint") : NSLocalizedString("Tap space to quickly jump to the next card", comment: "solver hint jump"))
                 .font(.system(size: 18, weight: .regular, design: .rounded))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.bottom,10)
                 .padding(.horizontal,25)
-            
-            Spacer()
+        }
+    }
+}
+
+struct SolverView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @ObservedObject var solengine: solverEngine
+    @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
+    
+    var tfengine:TFEngine
+    var body: some View {
+        VStack(spacing: 0) {
+            if horizontalSizeClass == .regular {
+                ZStack {
+                    SolverTopBar(solengine: solengine, tfengine: tfengine)
+                }
+            } else {
+                SolverTopBar(solengine: solengine, tfengine: tfengine)
+            }
+            if horizontalSizeClass != .regular {
+                Spacer()
+            }
             HStack(spacing:horizontalSizeClass == .regular ? 24 : 12) {
                 ForEach((0..<4), id:\.self) { index in
                     solverCard(numText: Binding(get: {

@@ -45,7 +45,8 @@ struct topBarButtons: View {
             }, label: {
                 EmptyView()
             }).disabled(konamiCheatVisible || rewardVisible)
-            .keyboardShortcut(tfengine.getKeyboardSettings().skipButton, modifiers: .command)
+            .keyboardShortcut(KeyEquivalent.return, modifiers: .command)
+            .keyboardShortcut(KeyEquivalent.tab, modifiers: .command)
             Button(action: {
                 if konamiCheatVisible {
                     tfengine.konamiLvl(setLvl: nil)
@@ -64,7 +65,8 @@ struct topBarButtons: View {
                     navBarButton(symbolName: "chevron.forward.2", active: true)
                 }
             }).hoverEffect(.lift)
-            .keyboardShortcut(tfengine.getKeyboardSettings().skipButton, modifiers: konamiCheatVisible ? .shift : .init(arrayLiteral: []))
+            .keyboardShortcut(KeyEquivalent.return, modifiers: konamiCheatVisible ? .shift : .init(arrayLiteral: []))
+            .keyboardShortcut(KeyEquivalent.tab, modifiers: konamiCheatVisible ? .shift : .init(arrayLiteral: []))
             .buttonStyle(topBarButtonStyle())
         }
     }

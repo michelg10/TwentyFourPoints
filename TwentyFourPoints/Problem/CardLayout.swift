@@ -43,7 +43,6 @@ struct CardLayout: View {
     var ultraCompetitive: Bool
     var instantCompetitive: Bool
     let stackSpacing: CGFloat = 10 // how far away the virtual card stack is from the left edge of the view
-    @State var cardsHover = Array(repeating: false, count:4)
     @ObservedObject var rotationObserver : UIRotationObserver
     
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
@@ -61,12 +60,8 @@ struct CardLayout: View {
                 HStack(spacing: CGFloat((Double(UIScreen.main.bounds.width)-2*sidePadding)*cardSpacing)) {
                     ForEach((0..<4), id:\.self) { index in
                         cardButtonView(card: cs[index], active: cA[index], tfengine: tfengine, operational: operational, index: index, ultraCompetitive: ultraCompetitive,instantCompetitive: instantCompetitive)
-                            .brightness(cardsHover[index] ? hoverBrightness : 0)
                             .offset(x: cardsShouldVisible[cardShouldVisibleHorzMap[index]] ? 0 : -UIScreen.main.bounds.width, y: 0)
                             .id(primID+"-card"+String(index+1))
-                            .onHover { (isHovering) in
-                                cardsHover[index]=isHovering
-                            }
                     }
                 }
                 Spacer()
@@ -78,44 +73,28 @@ struct CardLayout: View {
                         GeometryReader {geometry2 in
                             let viewWidth:CGFloat=min(geometry2.frame(in: .local).width,geometry2.frame(in: .local).height/177.0*128)
                             cardButtonView(card: cs[0], active: cA[0], tfengine: tfengine, operational: operational, index: 0, ultraCompetitive: ultraCompetitive,instantCompetitive: instantCompetitive)
-                                .brightness(cardsHover[0] ? hoverBrightness : 0)
                                 .position(x: cardsShouldVisible[0] ? geometry2.frame(in: .local).width-viewWidth/2 : -geometry2.frame(in: .global).minX-viewWidth+stackSpacing,y:tfengine.cardsShouldVisible[0] ? geometry2.frame(in: .local).height/2 : -geometry2.frame(in: .global).minY+geometry.frame(in: .global).midY)
                                 .id(primID+"-card1")
-                                .onHover { (isHovering) in
-                                    cardsHover[0]=isHovering
-                                }
                         }
                         GeometryReader {geometry2 in
                             let viewWidth:CGFloat=min(geometry2.frame(in: .local).width,geometry2.frame(in: .local).height/177.0*128)
                             cardButtonView(card: cs[1], active: cA[1], tfengine: tfengine, operational: operational, index: 1, ultraCompetitive: ultraCompetitive,instantCompetitive: instantCompetitive)
-                                .brightness(cardsHover[1] ? hoverBrightness : 0)
                                 .position(x: cardsShouldVisible[1] ? viewWidth/2 : -geometry2.frame(in: .global).minX-viewWidth+stackSpacing,y:tfengine.cardsShouldVisible[1] ? geometry2.frame(in: .local).height/2 : -geometry2.frame(in: .global).minY+geometry.frame(in: .global).midY)
                                 .id(primID+"-card2")
-                                .onHover { (isHovering) in
-                                    cardsHover[1]=isHovering
-                                }
                         }
                     }
                     HStack(spacing: 30.0) {
                         GeometryReader {geometry2 in
                             let viewWidth:CGFloat=min(geometry2.frame(in: .local).width,geometry2.frame(in: .local).height/177.0*128)
                             cardButtonView(card: cs[2], active: cA[2], tfengine: tfengine, operational: operational, index: 2, ultraCompetitive: ultraCompetitive,instantCompetitive: instantCompetitive)
-                                .brightness(cardsHover[2] ? hoverBrightness : 0)
                                 .position(x: cardsShouldVisible[2] ? geometry2.frame(in: .local).width-viewWidth/2 : -geometry2.frame(in: .global).minX-viewWidth+stackSpacing,y:tfengine.cardsShouldVisible[2] ? geometry2.frame(in: .local).height/2 : -geometry2.frame(in: .global).minY+geometry.frame(in: .global).midY)
                                 .id(primID+"-card3")
-                                .onHover { (isHovering) in
-                                    cardsHover[2]=isHovering
-                                }
                         }
                         GeometryReader {geometry2 in
                             let viewWidth:CGFloat=min(geometry2.frame(in: .local).width,geometry2.frame(in: .local).height/177.0*128)
                             cardButtonView(card: cs[3], active: cA[3], tfengine: tfengine, operational: operational, index: 3, ultraCompetitive: ultraCompetitive,instantCompetitive: instantCompetitive)
-                                .brightness(cardsHover[3] ? hoverBrightness : 0)
                                 .position(x: cardsShouldVisible[3] ? viewWidth/2 : -geometry2.frame(in: .global).minX-viewWidth+stackSpacing,y:tfengine.cardsShouldVisible[3] ? geometry2.frame(in: .local).height/2 : -geometry2.frame(in: .global).minY+geometry.frame(in: .global).midY)
                                 .id(primID+"-card4")
-                                .onHover { (isHovering) in
-                                    cardsHover[3]=isHovering
-                                }
                         }
                     }
                 }).frame(width: geometry.frame(in: .local).width,height:geometry.frame(in: .local).height)

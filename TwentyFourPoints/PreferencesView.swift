@@ -180,27 +180,6 @@ struct PreferencesView: View {
                         Spacer()
                     }
                 }.padding(.bottom,10)
-                if GCKeyboard.coalesced != nil {
-                    HStack {
-                        Text(NSLocalizedString("Keyboard", comment: "Keyboard layout settings in preferences"))
-                        Spacer()
-                        Picker(selection: Binding(get: {
-                            tfengine.keyboardType
-                        }, set: { (val) in
-                            tfengine.hapticGate(hap: .medium)
-                            tfengine.keyboardType=val
-                            tfengine.getKeyboardType()
-                            tfengine.refresh()
-                            DispatchQueue.global().async {
-                                tfengine.saveData()
-                            }
-                        }), label: Text(""), content: {
-                            Text("QWERTY").tag(1)
-                            Text("AZERTY").tag(2)
-                        }).pickerStyle(SegmentedPickerStyle())
-                        .fixedSize()
-                    }
-                }
                 if UIDevice.current.userInterfaceIdiom == .pad {
                     Toggle(isOn: Binding(get: {
                         tfengine.useSplit
@@ -223,7 +202,7 @@ struct PreferencesView: View {
                             }
                         }), label: {
                             Text(NSLocalizedString("Show keyboard tips", comment: "Whether or not to show keyboard tips when an external keyboard is connected"))
-                        }).padding(.leading,10)
+                        })
                     }
                 }
                 Toggle(isOn: Binding(get: {

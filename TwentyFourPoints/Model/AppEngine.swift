@@ -16,9 +16,6 @@ enum cardIcon: String, CaseIterable, Codable {
     case spade = "spade"
 }
 
-let qwertySet=KeyboardShortcutSet(resetButton: .init(" "), storeButton: .init("v"), numsButton: [.init("w"),.init("r"),.init("u"),.init("o")], oprsButton: [.init("s"),.init("f"),.init("j"),.init("l")], skipButton: .return)
-let azertySet=KeyboardShortcutSet(resetButton: .init(" "), storeButton: .init("v"), numsButton: [.init("z"),.init("r"),.init("u"),.init("o")], oprsButton: [.init("s"),.init("f"),.init("j"),.init("l")], skipButton: .return)
-
 struct card:Codable, Equatable {
     var CardIcon:cardIcon
     var numb:Int
@@ -158,27 +155,8 @@ class TFEngine: ObservableObject,tfCallable {
     var buttonsCanPress=false
     
     var cardsOnScreen = false
-    
-    var keyboardType: Int
-    
+        
     var showKeyboardTips: Bool
-    
-    var curKeyboardSettings: KeyboardShortcutSet?
-    
-    func getKeyboardSettings() -> KeyboardShortcutSet {
-        if curKeyboardSettings == nil {
-            return qwertySet
-        }
-        return curKeyboardSettings!
-    }
-    
-    func getKeyboardType() {
-        if keyboardType == 1 {
-            curKeyboardSettings=qwertySet
-        } else if keyboardType == 2 {
-            curKeyboardSettings=azertySet
-        }
-    }
         
     var instantCompetitive: Bool
     
@@ -245,7 +223,6 @@ class TFEngine: ObservableObject,tfCallable {
         storeData(toStore: upperBound, id: "upperBound", persistLocation: persistLoc)
         storeData(toStore: instantCompetitive, id: "instantCompetitive", persistLocation: persistLoc)
         storeData(toStore: prefersGameCenter, id: "prefersGameCenter", persistLocation: persistLoc)
-        storeData(toStore: keyboardType, id: "keyboardType", persistLocation: persistLoc)
         storeData(toStore: showKeyboardTips, id: "showKeyboardTips", persistLocation: persistLoc)
         storeData(toStore: useSplit, id: "useSplit", persistLocation: persistLoc)
         storeData(toStore: solengine.cards, id: "solCards", persistLocation: persistLoc)
@@ -435,7 +412,6 @@ class TFEngine: ObservableObject,tfCallable {
         grabData(toGrab: &upperBound, id: "upperBound", persistLocation: persLoc)
         grabData(toGrab: &instantCompetitive, id: "instantCompetitive", persistLocation: persLoc)
         grabData(toGrab: &prefersGameCenter, id: "prefersGameCenter", persistLocation: persLoc)
-        grabData(toGrab: &keyboardType, id: "keyboardType", persistLocation: persLoc)
         grabData(toGrab: &showKeyboardTips, id: "showKeyboardTips", persistLocation: persLoc)
         grabData(toGrab: &useSplit, id: "useSplit", persistLocation: persLoc)
         var tmpCurAchState=""
@@ -522,7 +498,6 @@ class TFEngine: ObservableObject,tfCallable {
         if hasToShowAnswer && nxtState == .ready {
             nxtButtonPressed()
         }
-        getKeyboardType()
         
         currentAchievementState = .questions
         /*
@@ -643,7 +618,6 @@ class TFEngine: ObservableObject,tfCallable {
         synciCloud=true
         upperBound=13
         instantCompetitive=false
-        keyboardType=1
         showKeyboardTips=true
         useSplit=true
         prefersGameCenter=true

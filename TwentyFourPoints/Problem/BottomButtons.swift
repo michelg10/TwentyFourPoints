@@ -79,20 +79,14 @@ struct imageTooltip: View {
     var isOptional: Bool
     var name: String
     var body: some View {
-        if name.count == 1 {
-            if name == " " {
-                Text("space")
-                    .foregroundColor(isOptional ? .secondary : .secondary)
-                    .font(.system(size: 15, weight: .regular, design: .rounded))
-            } else {
-                Text(name.capitalized)
-                    .foregroundColor(isOptional ? .secondary : .secondary)
-                    .font(.system(size: 15, weight: .regular, design: .monospaced))
-            }
-        } else {
-            Image(systemName: name)
+        if name == " " {
+            Text("space")
                 .foregroundColor(isOptional ? .secondary : .secondary)
                 .font(.system(size: 15, weight: .regular, design: .rounded))
+        } else {
+            Text(name)
+                .foregroundColor(isOptional ? .secondary : .secondary)
+                .font(.system(size: 15, weight: .regular, design: .monospaced))
         }
     }
 }
@@ -124,9 +118,7 @@ struct TopButtonsRow: View {
     
     var doSplit: Bool
     var showTooltip: Bool
-    
-    @State var storeHover: Bool=false
-    
+        
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     
@@ -160,7 +152,7 @@ struct TopButtonsRow: View {
                         .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
                         .padding(.leading, CGFloat(textInset*textField*(textInpHei-midSpace)))
                         .padding(.bottom,2)
-                    HStack {
+                    HStack(spacing:0) {
                         Spacer()
                         Button(action: {
                             tfengine.reset()
@@ -174,18 +166,19 @@ struct TopButtonsRow: View {
                         }).buttonStyle(contrastBottomButtonStyle())
                         .padding(.trailing,13)
                         .disabled(!resetActionEnabled)
-                        .keyboardShortcut(tfengine.getKeyboardSettings().resetButton, modifiers: .init([]))
+                        .keyboardShortcut(KeyEquivalent.delete, modifiers: .init([]))
+                        Button(action: {tfengine.reset(); tfengine.hapticGate(hap: .medium)}, label: {EmptyView()}).disabled(!resetActionEnabled).keyboardShortcut(KeyEquivalent.space, modifiers: .init([]))
                     }
                 }.frame(width: doSplit ? CGFloat(2*maxButtonSize+midSpace) : CGFloat(textField*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .leading)
                 if doSplit && showTooltip {
-                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().resetButton.character))
+                    imageTooltip(isOptional: false, name: "delete")
                         .opacity(resetActionEnabled ? 1 : tooltipOpacity)
                         .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
                         .padding(.leading,10)
                 }
                 Spacer()
                 if doSplit && showTooltip {
-                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().storeButton.character))
+                    imageTooltip(isOptional: false, name: ".")
                         .padding(.trailing,10)
                         .opacity(storeActionEnabled ? 1 : tooltipOpacity)
                         .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
@@ -212,13 +205,12 @@ struct TopButtonsRow: View {
                                 .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
                         }
                     }.frame(width: doSplit ? CGFloat(2*maxButtonSize+midSpace) : CGFloat((1-textField)*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .center)
-                }).keyboardShortcut(tfengine.getKeyboardSettings().storeButton, modifiers: .init([]))
+                }).keyboardShortcut(".", modifiers: .init([]))
                 .buttonStyle(bottomButtonStyle())
                 .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
                 .disabled(!storeActionEnabled)
-                .onHover(perform: { hovering in
-                    storeHover=hovering
-                }).brightness(storeHover ? hoverBrightness : 0)
+                Button(action: {tfengine.doStore()}, label: {EmptyView()}).disabled(!storeActionEnabled).keyboardShortcut("v", modifiers: .init([]))
+                Button(action: {tfengine.doStore()}, label: {EmptyView()}).disabled(!storeActionEnabled).keyboardShortcut("m", modifiers: .init([]))
             }
         }.frame(height: CGFloat(textInpHei))
     }
@@ -231,10 +223,7 @@ struct MiddleButtonRow: View {
     var tfengine: tfCallable
     var ultraCompetitive: Bool
     var doSplit: Bool
-    var showTooltip: Bool
-    
-    @State var numsHover: [Bool]=Array(repeating: false, count: 4)
-    
+        
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     
@@ -247,38 +236,13 @@ struct MiddleButtonRow: View {
                     }, label: {
                         bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: colorActive[index] ? Color.primary : Color.init("ButtonInactiveTextColor"), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
                     }).buttonStyle(bottomButtonStyle())
-                    .brightness(numsHover[index] ? hoverBrightness : 0)
                     .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
                     .disabled(!actionActive[index])
                     .modifier(konamiLog(tfengine: tfengine,daBtn: daBtn.allCases[4+index]))
-                    .keyboardShortcut(tfengine.getKeyboardSettings().numsButton[index], modifiers: .init([]))
-                    .onHover { (isHovering) in
-                        numsHover[index]=isHovering
-                    }
                 }
             }
             if doSplit {
-                if showTooltip {
-                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().numsButton[0].character))
-                        .padding(.leading,CGFloat(tooltipDistance))
-                        .opacity(actionActive[0] ? 1 : tooltipOpacity)
-                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
-                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().numsButton[1].character))
-                        .padding(.leading,CGFloat(tooltipSpacing))
-                        .opacity(actionActive[1] ? 1 : tooltipOpacity)
-                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
-                }
                 Spacer()
-                if showTooltip {
-                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().numsButton[2].character))
-                        .padding(.trailing,CGFloat(tooltipSpacing))
-                        .opacity(actionActive[2] ? 1 : tooltipOpacity)
-                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
-                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().numsButton[3].character))
-                        .padding(.trailing,CGFloat(tooltipDistance))
-                        .opacity(actionActive[3] ? 1 : tooltipOpacity)
-                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
-                }
             }
             HStack(spacing:CGFloat(midSpace)) {
                 ForEach((2..<4), id:\.self) { index in
@@ -287,14 +251,9 @@ struct MiddleButtonRow: View {
                     }, label: {
                         bottomButtonView(fillColor: Color.init(colorActive[index] ? "ButtonColorActive" : "ButtonColorInactive"), textColor: colorActive[index] ? Color.primary : Color.init("ButtonInactiveTextColor"), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
                     }).buttonStyle(bottomButtonStyle())
-                    .brightness(numsHover[index] ? hoverBrightness : 0)
                     .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
                     .disabled(!actionActive[index])
                     .modifier(konamiLog(tfengine: tfengine,daBtn: daBtn.allCases[4+index]))
-                    .keyboardShortcut(tfengine.getKeyboardSettings().numsButton[index], modifiers: .init([]))
-                    .onHover { (isHovering) in
-                        numsHover[index]=isHovering
-                    }
                 }
             }
         }.frame(maxWidth: .infinity)
@@ -315,92 +274,63 @@ struct BottomButtonRow: View {
     var oprColorActive: [Bool]
     var ultraCompetitive: Bool
     var doSplit: Bool
-    var showTooltip: Bool
-    
-    @State var oprHover: [Bool]=Array(repeating: false, count: 4)
-    
+        
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     
     var body: some View {
-        HStack(spacing: doSplit ? 0 : CGFloat(midSpace)) {
-            HStack(spacing:CGFloat(midSpace)) {
-                Button(action: {
-                    tfengine.handleOprPress(Opr: .add)
-                }, label: {
-                    bottomButtonView(fillColor: getButtonColor(active: oprColorActive[0]), textColor: getButtonTextColor(active: oprColorActive[0]), text: "+", ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
-                }).buttonStyle(bottomButtonStyle())
-                .brightness(oprHover[0] ? hoverBrightness : 0)
-                .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
-                .disabled(!oprActionActive[0])
-                .modifier(konamiLog(tfengine: tfengine,daBtn: .add))
-                .keyboardShortcut(tfengine.getKeyboardSettings().oprsButton[0], modifiers: .init([]))
-                .onHover { (isHovering) in
-                    oprHover[0]=isHovering
-                }
-                Button(action: {
-                    tfengine.handleOprPress(Opr: .sub)
-                }, label: {
-                    bottomButtonView(fillColor: getButtonColor(active: oprColorActive[1]), textColor: getButtonTextColor(active: oprColorActive[1]), text: "-", ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
-                }).buttonStyle(bottomButtonStyle())
-                .brightness(oprHover[1] ? hoverBrightness : 0)
-                .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
-                .disabled(!oprActionActive[1])
-                .modifier(konamiLog(tfengine: tfengine,daBtn: .sub))
-                .keyboardShortcut(tfengine.getKeyboardSettings().oprsButton[1], modifiers: .init([]))
-                .onHover { (isHovering) in
-                    oprHover[1]=isHovering
-                }
+        ZStack {
+            HStack(spacing:0) {
+                // addition keyboard shortcuts
+                Button(action: {tfengine.handleOprPress(Opr: .add)}, label: {EmptyView()}).disabled(!oprActionActive[0]).keyboardShortcut(.init("="), modifiers: .init([.shift]))
+                // subtraction keyboard shortcuts
+                Button(action: {tfengine.handleOprPress(Opr: .sub)}, label: {EmptyView()}).disabled(!oprActionActive[1]).keyboardShortcut(.init("-"), modifiers: .init([.shift]))
+                // multiplication keyboard shortcuts
+                Button(action: {tfengine.handleOprPress(Opr: .mul)}, label: {EmptyView()}).disabled(!oprActionActive[2]).keyboardShortcut(.init("x"), modifiers: .init([]))
             }
-            if doSplit {
-                if showTooltip {
-                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().oprsButton[0].character))
-                        .padding(.leading,CGFloat(tooltipDistance))
-                        .opacity(oprActionActive[0] ? 1 : tooltipOpacity)
-                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
-                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().oprsButton[1].character))
-                        .padding(.leading,CGFloat(tooltipSpacing))
-                        .opacity(oprActionActive[1] ? 1 : tooltipOpacity)
-                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
+            HStack(spacing: doSplit ? 0 : CGFloat(midSpace)) {
+                HStack(spacing:CGFloat(midSpace)) {
+                    Button(action: {
+                        tfengine.handleOprPress(Opr: .add)
+                    }, label: {
+                        bottomButtonView(fillColor: getButtonColor(active: oprColorActive[0]), textColor: getButtonTextColor(active: oprColorActive[0]), text: "+", ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
+                    }).buttonStyle(bottomButtonStyle())
+                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
+                        .disabled(!oprActionActive[0])
+                        .modifier(konamiLog(tfengine: tfengine,daBtn: .add))
+                        .keyboardShortcut(.init("="), modifiers: .init([]))
+                    Button(action: {
+                        tfengine.handleOprPress(Opr: .sub)
+                    }, label: {
+                        bottomButtonView(fillColor: getButtonColor(active: oprColorActive[1]), textColor: getButtonTextColor(active: oprColorActive[1]), text: "-", ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
+                    }).buttonStyle(bottomButtonStyle())
+                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
+                        .disabled(!oprActionActive[1])
+                        .modifier(konamiLog(tfengine: tfengine,daBtn: .sub))
+                        .keyboardShortcut(.init("-"), modifiers: .init([]))
                 }
-                Spacer()
-                if showTooltip {
-                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().oprsButton[2].character))
-                        .padding(.trailing,CGFloat(tooltipSpacing))
-                        .opacity(oprActionActive[2] ? 1 : tooltipOpacity)
-                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
-                    imageTooltip(isOptional: false, name: String(tfengine.getKeyboardSettings().oprsButton[3].character))
-                        .padding(.trailing,CGFloat(tooltipDistance))
-                        .opacity(oprActionActive[3] ? 1 : tooltipOpacity)
-                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
+                if doSplit {
+                    Spacer()
                 }
-            }
-            HStack(spacing:CGFloat(midSpace)) {
-                Button(action: {
-                    tfengine.handleOprPress(Opr: .mul)
-                }, label: {
-                    bottomButtonView(fillColor: getButtonColor(active: oprColorActive[2]), textColor: getButtonTextColor(active: oprColorActive[2]), text: "×", ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
-                }).buttonStyle(bottomButtonStyle())
-                .brightness(oprHover[2] ? hoverBrightness : 0)
-                .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
-                .disabled(!oprActionActive[2])
-                .modifier(konamiLog(tfengine: tfengine,daBtn: .mul))
-                .keyboardShortcut(tfengine.getKeyboardSettings().oprsButton[2], modifiers: .init([]))
-                .onHover { (isHovering) in
-                    oprHover[2]=isHovering
-                }
-                Button(action: {
-                    tfengine.handleOprPress(Opr: .div)
-                }, label: {
-                    bottomButtonView(fillColor: getButtonColor(active: oprColorActive[3]), textColor: getButtonTextColor(active: oprColorActive[3]), text: "÷", ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
-                }).buttonStyle(bottomButtonStyle())
-                .brightness(oprHover[3] ? hoverBrightness : 0)
-                .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
-                .disabled(!oprActionActive[3])
-                .modifier(konamiLog(tfengine: tfengine,daBtn: .div))
-                .keyboardShortcut(tfengine.getKeyboardSettings().oprsButton[3], modifiers: .init([]))
-                .onHover { (isHovering) in
-                    oprHover[3]=isHovering
+                HStack(spacing:CGFloat(midSpace)) {
+                    Button(action: {
+                        tfengine.handleOprPress(Opr: .mul)
+                    }, label: {
+                        bottomButtonView(fillColor: getButtonColor(active: oprColorActive[2]), textColor: getButtonTextColor(active: oprColorActive[2]), text: "×", ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
+                    }).buttonStyle(bottomButtonStyle())
+                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
+                        .disabled(!oprActionActive[2])
+                        .modifier(konamiLog(tfengine: tfengine,daBtn: .mul))
+                        .keyboardShortcut(.init("8"), modifiers: .shift)
+                    Button(action: {
+                        tfengine.handleOprPress(Opr: .div)
+                    }, label: {
+                        bottomButtonView(fillColor: getButtonColor(active: oprColorActive[3]), textColor: getButtonTextColor(active: oprColorActive[3]), text: "÷", ultraCompetitive: tfengine.getUltraCompetitive(), doSplit: doSplit)
+                    }).buttonStyle(bottomButtonStyle())
+                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveButtonAnimationTime))
+                        .disabled(!oprActionActive[3])
+                        .modifier(konamiLog(tfengine: tfengine,daBtn: .div))
+                        .keyboardShortcut(.init("/"), modifiers: .init([]))
                 }
             }
         }
@@ -447,8 +377,7 @@ struct bottomButtons: View {
                             cards: tfengine.curQ.cs,
                             tfengine: tfengine,
                             ultraCompetitive: tfengine.getUltraCompetitive(),
-                            doSplit: doSplit,
-                            showTooltip: showTooltip
+                            doSplit: doSplit
             )
             let otherOprActionActive = tfcalcengine.oprButtonActive && !allButtonsDisableSwitch
             let oprActionActive = [otherOprActionActive, !allButtonsDisableSwitch, otherOprActionActive, otherOprActionActive]
@@ -459,8 +388,7 @@ struct bottomButtons: View {
                             oprActionActive: oprActionActive,
                             oprColorActive: oprColorActive,
                             ultraCompetitive: tfengine.getUltraCompetitive(),
-                            doSplit: doSplit,
-                            showTooltip: showTooltip
+                            doSplit: doSplit
             )
         }
     }

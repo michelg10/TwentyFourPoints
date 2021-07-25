@@ -52,10 +52,6 @@ class tutorialEngine: ObservableObject, tfCallable {
         return true
     }
     
-    func getKeyboardSettings() -> KeyboardShortcutSet {
-        return qwertySet
-    }
-    
     func getUltraCompetitive() -> Bool {
         return true
     }

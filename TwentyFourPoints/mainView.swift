@@ -131,6 +131,7 @@ struct mainView: View {
                                 .animation(nil)
                         }
                     }).buttonStyle(topBarButtonStyle())
+                    .keyboardShortcut(",", modifiers: .command)
                     .onHover(perform: { (hovering) in
                         prefHover=hovering
                     }).brightness(prefHover ? hoverBrightness : 0)
@@ -234,6 +235,7 @@ struct mainView: View {
                     }, label: {
                         borederedButton(title: NSLocalizedString("Play", comment: "The play button on the main screen of the game"), clicked: playClicked)
                     }).buttonStyle(nilButtonStyle())
+                    .keyboardShortcut(KeyEquivalent.return, modifiers: .init([]))
                     .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
                         if buttonState == .pressed {
                             playClicked=true

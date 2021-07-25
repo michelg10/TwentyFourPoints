@@ -48,6 +48,43 @@ let allTrue=[true,true,true,true]
 let gameMessageProperty = TutProperty(skippable: true, oprButtonsHighlighted: allFalse, oprButtonsClickable: false, numbButtonsHighlighted: allFalse, numbButtonsClickable: false, storeHighlighted: false,storeClickable: false)
 
 class tutorialEngine: ObservableObject, tfCallable {
+    func handleKeyboardNumberPress(number: Int) {
+        if curState==4&&number==1 {
+            handleNumberPress(index: 0)
+        }
+        if curState==6&&number==1 {
+            handleNumberPress(index: 0)
+        }
+        if curState==8&&number==2 {
+            handleNumberPress(index: 0)
+        }
+        if curState==10&&number==1 {
+            handleNumberPress(index: 0)
+        }
+        if curState==13 {
+            if expr=="" {
+                handleNumberPress(index: (number==3 ? 2 : 3))
+            } else {
+                if expr=="3×"&&number==5 {
+                    handleNumberPress(index: 3)
+                } else if expr=="5×"&&number==3 {
+                    handleNumberPress(index: 2)
+                }
+            }
+        }
+        if curState==15 {
+            if expr=="" {
+                handleNumberPress(index: (number==1 ? 0 : 1))
+            } else {
+                if expr=="13×"&&number==3 {
+                    handleNumberPress(index: 0)
+                } else if expr=="3×"&&number==1 {
+                    handleNumberPress(index: 1)
+                }
+            }
+        }
+    }
+    
     func getDoSplit() -> Bool {
         return true
     }

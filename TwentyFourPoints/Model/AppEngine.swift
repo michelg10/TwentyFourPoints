@@ -75,7 +75,6 @@ struct customAchievement {
 let currentVersion=45
 
 class TFEngine: ObservableObject,tfCallable {
-    
     // routing everything to TFCalcEngine
     var calcEngine: TFCalcEngine
     func reset() {
@@ -91,6 +90,10 @@ class TFEngine: ObservableObject,tfCallable {
     
     func handleOprPress(Opr: opr) {
         calcEngine.handleOprPress(Opr: Opr)
+    }
+    
+    func handleKeyboardNumberPress(number: Int) {
+        
     }
     
     var solengine: solverEngine

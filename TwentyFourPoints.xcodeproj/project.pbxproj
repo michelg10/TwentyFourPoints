@@ -322,7 +322,6 @@
 				F0B2E1D725D8D41D007DF20E /* ProblemView.swift */,
 				F02AB9FE25E4AF11008EBE91 /* konamiView.swift */,
 				F0E7271625DFC7BF00403CDD /* TopBar.swift */,
-				F0B5B44425E28FBE0073606E /* mainView.swift */,
 				F0B2E22925D9505A007DF20E /* BottomButtons.swift */,
 			);
 			path = Problem;
@@ -375,6 +374,7 @@
 				F04034E526A5FCC700E84603 /* Model */,
 				F0CFB9332617662F00D66135 /* secrets.swift */,
 				F013E98225EE607E00FCBCD4 /* commonFunctions.swift */,
+				F0B5B44425E28FBE0073606E /* mainView.swift */,
 				F0FF2E8A25F364740097B4A0 /* PreferencesView.swift */,
 				F0F75722264139D800232985 /* whatsnewview.swift */,
 				F0FFF9B325ECB40000E90620 /* constants.swift */,

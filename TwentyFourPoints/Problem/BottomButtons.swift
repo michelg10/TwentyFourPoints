@@ -79,15 +79,11 @@ struct imageTooltip: View {
     var isOptional: Bool
     var name: String
     var body: some View {
-        if name == " " {
-            Text("space")
-                .foregroundColor(isOptional ? .secondary : .secondary)
-                .font(.system(size: 15, weight: .regular, design: .rounded))
-        } else {
-            Text(name)
-                .foregroundColor(isOptional ? .secondary : .secondary)
-                .font(.system(size: 15, weight: .regular, design: .monospaced))
-        }
+        var actualDisplay=(name == " " ? "space" : (name == "." ? "dot" : name))
+        
+        Text(actualDisplay)
+            .foregroundColor(isOptional ? .secondary : .secondary)
+            .font(.system(size: 15, weight: .regular, design: .monospaced))
     }
 }
 
@@ -103,6 +99,7 @@ struct TopButtonsRow: View {
     var storeTextColorEnabled: Bool
     var storeRectColorEnabled: Bool
     var expr: String
+    var autocompleteHintExpression: String?
     
     var answerShowOpacity: Double
     var answerText: String
@@ -129,29 +126,27 @@ struct TopButtonsRow: View {
                     RoundedRectangle(cornerRadius: CGFloat(textInpHei/2.0*buttonRadius),style: .continuous)
                         .fill(Color.init(resetColorEnabled ? "ButtonColorActive" : "ButtonColorInactive"))
                         .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
-                    Text(expr)
-                        .animation(nil)
-                        .foregroundColor(.white)
-                        .colorMultiply(resetColorEnabled ? Color.primary : Color.init("ButtonInactiveTextColor"))
-                        .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
-                        .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
-                        .padding(.leading, CGFloat(textInset*textField*(textInpHei-midSpace)))
-                        .padding(.bottom,2)
-                    Text(answerText)
-                        .opacity(answerShowOpacity)
-                        .animation(.easeInOut(duration: 0.3))
-                        .foregroundColor(Color.primary)
-                        .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
-                        .padding(.leading, CGFloat(textInset*textField*(textInpHei-midSpace)))
-                        .padding(.bottom,2)
-                    Text(incorText)
-                        .animation(nil)
-                        .opacity(incorShowOpacity)
-                        .animation(.easeInOut(duration: 0.2))
-                        .foregroundColor(Color.init("WrongNumber"))
-                        .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
-                        .padding(.leading, CGFloat(textInset*textField*(textInpHei-midSpace)))
-                        .padding(.bottom,2)
+                    ZStack(alignment: .leading) {
+                        Text(resetColorEnabled ? (autocompleteHintExpression ?? " ") : " ")
+                            .foregroundColor(Color.init("AutocompleteText"))
+                            .animation(nil)
+                        Text(expr)
+                            .animation(nil)
+                            .foregroundColor(.white)
+                            .colorMultiply(resetColorEnabled ? Color.primary : Color.init("ButtonInactiveTextColor"))
+                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
+                        Text(answerText == "" ? " " : answerText)
+                            .opacity(answerShowOpacity)
+                            .animation(.easeInOut(duration: 0.3))
+                            .foregroundColor(Color.primary)
+                        Text(incorText == "" ? " " : incorText)
+                            .animation(nil)
+                            .opacity(incorShowOpacity)
+                            .animation(.easeInOut(duration: 0.2))
+                            .foregroundColor(Color.init("WrongNumber"))
+                    }.font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
+                    .padding(.leading, CGFloat(textInset*textField*(textInpHei-midSpace)))
+                    .padding(.bottom,2)
                     HStack(spacing:0) {
                         Spacer()
                         Button(action: {
@@ -236,6 +231,11 @@ struct MiddleButtonRow: View {
                     }, label: {EmptyView()})
                         .keyboardShortcut(.init(.init(String(index))), modifiers: .init([]))
                 }
+                Button(action: {
+                    tfengine.handleKeyboardNumberPress(number: nil)
+                    print("handle autocomplete!")
+                }, label: {EmptyView()})
+                    .keyboardShortcut(.init(.init("`")), modifiers: .init([]))
             }
             HStack(spacing: doSplit ? 0 : CGFloat(midSpace)) {
                 HStack(spacing:CGFloat(midSpace)) {
@@ -364,25 +364,26 @@ struct bottomButtons: View {
         VStack {
             let allButtonsDisableSwitch=buttonsDisabled || tfengine.nxtState != .ready
             TopButtonsRow(tfengine: tfengine,
-                          storeActionEnabled: !(tfcalcengine.storedExpr == nil && !tfcalcengine.oprButtonActive || allButtonsDisableSwitch),
+                          storeActionEnabled: !(tfcalcengine.storedExpression == nil && !tfcalcengine.oprButtonActive || allButtonsDisableSwitch),
                           storeIconColorEnabled: !buttonsDisabled && tfcalcengine.oprButtonActive,
                           storeTextColorEnabled: !buttonsDisabled,
-                          storeRectColorEnabled: !buttonsDisabled && !(tfcalcengine.storedExpr == nil && !tfcalcengine.oprButtonActive),
-                          expr: tfcalcengine.expr,
+                          storeRectColorEnabled: !buttonsDisabled && !(tfcalcengine.storedExpression == nil && !tfcalcengine.oprButtonActive),
+                          expr: tfcalcengine.expression,
+                          autocompleteHintExpression: tfcalcengine.autocompleteHintExpression,
                           answerShowOpacity: tfengine.answerShowOpacity,
                           answerText: tfengine.answerShow.replacingOccurrences(of: "/", with: "÷").replacingOccurrences(of: "*", with: "×"),
                           incorShowOpacity: tfcalcengine.incorShowOpacity,
                           incorText: tfcalcengine.incorText,
-                          resetActionEnabled: !(tfcalcengine.expr=="" && tfcalcengine.storedExpr == nil && tfcalcengine.incorText == "" || allButtonsDisableSwitch),
+                          resetActionEnabled: !(tfcalcengine.expression=="" && tfcalcengine.storedExpression == nil && tfcalcengine.incorText == "" || allButtonsDisableSwitch),
                           resetColorEnabled: !buttonsDisabled,
-                          storedExpr: tfcalcengine.storedExpr,
+                          storedExpr: tfcalcengine.storedExpression,
                           ultraCompetitive: tfengine.getUltraCompetitive(),
                           doSplit: doSplit,
                           showTooltip: showTooltip
             )
             
-            MiddleButtonRow(colorActive: buttonsDisabled ? Array(repeating: false,count: 4) : tfcalcengine.cA,
-                            actionActive: allButtonsDisableSwitch ? Array(repeating: false,count:4) : tfcalcengine.cA,
+            MiddleButtonRow(colorActive: buttonsDisabled ? Array(repeating: false,count: 4) : tfcalcengine.cardActive,
+                            actionActive: allButtonsDisableSwitch ? Array(repeating: false,count:4) : tfcalcengine.cardActive,
                             cards: tfengine.curQ.cs,
                             tfengine: tfengine,
                             ultraCompetitive: tfengine.getUltraCompetitive(),

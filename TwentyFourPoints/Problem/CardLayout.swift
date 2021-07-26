@@ -108,7 +108,7 @@ struct CardLayout_Previews: PreviewProvider {
         let tfengine=TFEngine(isPreview: true)
         let tfcalcengine = TFCalcEngine(isPreview: true)
         Group {
-            CardLayout(tfengine: tfengine, cA:tfcalcengine.cA,cs: tfengine.curQ.cs, cardsShouldVisible: tfengine.cardsShouldVisible,operational: true, primID: "", ultraCompetitive: false, instantCompetitive: false, rotationObserver: UIRotationObserver())
+            CardLayout(tfengine: tfengine, cA:tfcalcengine.cardActive,cs: tfengine.curQ.cs, cardsShouldVisible: tfengine.cardsShouldVisible,operational: true, primID: "", ultraCompetitive: false, instantCompetitive: false, rotationObserver: UIRotationObserver())
                 .preferredColorScheme(.light)
             ProblemView(tfengine: TFEngine(isPreview: true), tfcalcengine: TFCalcEngine(isPreview: true), rotationObserver: UIRotationObserver())
                 .environment(\.horizontalSizeClass, .regular)

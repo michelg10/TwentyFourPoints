@@ -44,7 +44,7 @@ struct ProblemView: View {
                                     confettiEnabled=true
                                 }
                         } else {
-                            CardLayout(tfengine: tfengine, cA: tfcalcengine.cA, cs: tfengine.curQ.cs, cardsShouldVisible: tfengine.cardsShouldVisible, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString, ultraCompetitive: tfengine.getUltraCompetitive(), instantCompetitive: tfengine.instantCompetitive, rotationObserver: rotationObserver)
+                            CardLayout(tfengine: tfengine, cA: tfcalcengine.cardActive, cs: tfengine.curQ.cs, cardsShouldVisible: tfengine.cardsShouldVisible, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString, ultraCompetitive: tfengine.getUltraCompetitive(), instantCompetitive: tfengine.instantCompetitive, rotationObserver: rotationObserver)
                                 .padding(.horizontal,30)
                                 .animation(.spring())
                                 .offset(x: (draggedAmt.width < 0 ? -2*sqrt(-draggedAmt.width) : draggedAmt.width) + displaceDrag, y: 0)

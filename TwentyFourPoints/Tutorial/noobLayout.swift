@@ -48,6 +48,7 @@ struct noobLayout: View {
                               storeTextColorEnabled: curState.tutProperty.storeHighlighted,
                               storeRectColorEnabled: curState.tutProperty.storeHighlighted,
                               expr: tuengine.expr,
+                              autocompleteHintExpression: nil,
                               answerShowOpacity: 0,
                               answerText: "",
                               incorShowOpacity: 0,

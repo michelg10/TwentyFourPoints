@@ -46,7 +46,6 @@ struct topBarButtons: View {
                 EmptyView()
             }).disabled(konamiCheatVisible || rewardVisible)
             .keyboardShortcut(KeyEquivalent.return, modifiers: .command)
-            .keyboardShortcut(KeyEquivalent.tab, modifiers: .command)
             Button(action: {
                 if konamiCheatVisible {
                     tfengine.konamiLvl(setLvl: nil)
@@ -66,7 +65,6 @@ struct topBarButtons: View {
                 }
             }).hoverEffect(.lift)
             .keyboardShortcut(KeyEquivalent.return, modifiers: konamiCheatVisible ? .shift : .init(arrayLiteral: []))
-            .keyboardShortcut(KeyEquivalent.tab, modifiers: konamiCheatVisible ? .shift : .init(arrayLiteral: []))
             .buttonStyle(topBarButtonStyle())
         }
     }

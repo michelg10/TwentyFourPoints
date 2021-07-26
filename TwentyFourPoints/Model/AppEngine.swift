@@ -75,6 +75,7 @@ struct customAchievement {
 let currentVersion=45
 
 class TFEngine: ObservableObject,tfCallable {
+    
     // routing everything to TFCalcEngine
     var calcEngine: TFCalcEngine
     func reset() {
@@ -92,8 +93,10 @@ class TFEngine: ObservableObject,tfCallable {
         calcEngine.handleOprPress(Opr: Opr)
     }
     
-    func handleKeyboardNumberPress(number: Int) {
-        
+    func handleKeyboardNumberPress(number: Int?) {
+        if cardsClickable && nxtState == .ready {
+            calcEngine.handleKeyboardNumberPress(number: number)
+        }
     }
     
     var solengine: solverEngine
@@ -998,7 +1001,7 @@ class TFEngine: ObservableObject,tfCallable {
             if cardsOnScreen {
                 hapticGate(hap: .soft)
             }
-            calcEngine.expr=""
+            calcEngine.expression=""
             // show the answer
             nxtState = .inTransition
             answerShowOpacity=0

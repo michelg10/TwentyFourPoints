@@ -48,7 +48,10 @@ let allTrue=[true,true,true,true]
 let gameMessageProperty = TutProperty(skippable: true, oprButtonsHighlighted: allFalse, oprButtonsClickable: false, numbButtonsHighlighted: allFalse, numbButtonsClickable: false, storeHighlighted: false,storeClickable: false)
 
 class tutorialEngine: ObservableObject, tfCallable {
-    func handleKeyboardNumberPress(number: Int) {
+    func handleKeyboardNumberPress(number: Int?) {
+        if number==nil {
+            return
+        }
         if curState==4&&number==1 {
             handleNumberPress(index: 0)
         }

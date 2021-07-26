@@ -35,12 +35,21 @@ func doubleEquality(a:Double, b:Double) -> Bool {
     return false
 }
 
+
+//TODO: Highlight the top candidate
 class TFCalcEngine: ObservableObject {
+    struct CandidateMatch {
+        var index: Int
+        var number: Double
+    }
     // this engine handles basically everything in the problem screen
     weak var tfengine: TFEngine?
-    var cA: [Bool] // which cards are being activated and which are not
-    var storedExpr: String?
-    var expr: String = "" //update this from getExpr
+    var cardActive: [Bool] // which cards are being activated and which are not
+    var storedExpression: String?
+    var autocompleteHintExpression: String?
+    var expression = "" //update this from getExpr
+    var keyboardContents = ""
+    var topCandidateMatch: CandidateMatch?
     var stored: storedVal?
     var mainVal: storedVal? //put any calculation result into here
     var incorText:String
@@ -50,44 +59,51 @@ class TFCalcEngine: ObservableObject {
     
     func updtStoredExpr() {
         if stored != nil {
-            storedExpr=dblToString3Precision(x: stored!.value)
+            storedExpression=dblToString3Precision(x: stored!.value)
         } else {
-            storedExpr=nil
+            storedExpression=nil
         }
+        objectWillChange.send()
     }
     
-    func updtExpr() {
-        expr=""
+    func updateExpression() {
+        expression=""
         if (nxtNumNeg==true) {
-            expr = "-"
+            expression = "-"
         }
-        if (mainVal == nil) {
-            return
+        if (mainVal != nil) {
+            expression+=dblToString3Precision(x: mainVal!.value)
         }
-        expr=expr+dblToString3Precision(x: mainVal!.value)
-        if (selectedOperator == nil) {
-            return
+        if (selectedOperator != nil) {
+            switch selectedOperator! {
+            case .add:
+                expression+="+"
+            case .div:
+                expression+="÷"
+            case .mul:
+                expression+="×"
+            case .sub:
+                expression+="-"
+            }
         }
-        switch selectedOperator! {
-        case .add:
-            expr+="+"
-        case .div:
-            expr+="÷"
-        case .mul:
-            expr+="×"
-        case .sub:
-            expr+="-"
+        if topCandidateMatch == nil {
+            autocompleteHintExpression=nil
+        } else {
+            autocompleteHintExpression=expression+dblToString3Precision(x: topCandidateMatch!.number)
         }
+        expression=expression+keyboardContents
+        oprButtonActive=(mainVal != nil || topCandidateMatch != nil)
+        objectWillChange.send()
     }
     init(isPreview: Bool) {
         incorText=""
         incorShowOpacity=1
-        cA = [true, true, true, true]
+        cardActive = [true, true, true, true]
         if (isPreview) {
-            expr = "Expression"
+            expression = "Expression"
         }
         
-        updtExpr()
+        updateExpression()
     }
     
     func doMath(addendB: Double, noCardsActive: Bool) -> mathResult {
@@ -124,18 +140,19 @@ class TFCalcEngine: ObservableObject {
         return .cont
     }
     func handleNumberPress(index: Int) {
+        keyboardContents=""
+        topCandidateMatch=nil
         incorText=""
         tfengine!.hapticGate(hap: .light)
         
-        if !cA[index] {
+        if !cardActive[index] {
             return
         }
         
         if (selectedOperator == nil) {
             if (mainVal == nil) {
                 withAnimation(.easeInOut(duration: cardAniDur)) {
-                    cA[index]=false
-                    oprButtonActive=true
+                    cardActive[index]=false
                 }
                 mainVal=storedVal(value: Double(tfengine!.curQ.cs[index].numb), source: index)
             } else {
@@ -148,7 +165,7 @@ class TFCalcEngine: ObservableObject {
                         precondition(stored!.source != 4)
                         
                         withAnimation(.easeInOut(duration: cardAniDur)) {
-                            cA[stored!.source]=true
+                            cardActive[stored!.source]=true
                         }
                         
                         stored=mainVal
@@ -168,8 +185,8 @@ class TFCalcEngine: ObservableObject {
                     } else {
                         if mainVal!.source != index {
                             withAnimation(.easeInOut(duration: cardAniDur)) {
-                                cA[mainVal!.source]=true
-                                cA[index]=false
+                                cardActive[mainVal!.source]=true
+                                cardActive[index]=false
                             }
                             mainVal=storedVal(value: Double(tfengine!.curQ.cs[index].numb), source: index)
                         }
@@ -179,16 +196,16 @@ class TFCalcEngine: ObservableObject {
         } else {
             // do the math
             let addendB = Double(tfengine!.curQ.cs[index].numb)
-            var pretendcA=cA
+            var pretendcA=cardActive
             pretendcA[index]=false
             let mathRes:mathResult=doMath(addendB: addendB, noCardsActive: !pretendcA.contains(true))
             if mathRes == .success {
-                cA[index]=false
+                cardActive[index]=false
                 tfengine!.nextCardView(nxtCardSet: nil)
                 tfengine!.incrementLvl()
             } else if mathRes == .cont {
                 withAnimation(.easeInOut(duration: cardAniDur)) {
-                    cA[index]=false
+                    cardActive[index]=false
                 }
             } else if mathRes == .failure {
                 respondToFailure(isDivByZero: false)
@@ -196,13 +213,22 @@ class TFCalcEngine: ObservableObject {
                 respondToFailure(isDivByZero: true)
             }
         }
-        updtExpr()
-        objectWillChange.send()
+        updateExpression()
     }
     func handleOprPress(Opr:opr) {
         incorText=""
         tfengine!.hapticGate(hap: .light)
         // replace whatever operator is currently in use. if there's nothing in the expression right now, turn the next number negative.
+        
+        if topCandidateMatch != nil {
+            if topCandidateMatch!.index == -1 {
+                doStore()
+            } else {
+                handleNumberPress(index: topCandidateMatch!.index)
+            }
+            handleOprPress(Opr: Opr)
+            return
+        }
         
         if (mainVal == nil) {
             assert(Opr == .sub)
@@ -215,10 +241,21 @@ class TFCalcEngine: ObservableObject {
             selectedOperator = Opr
         }
         
-        updtExpr()
-        objectWillChange.send()
+        updateExpression()
     }
     func doStore() {
+        if topCandidateMatch != nil {
+            if topCandidateMatch!.index == -1 {
+                doStore()
+            } else {
+                handleNumberPress(index: topCandidateMatch!.index)
+            }
+            doStore()
+            return
+        }
+        
+        keyboardContents=""
+        topCandidateMatch=nil
         tfengine!.hapticGate(hap: .light)
         //store can only be called if there's something in store or in the expression
         
@@ -234,7 +271,6 @@ class TFCalcEngine: ObservableObject {
                 stored=mainVal
                 mainVal=nil
                 selectedOperator=nil
-                oprButtonActive=false
             }
         } else {
             if (mainVal == nil) {
@@ -244,7 +280,6 @@ class TFCalcEngine: ObservableObject {
                 }
                 mainVal=stored
                 withAnimation(.easeInOut(duration: cardAniDur)) {
-                    oprButtonActive=true
                     stored=nil
                 }
             } else {
@@ -257,7 +292,7 @@ class TFCalcEngine: ObservableObject {
                 } else {
                     let tmp=stored!.value
                     stored=nil
-                    let mathRturn=doMath(addendB: tmp, noCardsActive: !cA.contains(true))
+                    let mathRturn=doMath(addendB: tmp, noCardsActive: !cardActive.contains(true))
                     if mathRturn == .success {
                         tfengine!.nextCardView(nxtCardSet: nil)
                         tfengine!.incrementLvl()
@@ -271,32 +306,32 @@ class TFCalcEngine: ObservableObject {
         }
         
         updtStoredExpr()
-        updtExpr()
-        objectWillChange.send()
+        updateExpression()
     }
     func reset() { //deactivate everything and reset engine
+        topCandidateMatch=nil
+        keyboardContents=""
         incorText=""
         selectedOperator=nil
         nxtNumNeg=nil
         withAnimation(.easeInOut(duration: cardAniDur)) {
-            cA=Array(repeating: true, count: 4)
+            cardActive=Array(repeating: true, count: 4)
             oprButtonActive=false
         }
         mainVal=nil
-        updtExpr()
+        updateExpression()
         stored=nil
         updtStoredExpr()
-        objectWillChange.send()
     }
     
     var incorShowOpacity: Double
     func respondToFailure(isDivByZero: Bool) {
         var currentExpr: String
         if isDivByZero {
-            currentExpr=expr+"0"
+            currentExpr=expression+"0"
         } else {
-            updtExpr()
-            currentExpr=expr
+            updateExpression()
+            currentExpr=expression
         }
         reset()
         incorText=currentExpr
@@ -307,6 +342,70 @@ class TFCalcEngine: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now()+flashDuration) { [self] in
             incorShowOpacity=1.0
             objectWillChange.send()
+        }
+    }
+    func handleKeyboardNumberPress(number: Int?) {
+        if number==nil {
+            // do autocomplete
+            if topCandidateMatch != nil {
+                if topCandidateMatch!.index == -1 {
+                    doStore()
+                } else {
+                    handleNumberPress(index: topCandidateMatch!.index)
+                }
+            }
+            topCandidateMatch=nil
+            keyboardContents=""
+            updateExpression()
+            return
+        }
+        let newKeyboardContents=String((Int(keyboardContents) ?? 0)*10+number!)
+        var numberAppearedBefore: [String: Bool]=[:]
+        var potentialCandidateMatches: [CandidateMatch]=[]
+        if stored != nil {
+            potentialCandidateMatches.append(.init(index: -1, number: stored!.value))
+        }
+        for i in 0..<cardActive.count {
+            if cardActive[i] {
+                potentialCandidateMatches.append(.init(index: i, number: Double(tfengine!.curQ.cs[i].numb)))
+            }
+        }
+        var candidateMatches: [CandidateMatch]=[]
+        for i in potentialCandidateMatches {
+            let currentNumber=i.number
+            let currentNumberString=String(dblToString3Precision(x: currentNumber))
+            if newKeyboardContents.count>currentNumberString.count {
+                continue
+            }
+            if numberAppearedBefore[currentNumberString]==nil&&currentNumberString[currentNumberString.startIndex..<currentNumberString.index(currentNumberString.startIndex, offsetBy: newKeyboardContents.count)]==newKeyboardContents {
+                numberAppearedBefore[currentNumberString]=true
+                candidateMatches.append(.init(index: i.index, number: currentNumber))
+            }
+        }
+        if candidateMatches.count == 1 {
+            topCandidateMatch=nil
+            if candidateMatches[0].index == -1 {
+                doStore()
+            } else {
+                handleNumberPress(index: candidateMatches[0].index)
+            }
+            updateExpression()
+        } else if candidateMatches.count>1 {
+            candidateMatches.sort { a, b in
+                if dblToString3Precision(x: a.number)==newKeyboardContents {
+                    return true
+                }
+                if dblToString3Precision(x: b.number)==newKeyboardContents {
+                    return false
+                }
+                if dblToString3Precision(x: a.number).count == dblToString3Precision(x: b.number).count {
+                    return a.number<b.number
+                }
+                return dblToString3Precision(x: a.number).count > dblToString3Precision(x: b.number).count
+            }
+            keyboardContents=newKeyboardContents
+            topCandidateMatch=candidateMatches[0]
+            updateExpression()
         }
     }
 }

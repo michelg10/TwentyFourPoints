@@ -82,6 +82,8 @@
 
 "RickAstleySpecialThanks" = "特别感谢你过了10000关！";
 
+"SophieSpecialThanks" = "特别感谢李格是史上最酷的人！";
+
 /* No comment provided by engineer. */
 "New Rank" = "升级";
 
@@ -272,3 +274,9 @@
 "nfe3"="重新设计的解题界面";
 
 "nfe4"="细节优化";
+
+"KeyboardDelete"="⌫";
+
+"KeyboardPrevious"="◀︎";
+
+"KeyboardNext"="▶︎";

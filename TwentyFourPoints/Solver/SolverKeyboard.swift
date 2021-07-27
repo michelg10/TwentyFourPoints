@@ -86,7 +86,7 @@ struct SolverKeyboard: View {
                     Button(action: {
                         solengine.handleKeyboardDelete()
                     }, label: {
-                        alternateButton(text: "delete", alignment: .trailing, disabled: deleteDisabled)
+                        alternateButton(text: NSLocalizedString("KeyboardDelete", comment: ""), alignment: .trailing, disabled: deleteDisabled)
                             .frame(width: unitKeyCapWidth*146.0/93.0)
                     }).disabled(deleteDisabled)
                     .buttonStyle(solverKeyboardAlternateButtonStyle())
@@ -98,7 +98,7 @@ struct SolverKeyboard: View {
                     Button(action: {
                         solengine.prevResponderFocus()
                     }, label: {
-                        alternateButton(text: "previous", alignment: .leading, disabled: prevNextDisabled)
+                        alternateButton(text: NSLocalizedString("KeyboardPrevious", comment: ""), alignment: .leading, disabled: prevNextDisabled)
                             .frame(width: unitKeyCapWidth*179.0/93.0)
                     }).buttonStyle(solverKeyboardAlternateButtonStyle())
                     .disabled(prevNextDisabled)
@@ -106,7 +106,7 @@ struct SolverKeyboard: View {
                     Button(action: {
                         solengine.nextResponderFocus()
                     }, label: {
-                        alternateButton(text: "next", alignment: .trailing, disabled: prevNextDisabled)
+                        alternateButton(text: NSLocalizedString("KeyboardNext", comment: ""), alignment: .trailing, disabled: prevNextDisabled)
                             .frame(width: unitKeyCapWidth*179.0/93.0)
                     }).buttonStyle(solverKeyboardAlternateButtonStyle())
                     .disabled(prevNextDisabled)

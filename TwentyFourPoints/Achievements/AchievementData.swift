@@ -35,12 +35,12 @@ var lvlachievement: [LvlAchievement] = [
     .init(title: "Ethan",lvlReq: 200,secret:false,detailDesc: NSLocalizedString("PersonaDescEthan", comment: "")),
     .init(title: "Ella",lvlReq: 300,secret:false,detailDesc: NSLocalizedString("PersonaDescElla", comment: "")),
     .init(title: "Alyx",lvlReq: 400,secret:false,detailDesc: NSLocalizedString("PersonaDescAlyx", comment: "")),
-    .init(title: "Mimi",lvlReq: 500,secret:false,detailDesc: NSLocalizedString("PersonaDescMimi", comment: ""),detailSpecialThanks: NSLocalizedString("MimiSpecialThanks", comment: "")),
-    .init(title: "Mike",lvlReq: 750,secret:false,detailDesc: NSLocalizedString("PersonaDescMike", comment: ""),detailSpecialThanks: NSLocalizedString("MikeSpecialThanks", comment: "")),
+    .init(title: "Mimi",lvlReq: 500,secret:false,detailDesc: NSLocalizedString("PersonaDescMimi", comment: ""), detailSpecialThanks: NSLocalizedString("MimiSpecialThanks", comment: "")),
+    .init(title: "Mike",lvlReq: 750,secret:false,detailDesc: NSLocalizedString("PersonaDescMike", comment: ""), detailSpecialThanks: NSLocalizedString("MikeSpecialThanks", comment: "")),
     .init(title: "Sarah",lvlReq: 1000,secret:false,detailDesc: NSLocalizedString("PersonaDescSarah", comment: "")),
     .init(title: "Max",lvlReq: 2000,secret:false,detailDesc: NSLocalizedString("PersonaDescMax", comment: "")),
     .init(title: "Sophie",lvlReq: 3000,secret:false,detailDesc: NSLocalizedString("PersonaDescSophie", comment: "")),
-    .init(title: "Rick Astley",lvlReq: 10000,secret:true,detailDesc: NSLocalizedString("PersonaDescRickAstley", comment: ""))
+    .init(title: "Rick Astley",lvlReq: 10000,secret:true,detailDesc: NSLocalizedString("PersonaDescRickAstley", comment: ""), detailSpecialThanks: NSLocalizedString("RickAstleySpecialThanks", comment: ""))
 ]
 
 let leaderboardUnlockQsThres=30

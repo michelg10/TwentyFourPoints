@@ -19,6 +19,8 @@
 		F02AB9FA25E39EFD008EBE91 /* navBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9F925E39EFD008EBE91 /* navBarButton.swift */; };
 		F02AB9FF25E4AF11008EBE91 /* konamiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02AB9FE25E4AF11008EBE91 /* konamiView.swift */; };
 		F02D3F1225F279800063716D /* generator24.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F02D3F1025F279800063716D /* generator24.cpp */; };
+		F030AA1526AED0DB0019CCC4 /* SolverKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F030AA1426AED0DB0019CCC4 /* SolverKeyboard.swift */; };
+		F030AA1726AED32D0019CCC4 /* RoundSpecificCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = F030AA1626AED32D0019CCC4 /* RoundSpecificCorners.swift */; };
 		F034A34D262196E400528E6F /* MacTwentyFourPointsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034A34C262196E400528E6F /* MacTwentyFourPointsApp.swift */; };
 		F034A34F262196E400528E6F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034A34E262196E400528E6F /* ContentView.swift */; };
 		F034A351262196E500528E6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F034A350262196E500528E6F /* Assets.xcassets */; };
@@ -105,6 +107,8 @@
 		F02D3F0F25F279800063716D /* TwentyFourPoints-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TwentyFourPoints-Bridging-Header.h"; sourceTree = "<group>"; };
 		F02D3F1025F279800063716D /* generator24.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = generator24.cpp; sourceTree = "<group>"; };
 		F02D3F1125F279800063716D /* generator24.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = generator24.hpp; sourceTree = "<group>"; };
+		F030AA1426AED0DB0019CCC4 /* SolverKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolverKeyboard.swift; sourceTree = "<group>"; };
+		F030AA1626AED32D0019CCC4 /* RoundSpecificCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundSpecificCorners.swift; sourceTree = "<group>"; };
 		F034A34A262196E400528E6F /* MacTwentyFourPoints.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacTwentyFourPoints.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F034A34C262196E400528E6F /* MacTwentyFourPointsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTwentyFourPointsApp.swift; sourceTree = "<group>"; };
 		F034A34E262196E400528E6F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -299,6 +303,7 @@
 			children = (
 				F08DF54A260733980082458B /* solverEngine.swift */,
 				F02AB9F425E39EA7008EBE91 /* SolverView.swift */,
+				F030AA1426AED0DB0019CCC4 /* SolverKeyboard.swift */,
 			);
 			path = Solver;
 			sourceTree = "<group>";
@@ -331,6 +336,7 @@
 			isa = PBXGroup;
 			children = (
 				F02AB9F925E39EFD008EBE91 /* navBarButton.swift */,
+				F030AA1626AED32D0019CCC4 /* RoundSpecificCorners.swift */,
 				F0B346D625F05572001938A8 /* confettiView.swift */,
 			);
 			path = "Utility Views";
@@ -669,6 +675,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F030AA1526AED0DB0019CCC4 /* SolverKeyboard.swift in Sources */,
 				F01DAD4925EBF2D00096740B /* personaFocusView.swift in Sources */,
 				F02AB9FA25E39EFD008EBE91 /* navBarButton.swift in Sources */,
 				F013E98325EE607E00FCBCD4 /* commonFunctions.swift in Sources */,
@@ -685,6 +692,7 @@
 				F08DF54B260733980082458B /* solverEngine.swift in Sources */,
 				F0B2E20C25D8D496007DF20E /* Card.swift in Sources */,
 				F0A16D9025E76C5600C46C62 /* achievementView.swift in Sources */,
+				F030AA1726AED32D0019CCC4 /* RoundSpecificCorners.swift in Sources */,
 				F0FFF9B425ECB40000E90620 /* constants.swift in Sources */,
 				F0FF2E8B25F364740097B4A0 /* PreferencesView.swift in Sources */,
 				F02AB9FF25E4AF11008EBE91 /* konamiView.swift in Sources */,
@@ -1037,7 +1045,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 45;
+				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;
@@ -1072,7 +1080,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "TwentyFourPoints/Twenty Four Points.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 45;
+				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_ASSET_PATHS = "\"TwentyFourPoints/Preview Content\"";
 				DEVELOPMENT_TEAM = 9K2XM38XLK;
 				ENABLE_PREVIEWS = YES;

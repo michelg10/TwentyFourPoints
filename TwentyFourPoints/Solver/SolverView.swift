@@ -134,10 +134,13 @@ struct solverCard: View {
     var tfengine: TFEngine
     
     @State var appliedDragGestureDelta=0
+    
+    @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     //todo: add a buffer feature i.e. dragging for a bit won't do anything then you feel a hard haptic
     // then you start changing really fast
     var body: some View {
-        let foregroundColor:Color=Color.init("CardForeground" + (cardicon == .diamond || cardicon == .heart ? "Red" : "Black") + (active ? "Active" : "Inactive"))
+        let foregroundColor:Color=Color.init("SolverCardForeground" + (cardicon == .diamond || cardicon == .heart ? "Red" : "Black") + (active ? "Active" : "Inactive"))
         Rectangle()
             .fill(Color.clear)
             .aspectRatio(128/177, contentMode: .fit)
@@ -146,13 +149,18 @@ struct solverCard: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: geometry.size.width*0.1,style: .continuous)
                             .foregroundColor(Color.white)
-                            .colorMultiply(Color(active ? "Card-Active-Bg" : "Card-Inactive-Bg"))
+                            .colorMultiply(Color(active ? "SolverCard-Active-Bg" : "SolverCard-Inactive-Bg"))
                         RoundedRectangle(cornerRadius: geometry.size.width*0.07,style: .continuous)
                             .stroke(Color.white, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
                             .colorMultiply(foregroundColor)
                             .padding(geometry.size.width*0.025)
-                        responderTextView(text: $numText, whichResponder: $whichResponder, index: index, textSize: (geometry.size.width)*0.55, textColor: UIColor(foregroundColor))
-                            .foregroundColor(Color.white)
+                        if horizontalSizeClass == .regular {
+                            Text(numText)
+                                .font(.system(size: (geometry.size.width)*0.55, weight: .medium, design: .rounded))
+                                .foregroundColor(foregroundColor)
+                        } else {
+                            responderTextView(text: $numText, whichResponder: $whichResponder, index: index, textSize: (geometry.size.width)*0.55, textColor: UIColor(foregroundColor))
+                        }
                         solverNumView(CardIcon: cardicon, numberString: getStringNameOfNum(num: Int(numText) ?? -1), foregroundColor: foregroundColor)
                     }
                 }
@@ -212,14 +220,17 @@ struct SolverTopBar: View {
                 Text(NSLocalizedString("ProblemSolver", comment: "solver title"))
                     .font(.system(size: 36, weight: .semibold, design: .rounded))
                     .multilineTextAlignment(.center)
-                    .padding(.bottom,3)
+                    .padding(.bottom, 3)
             }).buttonStyle(textButtonStyle())
-            Text(solengine.showHints ? NSLocalizedString("Tap a card to get started", comment: "solver hint") : NSLocalizedString("Tap space to quickly jump to the next card", comment: "solver hint jump"))
-                .font(.system(size: 18, weight: .regular, design: .rounded))
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.bottom,10)
-                .padding(.horizontal,25)
+            .padding(.top, horizontalSizeClass == .regular ? 21.0 : 0.0)
+            if horizontalSizeClass != .regular {
+                Text(solengine.showHints ? NSLocalizedString("Tap a card to get started", comment: "solver hint") : NSLocalizedString("Tap space to quickly jump to the next card", comment: "solver hint jump"))
+                    .font(.system(size: 18, weight: .medium, design: .rounded))
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom,10)
+                    .padding(.horizontal,25)
+            }
         }
     }
 }
@@ -240,41 +251,74 @@ struct SolverView: View {
             } else {
                 SolverTopBar(solengine: solengine, tfengine: tfengine)
             }
-            if horizontalSizeClass != .regular {
-                Spacer()
-            }
-            HStack(spacing:horizontalSizeClass == .regular ? 24 : 12) {
-                ForEach((0..<4), id:\.self) { index in
-                    solverCard(numText: Binding(get: {
-                        solengine.cards![index] == 0 ? "" : String(solengine.cards![index])
-                    }, set: { (val) in
-                        solengine.setCards(ind: index, val: val)
-                    }), whichResponder: Binding(get: {
-                        solengine.whichResponder
-                    }, set: { (val) in
-                        solengine.showHints=false
-                        solengine.whichResponder=val
-                    }),
-                    index: index,
-                    cardicon: cardIcon.allCases[index],
-                    solengine: solengine,
-                    tfengine: tfengine
-                    )
-                }
-            }.padding(.horizontal,(horizontalSizeClass == .regular ? 46 : 23))
-            
-            Text((solengine.computedSolution ?? NSLocalizedString("NoSolution", comment: "nosol")).replacingOccurrences(of: "/", with: "÷").replacingOccurrences(of: "*", with: "×"))
-                .font(.system(size: 24, weight: .medium, design: .rounded))
-                .padding(.top,15)
             
             Spacer()
-        }
+            
+            let sidePadding: Double=50.0
+            let cardSpacing: Double=0.07
+            
+            HStack(spacing:horizontalSizeClass == .regular ? CGFloat((Double(UIScreen.main.bounds.width)-2*sidePadding)*cardSpacing) : 12) {
+                ForEach((0..<4), id:\.self) { index in
+                    if horizontalSizeClass == .regular {
+                        Button(action: {
+                            solengine.setCardToFocus(index: index)
+                        }, label: {
+                            solverCard(numText: Binding(get: {
+                                solengine.cards![index] == 0 ? "" : String(solengine.cards![index])
+                            }, set: { (val) in
+                                solengine.setCards(ind: index, val: val)
+                            }), whichResponder: Binding(get: {
+                                solengine.whichCardInFocus
+                            }, set: { (val) in
+                                solengine.showHints=false
+                                solengine.whichCardInFocus=val
+                            }),
+                                       index: index,
+                                       cardicon: cardIcon.allCases[index],
+                                       solengine: solengine,
+                                       active: solengine.whichCardInFocus == index,
+                                       tfengine: tfengine
+                            ).frame(maxWidth: 187)
+                        }).buttonStyle(topBarButtonStyle())
+                        
+                    } else {
+                        solverCard(numText: Binding(get: {
+                            solengine.cards![index] == 0 ? "" : String(solengine.cards![index])
+                        }, set: { (val) in
+                            solengine.setCards(ind: index, val: val)
+                        }), whichResponder: Binding(get: {
+                            solengine.whichCardInFocus
+                        }, set: { (val) in
+                            solengine.showHints=false
+                            solengine.whichCardInFocus=val
+                        }),
+                                   index: index,
+                                   cardicon: cardIcon.allCases[index],
+                                   solengine: solengine,
+                                   tfengine: tfengine
+                        ).frame(maxWidth: 187)
+                    }
+                }
+            }.padding(.horizontal,(horizontalSizeClass == .regular ? CGFloat(sidePadding) : 23))
+            
+            Text((solengine.computedSolution ?? NSLocalizedString("NoSolution", comment: "nosol")).replacingOccurrences(of: "/", with: "÷").replacingOccurrences(of: "*", with: "×"))
+                .font(.system(size: 24, weight: .semibold, design: .rounded))
+                .padding(.top, (horizontalSizeClass == .regular ? 24.0 : 15.0))
+            
+            Spacer()
+            if horizontalSizeClass == .regular {
+                SolverKeyboard(numbersDisabled: Array(repeating: false, count: 10), deleteDisabled: false, prevNextDisabled: solengine.whichCardInFocus == -1, solengine: solengine)
+            }
+        }.edgesIgnoringSafeArea(horizontalSizeClass == .regular ? [.bottom] : [])
         .background(Color.init("bgColor"))
         .navigationBarHidden(true)
         .onAppear {
             print("Nav back")
             canNavBack=true
             tfengine.setAccessPointVisible(visible: false)
+            if horizontalSizeClass == .regular {
+                solengine.whichCardInFocus=0
+            }
         }.onDisappear {
             print("No nav back")
             canNavBack=false
@@ -285,6 +329,11 @@ struct SolverView: View {
 
 struct SolverView_Previews: PreviewProvider {
     static var previews: some View {
-        SolverView(solengine: solverEngine(isPreview: true, tfEngine: TFEngine(isPreview: true)), tfengine: TFEngine(isPreview: true))
+        if #available(iOS 15.0, *) {
+            SolverView(solengine: solverEngine(isPreview: true, tfEngine: TFEngine(isPreview: true)), tfengine: TFEngine(isPreview: true))
+                .previewInterfaceOrientation(.landscapeLeft)
+        } else {
+            // Fallback on earlier versions
+        }
     }
 }

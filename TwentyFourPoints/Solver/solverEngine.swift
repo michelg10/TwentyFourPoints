@@ -8,10 +8,11 @@
 import Foundation
 
 class solverEngine: ObservableObject {
-    var whichResponder: Int
+    var whichCardInFocus: Int
     var cards: [Int]?
     var computedSolution: String?
     var showHints: Bool
+    var currentCardHasTyped: Bool=false
     weak var tfengine: TFEngine?
     func computeSolution() {
         if cards==nil {
@@ -19,16 +20,24 @@ class solverEngine: ObservableObject {
         }
         computedSolution = solution(problemSet: cards!)
     }
+    func setCardToFocus(index: Int) {
+        if cards == nil {
+            return
+        }
+        whichCardInFocus=index
+        currentCardHasTyped = false
+        objectWillChange.send()
+    }
     init(isPreview: Bool, tfEngine: TFEngine?) {
         if isPreview {
             showHints=true
             cards=[1,2,3,4]
-            whichResponder = -1
+            whichCardInFocus = -1
             computedSolution="Preview"
             return
         }
         showHints=true
-        whichResponder = -1
+        whichCardInFocus = -1
         cards=nil
         tfengine=tfEngine
         
@@ -45,8 +54,39 @@ class solverEngine: ObservableObject {
             return
         }
         showHints=false
-        whichResponder=(whichResponder+1)%4
-        cards![whichResponder]=0
+        whichCardInFocus=(whichCardInFocus+1)%4
+        currentCardHasTyped = false
+        objectWillChange.send()
+    }
+    func prevResponderFocus() {
+        if cards==nil {
+            return
+        }
+        showHints=false
+        whichCardInFocus=(whichCardInFocus-1+4)%4
+        currentCardHasTyped = false
+        objectWillChange.send()
+    }
+    func handleKeyboardDelete() {
+        if whichCardInFocus == -1 {
+            return
+        }
+        let currentCardString=String(cards![whichCardInFocus])
+        currentCardHasTyped = true
+        if currentCardString.count<1 {
+            return
+        }
+        setCards(ind: whichCardInFocus, val: String(currentCardString[currentCardString.startIndex..<currentCardString.index(currentCardString.endIndex, offsetBy: -1)]))
+    }
+    func handleKeyboardNumberPress(number: Int) {
+        if (whichCardInFocus == -1) {
+            return
+        }
+        if !currentCardHasTyped {
+            setCards(ind: whichCardInFocus, val: "")
+        }
+        currentCardHasTyped = true
+        setCards(ind: whichCardInFocus, val: String(cards![whichCardInFocus])+String(number))
     }
     func setCards(ind: Int,val: String) {
         if cards==nil {
@@ -55,6 +95,7 @@ class solverEngine: ObservableObject {
         var myVal=val.filter("0123456789".contains)
         if val == myVal+" " {
             nextResponderFocus()
+            cards![whichCardInFocus]=0
             objectWillChange.send()
             return
         }
@@ -62,14 +103,6 @@ class solverEngine: ObservableObject {
             myVal="0"
         }
         myVal=String(Int(myVal)!)
-//        if myVal.count>2 {
-//            myVal=String(myVal.prefix(2))
-//            nextResponderFocus()
-//            print("Count too big")
-//        } else if myVal.count == 2 && cards[ind]<Int(myVal) ?? 0 {
-//            nextResponderFocus()
-//            print("Count is 2")
-//        }
         let myValInt=Int(myVal) ?? 0
         if myValInt <= 24 {
             cards![ind]=myValInt

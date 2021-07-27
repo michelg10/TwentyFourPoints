@@ -72,7 +72,7 @@ struct customAchievement {
     var id: String
 }
 
-let currentVersion=45
+let currentVersion=46
 
 class TFEngine: ObservableObject,tfCallable {
     

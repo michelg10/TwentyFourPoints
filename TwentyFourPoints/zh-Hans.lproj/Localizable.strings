@@ -8,9 +8,11 @@
 "achievementListItemLvlLeftPrefix" = "还剩";
 
 /* No comment provided by engineer. */
-"achievementListItemLvlReqPostfix" = "题";
+"achievementListItemLvlReqPostfixNoflexPre" = "题";
 
-"achievementListItemLvlReqPostfixCompact" = "题";
+"achievementListItemLvlReqPostfixFlex" = "";
+
+"achievementListItemLvlReqPostfixNoflexPost" = "";
 
 /* No comment provided by engineer. */
 "achievementListItemLvlReqPrefix" = "做完";
@@ -77,6 +79,8 @@
 
 /* No comment provided by engineer. */
 "MimiSpecialThanks" = "特别感谢Mimi对于页面设计的支持与帮助";
+
+"RickAstleySpecialThanks" = "特别感谢你过了10000关！";
 
 /* No comment provided by engineer. */
 "New Rank" = "升级";
@@ -255,10 +259,16 @@
 
 "GCSignedOut" = "未登录";
 
-"GCCouldNotAuth" = "连接失败";
-
 "GCError" = "出错";
 
 "Tap a card to get started" = "点击一个卡牌以开始解题";
 
-"Tap space to quickly jump to the next card" = "点击空格键快速跳到下张卡";
+"Tap space to quickly jump to the next card" = "点击空格键以快速跳到下张卡";
+
+"nfe1"="排行榜";
+
+"nfe2"="改进了键盘输入";
+
+"nfe3"="重新设计的解题界面";
+
+"nfe4"="细节优化";

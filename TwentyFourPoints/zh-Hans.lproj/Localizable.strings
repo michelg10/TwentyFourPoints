@@ -280,3 +280,9 @@
 "KeyboardPrevious"="◀︎";
 
 "KeyboardNext"="▶︎";
+
+"NewVersionPrefix"="版本";
+
+"NewVersionPostfix"="的新功能";
+
+"WhatsNewContinue"="继续";

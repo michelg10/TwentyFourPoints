@@ -20,7 +20,7 @@ struct whatsnewview: View {
             AppLogoTitleView()
                 .padding(.top,130)
                 .padding(.bottom,61)
-            Text("What's New in Version "+newVersion)
+            Text(NSLocalizedString("NewVersionPrefix", comment: "")+newVersion+NSLocalizedString("NewVersionPostfix", comment: ""))
                 .font(.system(size: 32, weight: .bold, design: .rounded))
                 .padding(.horizontal,68)
                 .multilineTextAlignment(.center)
@@ -40,7 +40,7 @@ struct whatsnewview: View {
                 presentationMode.wrappedValue.dismiss()
                 tfengine.refresh()
             }, label: {
-                borederedButton(title: "Continue", clicked: continueClicked, width:190,isOnSheet: true)
+                borederedButton(title: NSLocalizedString("WhatsNewContinue", comment: ""), clicked: continueClicked, width:190,isOnSheet: true)
             }).buttonStyle(nilButtonStyle())
             .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
                 if buttonState == .pressed {

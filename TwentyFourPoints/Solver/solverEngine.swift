@@ -78,6 +78,13 @@ class solverEngine: ObservableObject {
         }
         setCards(ind: whichCardInFocus, val: String(currentCardString[currentCardString.startIndex..<currentCardString.index(currentCardString.endIndex, offsetBy: -1)]))
     }
+    func handleKeyboardAllDelete() {
+        if whichCardInFocus == -1 {
+            return
+        }
+        currentCardHasTyped = true
+        setCards(ind: whichCardInFocus, val: "")
+    }
     func handleKeyboardNumberPress(number: Int) {
         if (whichCardInFocus == -1) {
             return

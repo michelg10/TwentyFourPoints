@@ -16,6 +16,7 @@ struct ProblemView: View {
     @State var sID: String=""
     @State var confettiEnabled=false
     @State var konamikaren=konamiKaren()
+    @Binding var mainViewVisible: Bool
     @ObservedObject var rotationObserver: UIRotationObserver
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -27,7 +28,7 @@ struct ProblemView: View {
             ZStack {
                 VStack {
                     Spacer()
-                    TopBar(lvl: tfengine.levelInfo.lvl, lvlName: tfengine.levelInfo.lvlName, konamiCheatVisible: tfengine.konamiCheatVisible, rewardVisible: tfengine.rewardScreenVisible, tfengine:tfengine)
+                    TopBar(lvl: tfengine.levelInfo.lvl, lvlName: tfengine.levelInfo.lvlName, konamiCheatVisible: tfengine.konamiCheatVisible, rewardVisible: tfengine.rewardScreenVisible, tfengine:tfengine, mainViewVisible: $mainViewVisible)
                         .equatable()
                         .padding(.bottom,20)
                     ZStack {
@@ -85,11 +86,13 @@ struct ProblemView: View {
             print("Nav back")
             canNavBack=true
             tfengine.setAccessPointVisible(visible: false)
+            mainViewVisible=false
             tfengine.currentSession=UUID().uuidString
         }.onDisappear {
             print("No nav back")
             tfengine.cardsOnScreen=false
             canNavBack=false
+            mainViewVisible=true
             tfengine.setAccessPointVisible(visible: true)
         }
     }
@@ -99,7 +102,7 @@ struct ProblemView_Previews: PreviewProvider {
     static var previews: some View {
         //        ProblemView(tfengine: TFEngine())
         //            .previewDevice("iPhone 8")
-        ProblemView(tfengine: TFEngine(isPreview: true), tfcalcengine: TFCalcEngine(isPreview: true), rotationObserver: UIRotationObserver())
+        ProblemView(tfengine: TFEngine(isPreview: true), tfcalcengine: TFCalcEngine(isPreview: true), mainViewVisible: .constant(false), rotationObserver: UIRotationObserver())
             .previewLayout(.fixed(width: 1194, height: 834))
             .environment(\.horizontalSizeClass, .regular)
             .environment(\.verticalSizeClass, .regular)

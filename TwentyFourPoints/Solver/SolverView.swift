@@ -148,7 +148,7 @@ struct solverCard: View {
                 GeometryReader { geometry in
                     ZStack {
                         RoundedRectangle(cornerRadius: geometry.size.width*0.1,style: .continuous)
-                            .foregroundColor(Color.white)
+                            .foregroundColor(.white)
                             .colorMultiply(Color(active ? "SolverCard-Active-Bg" : "SolverCard-Inactive-Bg"))
                         RoundedRectangle(cornerRadius: geometry.size.width*0.07,style: .continuous)
                             .stroke(Color.white, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
@@ -157,7 +157,8 @@ struct solverCard: View {
                         if horizontalSizeClass == .regular {
                             Text(numText)
                                 .font(.system(size: (geometry.size.width)*0.55, weight: .medium, design: .rounded))
-                                .foregroundColor(foregroundColor)
+                                .foregroundColor(.white)
+                                .colorMultiply(foregroundColor)
                         } else {
                             responderTextView(text: $numText, whichResponder: $whichResponder, index: index, textSize: (geometry.size.width)*0.55, textColor: UIColor(foregroundColor))
                         }
@@ -196,6 +197,7 @@ struct solverCard: View {
 struct SolverTopBar: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var solengine: solverEngine
+    @Binding var mainViewVisible: Bool
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     
@@ -205,6 +207,7 @@ struct SolverTopBar: View {
             Button(action: {
                 tfengine.hapticGate(hap: .medium)
                 presentationMode.wrappedValue.dismiss()
+                mainViewVisible=true
                 tfengine.setAccessPointVisible(visible: true)
             }, label: {
                 navBarButton(symbolName: "chevron.backward", active: true)
@@ -237,6 +240,7 @@ struct SolverTopBar: View {
 
 struct SolverView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Binding var mainViewVisible: Bool
     @ObservedObject var solengine: solverEngine
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -246,10 +250,10 @@ struct SolverView: View {
         VStack(spacing: 0) {
             if horizontalSizeClass == .regular {
                 ZStack {
-                    SolverTopBar(solengine: solengine, tfengine: tfengine)
+                    SolverTopBar(solengine: solengine, mainViewVisible: $mainViewVisible, tfengine: tfengine)
                 }
             } else {
-                SolverTopBar(solengine: solengine, tfengine: tfengine)
+                SolverTopBar(solengine: solengine, mainViewVisible: $mainViewVisible, tfengine: tfengine)
             }
             
             Spacer()
@@ -313,15 +317,15 @@ struct SolverView: View {
         .background(Color.init("bgColor"))
         .navigationBarHidden(true)
         .onAppear {
-            print("Nav back")
             canNavBack=true
+            mainViewVisible=false
             tfengine.setAccessPointVisible(visible: false)
             if horizontalSizeClass == .regular {
                 solengine.whichCardInFocus=0
             }
         }.onDisappear {
-            print("No nav back")
             canNavBack=false
+            mainViewVisible=true
             tfengine.setAccessPointVisible(visible: true)
         }
     }
@@ -330,7 +334,7 @@ struct SolverView: View {
 struct SolverView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            SolverView(solengine: solverEngine(isPreview: true, tfEngine: TFEngine(isPreview: true)), tfengine: TFEngine(isPreview: true))
+            SolverView(mainViewVisible: .constant(false), solengine: solverEngine(isPreview: true, tfEngine: TFEngine(isPreview: true)), tfengine: TFEngine(isPreview: true))
                 .previewInterfaceOrientation(.landscapeLeft)
         } else {
             // Fallback on earlier versions

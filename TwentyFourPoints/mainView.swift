@@ -99,6 +99,7 @@ struct mainView: View {
     @State var playHover: Bool = false
     @State var solverHover: Bool = false
     @State var prefHover: Bool = false
+    @State var thisViewVisible: Bool = true
     
     @ObservedObject var rotationObserver: UIRotationObserver
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
@@ -116,6 +117,7 @@ struct mainView: View {
                         tfengine.snapshotUBound()
                         tfengine.hapticGate(hap: .medium)
                         prefPresented=true
+                        thisViewVisible=false
                         tfengine.setAccessPointVisible(visible: false)
                     }, label: {
                         ZStack {
@@ -131,11 +133,13 @@ struct mainView: View {
                                 .animation(nil)
                         }
                     }).buttonStyle(topBarButtonStyle())
+                    .disabled(!thisViewVisible)
                     .keyboardShortcut(",", modifiers: .command)
                     .onHover(perform: { (hovering) in
                         prefHover=hovering
                     }).brightness(prefHover ? hoverBrightness : 0)
                     .sheet(isPresented: $prefPresented, onDismiss: {
+                        thisViewVisible=true
                         tfengine.setAccessPointVisible(visible: true)
                         tfengine.commitSnap()
                     }, content: {
@@ -147,7 +151,7 @@ struct mainView: View {
                             DispatchQueue.global().async {
                                 tfengine.saveData()
                             }
-                        }))
+                        }), mainViewVisible: $thisViewVisible)
                     }).padding(.horizontal,20)
                 }.padding(.top,20)
                 Spacer()
@@ -175,8 +179,8 @@ struct mainView: View {
                             tfengine.hapticGate(hap: .medium)
                             achPresented=true
                             canNavBack=true
+                            thisViewVisible=false
                             tfengine.setAccessPointVisible(visible: false)
-                            print("Nav back")
                         }, label: {
                             ZStack(alignment: .leading) {
                                 HStack {
@@ -207,7 +211,7 @@ struct mainView: View {
                         .buttonStyle(achievementButtonStyle())
                         .sheet(isPresented: $achPresented,onDismiss: {
                             canNavBack=false
-                            print("No nav back")
+                            thisViewVisible=true
                             tfengine.setAccessPointVisible(visible: true)
                         }, content: {
                             achievementView(tfengine: tfengine)
@@ -216,12 +220,12 @@ struct mainView: View {
                 Spacer()
                 VStack(spacing:0) {
                     NavigationLink(
-                        destination: ProblemView(tfengine: tfengine, tfcalcengine: tfengine.calcEngine, rotationObserver: rotationObserver),tag: 1,selection: $navAction,
+                        destination: ProblemView(tfengine: tfengine, tfcalcengine: tfengine.calcEngine, mainViewVisible: $thisViewVisible, rotationObserver: rotationObserver),tag: 1,selection: $navAction,
                         label: {
                             EmptyView()
                         })
                     NavigationLink(
-                        destination: SolverView(solengine: solengine, tfengine: tfengine),tag: 2,selection: $navAction,
+                        destination: SolverView(mainViewVisible: $thisViewVisible, solengine: solengine, tfengine: tfengine),tag: 2,selection: $navAction,
                         label: {
                             EmptyView()
                         })
@@ -229,13 +233,12 @@ struct mainView: View {
                     Button(action: {
                         tfengine.hapticGate(hap: .medium)
                         navAction=1
-                        print("Prior card state: \(tfengine.cardsOnScreen)")
                         tfengine.cardsOnScreen=true
-                        print("Set cards to true")
                     }, label: {
                         borederedButton(title: NSLocalizedString("Play", comment: "The play button on the main screen of the game"), clicked: playClicked)
                     }).buttonStyle(nilButtonStyle())
                     .keyboardShortcut(KeyEquivalent.return, modifiers: .init([]))
+                    .disabled(!thisViewVisible)
                     .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
                         if buttonState == .pressed {
                             playClicked=true
@@ -274,16 +277,14 @@ struct mainView: View {
         .navigationBarHidden(true)
         .onAppear {
             GKAccessPoint.shared.location = .topLeading
+            thisViewVisible=true
             tfengine.setAccessPointVisible(visible: true)
             tfengine.updtColorScheme()
             DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
                 viewDidLoad=true
             }
             canNavBack=false
-            print("No nav back")
-            print("Prior card state: \(tfengine.cardsOnScreen)")
             tfengine.cardsOnScreen=false
-            print("Set cards to false")
         }
     }
 }

@@ -26,6 +26,7 @@ struct topBarButtons: View {
     var konamiCheatVisible: Bool
     var rewardVisible: Bool
     var tfengine: TFEngine
+    @Binding var mainViewVisible: Bool
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var body: some View {
         HStack {
@@ -33,6 +34,7 @@ struct topBarButtons: View {
                 presentationMode.wrappedValue.dismiss()
                 tfengine.reset()
                 tfengine.hapticGate(hap: .medium)
+                mainViewVisible=true
                 tfengine.setAccessPointVisible(visible: true)
             }, label: {
                 navBarButton(symbolName: "chevron.backward", active: !konamiCheatVisible && !rewardVisible)
@@ -120,13 +122,14 @@ struct TopBar: View, Equatable {
     var konamiCheatVisible: Bool
     var rewardVisible: Bool
     var tfengine: TFEngine
+    @Binding var mainViewVisible: Bool
     @State var achPresented: Bool = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     var body: some View {
         ZStack(alignment: .top) {
-            topBarButtons(konamiCheatVisible: konamiCheatVisible, rewardVisible: rewardVisible, tfengine: tfengine)
+            topBarButtons(konamiCheatVisible: konamiCheatVisible, rewardVisible: rewardVisible, tfengine: tfengine, mainViewVisible: $mainViewVisible)
             TopBarText(lvl: lvl, lvlName: lvlName, tfengine: tfengine, achPresented: $achPresented)
                 .padding(.top,horizontalSizeClass == .regular ? 0 : 25)
         }.padding(.top, horizontalSizeClass == .regular ? 15 : 0)
@@ -135,6 +138,6 @@ struct TopBar: View, Equatable {
 
 struct TopBar_Previews: PreviewProvider {
     static var previews: some View {
-        TopBar(lvl:10,lvlName:"Jonathan", konamiCheatVisible: false, rewardVisible: false,tfengine: TFEngine(isPreview: true))
+        TopBar(lvl:10,lvlName:"Jonathan", konamiCheatVisible: false, rewardVisible: false,tfengine: TFEngine(isPreview: true), mainViewVisible: .constant(false))
     }
 }

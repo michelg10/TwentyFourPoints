@@ -82,6 +82,7 @@ struct SolverKeyboard: View {
                             }
                         }).buttonStyle(solverKeyboardRegularButtonStyle())
                         .disabled(numbersDisabled[number])
+                        .keyboardShortcut(KeyEquivalent.init(.init(String(number))), modifiers: .init([]))
                     }
                     Button(action: {
                         solengine.handleKeyboardDelete()
@@ -89,7 +90,12 @@ struct SolverKeyboard: View {
                         alternateButton(text: NSLocalizedString("KeyboardDelete", comment: ""), alignment: .trailing, disabled: deleteDisabled)
                             .frame(width: unitKeyCapWidth*146.0/93.0)
                     }).disabled(deleteDisabled)
+                    .keyboardShortcut(KeyEquivalent.delete, modifiers: .init([]))
                     .buttonStyle(solverKeyboardAlternateButtonStyle())
+                }
+                HStack(spacing:0) {
+                    Button(action: {solengine.handleKeyboardAllDelete()}, label: {EmptyView()}).disabled(deleteDisabled).keyboardShortcut(KeyEquivalent.delete, modifiers: .command)
+                    Button(action: {solengine.handleKeyboardAllDelete()}, label: {EmptyView()}).disabled(deleteDisabled).keyboardShortcut(KeyEquivalent.delete, modifiers: .option)
                 }
             }.frame(height: 63)
             GeometryReader { geometry in
@@ -102,6 +108,7 @@ struct SolverKeyboard: View {
                             .frame(width: unitKeyCapWidth*179.0/93.0)
                     }).buttonStyle(solverKeyboardAlternateButtonStyle())
                     .disabled(prevNextDisabled)
+                    .keyboardShortcut(KeyEquivalent.init(.init("[")), modifiers: .init([]))
                     Spacer()
                     Button(action: {
                         solengine.nextResponderFocus()
@@ -110,6 +117,12 @@ struct SolverKeyboard: View {
                             .frame(width: unitKeyCapWidth*179.0/93.0)
                     }).buttonStyle(solverKeyboardAlternateButtonStyle())
                     .disabled(prevNextDisabled)
+                    .keyboardShortcut(KeyEquivalent.init(.init("]")), modifiers: .init([]))
+                    Button(action: {solengine.nextResponderFocus()}, label: {EmptyView()}).disabled(prevNextDisabled).keyboardShortcut(KeyEquivalent.return, modifiers: .init([]))
+                    Button(action: {solengine.setCardToFocus(index: 0)}, label: {EmptyView()}).disabled(prevNextDisabled).keyboardShortcut(KeyEquivalent.init(.init("[")), modifiers: .command)
+                    Button(action: {solengine.setCardToFocus(index: 0)}, label: {EmptyView()}).disabled(prevNextDisabled).keyboardShortcut(KeyEquivalent.init(.init("[")), modifiers: .option)
+                    Button(action: {solengine.setCardToFocus(index: 3)}, label: {EmptyView()}).disabled(prevNextDisabled).keyboardShortcut(KeyEquivalent.init(.init("]")), modifiers: .command)
+                    Button(action: {solengine.setCardToFocus(index: 3)}, label: {EmptyView()}).disabled(prevNextDisabled).keyboardShortcut(KeyEquivalent.init(.init("]")), modifiers: .option)
                 }
             }.frame(height: 63)
         }.padding(14)

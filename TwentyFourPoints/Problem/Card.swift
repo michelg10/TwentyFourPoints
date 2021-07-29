@@ -45,6 +45,7 @@ struct numView: View {
     var foregroundColor:Color
     var ultraCompetitive: Bool
     var body: some View {
+        let animation=ultraCompetitive ? nil : competitiveAnimation
         GeometryReader { geometry in
             VStack(alignment: .center, spacing: 0, content: {
                 HStack {
@@ -56,7 +57,7 @@ struct numView: View {
                             .animation(springAnimation)
                             .foregroundColor(Color.white)
                             .colorMultiply(foregroundColor)
-                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
+                            .animation(animation)
                         Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
                             .if (isStationary) { view in
                                 view.animation(nil)
@@ -64,7 +65,7 @@ struct numView: View {
                             .animation(springAnimation)
                             .foregroundColor(Color.white)
                             .colorMultiply(foregroundColor)
-                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
+                            .animation(animation)
                     }
                     Spacer()
                 }
@@ -80,7 +81,7 @@ struct numView: View {
                             .animation(springAnimation)
                             .foregroundColor(Color.white)
                             .colorMultiply(foregroundColor)
-                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
+                            .animation(animation)
                         Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
                             .if (isStationary) { view in
                                 view.animation(nil)
@@ -89,7 +90,7 @@ struct numView: View {
                             .animation(springAnimation)
                             .foregroundColor(Color.white)
                             .colorMultiply(foregroundColor)
-                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
+                            .animation(animation)
                     }
                 }
             }).frame(minWidth: 0,maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
@@ -141,7 +142,8 @@ struct cardView: View {
     var isStationary: Bool
     var ultraCompetitive: Bool
     var body: some View {
-        let foregroundColor:Color=Color.init("CardForeground" + (card.CardIcon == .diamond || card.CardIcon == .heart ? "Red" : "Black") + (active ? "Active" : "Inactive"))
+        let foregroundColor=Color.init("CardForeground" + (card.CardIcon == .diamond || card.CardIcon == .heart ? "Red" : "Black") + (active ? "Active" : "Inactive"))
+        let animation=ultraCompetitive ? nil : competitiveAnimation
         Rectangle()
             .fill(Color.clear)
             .aspectRatio(128/177, contentMode: .fit)
@@ -152,12 +154,12 @@ struct cardView: View {
                             .foregroundColor(Color.white)
                             .animation(springAnimation)
                             .colorMultiply(Color(active ? "Card-Active-Bg" : "Card-Inactive-Bg"))
-                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
+                            .animation(animation)
                         RoundedRectangle(cornerRadius: geometry.size.width*0.07,style: .continuous)
                             .stroke(Color.white, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
                             .animation(springAnimation)
                             .colorMultiply(foregroundColor)
-                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
+                            .animation(animation)
                             .padding(geometry.size.width*0.025)
                         Text(String(card.numb)).font(.system(size:(geometry.size.width)*0.55, weight: .medium, design: .rounded))
                             .if (isStationary) { view in
@@ -166,7 +168,7 @@ struct cardView: View {
                             .foregroundColor(Color.white)
                             .animation(springAnimation)
                             .colorMultiply(foregroundColor)
-                            .animation(ultraCompetitive ? nil : .easeInOut(duration:competitiveTime))
+                            .animation(animation)
                         numView(isStationary: isStationary, CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor, ultraCompetitive: ultraCompetitive)
                     }
                 }

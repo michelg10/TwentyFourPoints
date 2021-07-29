@@ -124,8 +124,7 @@ struct TopBar: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     var body: some View {
-        print("TOP BAR UPDATE, REWARD VISIBLE \(rewardVisible)")
-        return ZStack(alignment: .top) {
+        ZStack(alignment: .top) {
             topBarButtons(konamiCheatVisible: konamiCheatVisible, rewardVisible: rewardVisible, tfengine: tfengine, mainViewVisible: $mainViewVisible)
             TopBarText(lvl: lvl, lvlName: lvlName, tfengine: tfengine, achPresented: $achPresented)
                 .padding(.top,horizontalSizeClass == .regular ? 0 : 25)

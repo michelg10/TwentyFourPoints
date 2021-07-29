@@ -15,6 +15,7 @@ struct borederedButton: View {
     var isOnSheet=false
     var body: some View {
         let colorPrefix=(isOnSheet ? "Sheet" : "")+"HomeButton"
+        let foregroundColor=Color.init(clicked ? (colorPrefix+"ForegroundActive") : (colorPrefix+"ForegroundInactive"))
         ZStack {
             RoundedRectangle(cornerRadius: 11,style: .continuous)
                 .frame(width:width ?? 182,height:53)
@@ -24,12 +25,12 @@ struct borederedButton: View {
             RoundedRectangle(cornerRadius: 9,style: .continuous)
                 .stroke(Color.white, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                 .animation(nil)
-                .colorMultiply(Color.init(clicked ? (colorPrefix+"ForegroundActive") : (colorPrefix+"ForegroundInactive")))
+                .colorMultiply(foregroundColor)
                 .frame(width:(width ?? 182)-8,height:47)
             Text(title)
                 .foregroundColor(.white)
                 .animation(nil)
-                .colorMultiply(.init(clicked ? (colorPrefix+"ForegroundActive") : (colorPrefix+"ForegroundInactive")))
+                .colorMultiply(foregroundColor)
                 .font(.system(size: 24, weight: .medium, design: .rounded))
         }
     }

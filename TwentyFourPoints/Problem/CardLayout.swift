@@ -26,7 +26,7 @@ struct cardButtonView: View {
                 cardView(active: active, card: card, isStationary: false, ultraCompetitive: tfengine.getUltraCompetitive())
             })
             .buttonStyle(cardButtonStyle())
-            .animation(ultraCompetitive ? nil : .easeInOut(duration: competitiveButtonAnimationTime))
+            .animation(ultraCompetitive ? nil : competitiveButtonAnimation)
             .disabled(!active || !operational)
         }.transition(.asymmetric(insertion: .identity, removal: instantCompetitive ? .identity : .offset(x: UIScreen.main.bounds.width, y: 0)))
         .animation(.spring())

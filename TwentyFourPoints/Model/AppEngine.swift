@@ -86,11 +86,21 @@ class TFEngine: ObservableObject,tfCallable {
     }
     
     func handleNumberPress(index: Int) {
+//        let start = DispatchTime.now()
         calcEngine.handleNumberPress(index: index)
+//        let end = DispatchTime.now()
+//        let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
+//        let timeInterval = Double(nanoTime) / 1_000_000_000
+//        print("Number press time: \(timeInterval) seconds")
     }
     
     func handleOprPress(Opr: opr) {
+//        let start = DispatchTime.now()
         calcEngine.handleOprPress(Opr: Opr)
+//        let end = DispatchTime.now()
+//        let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
+//        let timeInterval = Double(nanoTime) / 1_000_000_000
+//        print("Operator press time: \(timeInterval) seconds")
     }
     
     func handleKeyboardNumberPress(number: Int?) {

@@ -151,9 +151,7 @@ class TFCalcEngine: ObservableObject {
         
         if (selectedOperator == nil) {
             if (mainVal == nil) {
-                withAnimation(.easeInOut(duration: cardAniDur)) {
-                    cardActive[index]=false
-                }
+                cardActive[index]=false
                 mainVal=storedVal(value: Double(tfengine!.curQ.cs[index].numb), source: index)
             } else {
                 if mainVal!.source == 4 {
@@ -164,9 +162,7 @@ class TFCalcEngine: ObservableObject {
                     } else {
                         precondition(stored!.source != 4)
                         
-                        withAnimation(.easeInOut(duration: cardAniDur)) {
-                            cardActive[stored!.source]=true
-                        }
+                        cardActive[stored!.source]=true
                         
                         stored=mainVal
                         
@@ -184,10 +180,8 @@ class TFCalcEngine: ObservableObject {
                         handleNumberPress(index: index)
                     } else {
                         if mainVal!.source != index {
-                            withAnimation(.easeInOut(duration: cardAniDur)) {
-                                cardActive[mainVal!.source]=true
-                                cardActive[index]=false
-                            }
+                            cardActive[mainVal!.source]=true
+                            cardActive[index]=false
                             mainVal=storedVal(value: Double(tfengine!.curQ.cs[index].numb), source: index)
                         }
                     }
@@ -204,9 +198,7 @@ class TFCalcEngine: ObservableObject {
                 tfengine!.nextCardView(nxtCardSet: nil)
                 tfengine!.incrementLvl()
             } else if mathRes == .cont {
-                withAnimation(.easeInOut(duration: cardAniDur)) {
-                    cardActive[index]=false
-                }
+                cardActive[index]=false
             } else if mathRes == .failure {
                 respondToFailure(isDivByZero: false)
             } else if mathRes == .divByZero {
@@ -279,9 +271,7 @@ class TFCalcEngine: ObservableObject {
                     stored!.value *= -1
                 }
                 mainVal=stored
-                withAnimation(.easeInOut(duration: cardAniDur)) {
-                    stored=nil
-                }
+                stored=nil
             } else {
                 if nxtNumNeg == true {
                     nxtNumNeg=nil

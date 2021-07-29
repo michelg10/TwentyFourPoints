@@ -23,7 +23,7 @@ struct ProblemView: View {
     
     var body: some View {
         let buttonsPadding=horizontalSizeClass == .regular ? 30.0 : 15.0
-        print("View reload")
+        print("ProblemView reload")
         return GeometryReader { _ in
             ZStack {
                 VStack {

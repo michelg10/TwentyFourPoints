@@ -1060,6 +1060,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1;
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.TwentyFourPoints;
 				PRODUCT_MODULE_NAME = TwentyFourPoints;
 				PRODUCT_NAME = "24 Points";
@@ -1095,6 +1096,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1;
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.legitmichel777.TwentyFourPoints;
 				PRODUCT_MODULE_NAME = TwentyFourPoints;
 				PRODUCT_NAME = "24 Points";

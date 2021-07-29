@@ -365,9 +365,9 @@ struct bottomButtons: View {
             let allButtonsDisableSwitch=buttonsDisabled || tfengine.nxtState != .ready
             TopButtonsRow(tfengine: tfengine,
                           storeActionEnabled: !(tfcalcengine.storedExpression == nil && !tfcalcengine.oprButtonActive || allButtonsDisableSwitch),
-                          storeIconColorEnabled: !buttonsDisabled && tfcalcengine.oprButtonActive,
-                          storeTextColorEnabled: !buttonsDisabled,
-                          storeRectColorEnabled: !buttonsDisabled && !(tfcalcengine.storedExpression == nil && !tfcalcengine.oprButtonActive),
+                          storeIconColorEnabled: !allButtonsDisableSwitch && tfcalcengine.oprButtonActive,
+                          storeTextColorEnabled: !allButtonsDisableSwitch,
+                          storeRectColorEnabled: !allButtonsDisableSwitch && !(tfcalcengine.storedExpression == nil && !tfcalcengine.oprButtonActive),
                           expr: tfcalcengine.expression,
                           autocompleteHintExpression: tfcalcengine.autocompleteHintExpression,
                           answerShowOpacity: tfengine.answerShowOpacity,
@@ -382,7 +382,7 @@ struct bottomButtons: View {
                           showTooltip: showTooltip
             )
             
-            MiddleButtonRow(colorActive: buttonsDisabled ? Array(repeating: false,count: 4) : tfcalcengine.cardActive,
+            MiddleButtonRow(colorActive: allButtonsDisableSwitch ? Array(repeating: false,count: 4) : tfcalcengine.cardActive,
                             actionActive: allButtonsDisableSwitch ? Array(repeating: false,count:4) : tfcalcengine.cardActive,
                             cards: tfengine.curQ.cs,
                             tfengine: tfengine,
@@ -391,8 +391,8 @@ struct bottomButtons: View {
             )
             let otherOprActionActive = tfcalcengine.oprButtonActive && !allButtonsDisableSwitch
             let oprActionActive = [otherOprActionActive, !allButtonsDisableSwitch, otherOprActionActive, otherOprActionActive]
-            let otherOprColorActive=tfcalcengine.oprButtonActive && !buttonsDisabled
-            let oprColorActive = [otherOprColorActive, !buttonsDisabled, otherOprColorActive, otherOprColorActive]
+            let otherOprColorActive=tfcalcengine.oprButtonActive && !allButtonsDisableSwitch
+            let oprColorActive = [otherOprColorActive, !allButtonsDisableSwitch, otherOprColorActive, otherOprColorActive]
             
             BottomButtonRow(tfengine: tfengine,
                             oprActionActive: oprActionActive,

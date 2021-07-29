@@ -970,6 +970,7 @@ class TFEngine: ObservableObject,tfCallable {
         DispatchQueue.global().async {
             self.saveData()
         }
+        objectWillChange.send()
     }
     
     var answerShow:String = "888"

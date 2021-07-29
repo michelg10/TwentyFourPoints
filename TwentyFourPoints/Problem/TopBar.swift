@@ -49,10 +49,10 @@ struct topBarButtons: View {
             }).disabled(konamiCheatVisible || rewardVisible)
             .keyboardShortcut(KeyEquivalent.return, modifiers: .command)
             Button(action: {
-                if konamiCheatVisible {
+                if tfengine.konamiCheatVisible {
                     tfengine.konamiLvl(setLvl: nil)
                     tfengine.hapticGate(hap: .medium)
-                } else if rewardVisible {
+                } else if tfengine.rewardScreenVisible {
                     tfengine.dismissRank()
                 } else {
                     tfengine.nxtButtonPressed()
@@ -112,11 +112,7 @@ struct TopBarText: View {
     }
 }
 
-struct TopBar: View, Equatable {
-    static func == (lhs: TopBar, rhs: TopBar) -> Bool {
-        return lhs.lvl == rhs.lvl && lhs.konamiCheatVisible == rhs.konamiCheatVisible && lhs.rewardVisible == rhs.rewardVisible
-    }
-    
+struct TopBar: View {
     var lvl: Int
     var lvlName: String?
     var konamiCheatVisible: Bool
@@ -128,7 +124,8 @@ struct TopBar: View, Equatable {
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     var body: some View {
-        ZStack(alignment: .top) {
+        print("TOP BAR UPDATE, REWARD VISIBLE \(rewardVisible)")
+        return ZStack(alignment: .top) {
             topBarButtons(konamiCheatVisible: konamiCheatVisible, rewardVisible: rewardVisible, tfengine: tfengine, mainViewVisible: $mainViewVisible)
             TopBarText(lvl: lvl, lvlName: lvlName, tfengine: tfengine, achPresented: $achPresented)
                 .padding(.top,horizontalSizeClass == .regular ? 0 : 25)

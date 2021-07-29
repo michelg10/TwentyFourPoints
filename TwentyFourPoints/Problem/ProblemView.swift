@@ -29,7 +29,6 @@ struct ProblemView: View {
                 VStack {
                     Spacer()
                     TopBar(lvl: tfengine.levelInfo.lvl, lvlName: tfengine.levelInfo.lvlName, konamiCheatVisible: tfengine.konamiCheatVisible, rewardVisible: tfengine.rewardScreenVisible, tfengine:tfengine, mainViewVisible: $mainViewVisible)
-                        .equatable()
                         .padding(.bottom,20)
                     ZStack {
                         if tfengine.konamiCheatVisible {
@@ -83,13 +82,11 @@ struct ProblemView: View {
             .ignoresSafeArea(.keyboard,edges: .all)
             .navigationBarHidden(true)
         }.onAppear {
-            print("Nav back")
             canNavBack=true
             tfengine.setAccessPointVisible(visible: false)
             mainViewVisible=false
             tfengine.currentSession=UUID().uuidString
         }.onDisappear {
-            print("No nav back")
             tfengine.cardsOnScreen=false
             canNavBack=false
             mainViewVisible=true

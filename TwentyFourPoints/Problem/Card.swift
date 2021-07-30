@@ -43,9 +43,7 @@ struct numView: View {
     var CardIcon: cardIcon
     var numberString:String
     var foregroundColor:Color
-    var ultraCompetitive: Bool
     var body: some View {
-        let animation=ultraCompetitive ? nil : competitiveAnimation
         GeometryReader { geometry in
             VStack(alignment: .center, spacing: 0, content: {
                 HStack {
@@ -54,18 +52,12 @@ struct numView: View {
                             .if (isStationary) { view in
                                 view.animation(nil)
                             }
-                            .animation(springAnimation)
-                            .foregroundColor(Color.white)
-                            .colorMultiply(foregroundColor)
-                            .animation(animation)
+                            .foregroundColor(foregroundColor)
                         Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
                             .if (isStationary) { view in
                                 view.animation(nil)
                             }
-                            .animation(springAnimation)
-                            .foregroundColor(Color.white)
-                            .colorMultiply(foregroundColor)
-                            .animation(animation)
+                            .foregroundColor(foregroundColor)
                     }
                     Spacer()
                 }
@@ -78,19 +70,13 @@ struct numView: View {
                                 view.animation(nil)
                             }
                             .rotationEffect(.init(degrees: 180))
-                            .animation(springAnimation)
-                            .foregroundColor(Color.white)
-                            .colorMultiply(foregroundColor)
-                            .animation(animation)
+                            .foregroundColor(foregroundColor)
                         Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
                             .if (isStationary) { view in
                                 view.animation(nil)
                             }
                             .rotationEffect(.init(degrees: 180))
-                            .animation(springAnimation)
-                            .foregroundColor(Color.white)
-                            .colorMultiply(foregroundColor)
-                            .animation(animation)
+                            .foregroundColor(foregroundColor)
                     }
                 }
             }).frame(minWidth: 0,maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
@@ -143,7 +129,6 @@ struct cardView: View {
     var ultraCompetitive: Bool
     var body: some View {
         let foregroundColor=Color.init("CardForeground" + (card.CardIcon == .diamond || card.CardIcon == .heart ? "Red" : "Black") + (active ? "Active" : "Inactive"))
-        let animation=ultraCompetitive ? nil : competitiveAnimation
         Rectangle()
             .fill(Color.clear)
             .aspectRatio(128/177, contentMode: .fit)
@@ -151,28 +136,20 @@ struct cardView: View {
                 GeometryReader { geometry in
                     ZStack {
                         RoundedRectangle(cornerRadius: geometry.size.width*0.1,style: .continuous)
-                            .foregroundColor(Color.white)
-                            .animation(springAnimation)
-                            .colorMultiply(Color(active ? "Card-Active-Bg" : "Card-Inactive-Bg"))
-                            .animation(animation)
+                            .foregroundColor(Color(active ? "Card-Active-Bg" : "Card-Inactive-Bg"))
                         RoundedRectangle(cornerRadius: geometry.size.width*0.07,style: .continuous)
-                            .stroke(Color.white, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
-                            .animation(springAnimation)
-                            .colorMultiply(foregroundColor)
-                            .animation(animation)
+                            .stroke(foregroundColor, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
                             .padding(geometry.size.width*0.025)
                         Text(String(card.numb)).font(.system(size:(geometry.size.width)*0.55, weight: .medium, design: .rounded))
                             .if (isStationary) { view in
                                 view.animation(nil)
                             }
-                            .foregroundColor(Color.white)
-                            .animation(springAnimation)
-                            .colorMultiply(foregroundColor)
-                            .animation(animation)
-                        numView(isStationary: isStationary, CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor, ultraCompetitive: ultraCompetitive)
+                            .foregroundColor(foregroundColor)
+                        numView(isStationary: isStationary, CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor)
                     }
                 }
-            )
+            ).drawingGroup()
+            .animation(springAnimation)
     }
 }
 

@@ -126,7 +126,6 @@ struct cardView: View {
     var active: Bool
     var card: card
     var isStationary: Bool
-    var ultraCompetitive: Bool
     var body: some View {
         let foregroundColor=Color.init("CardForeground" + (card.CardIcon == .diamond || card.CardIcon == .heart ? "Red" : "Black") + (active ? "Active" : "Inactive"))
         Rectangle()
@@ -148,13 +147,14 @@ struct cardView: View {
                         numView(isStationary: isStationary, CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor)
                     }
                 }
-            ).drawingGroup()
+            )
+            .drawingGroup()
             .animation(springAnimation)
     }
 }
 
 struct card_Previews: PreviewProvider {
     static var previews: some View {
-        cardView(active: true, card: card(CardIcon: .club, numb: 2), isStationary: false, ultraCompetitive: false)
+        cardView(active: true, card: card(CardIcon: .club, numb: 2), isStationary: false)
     }
 }

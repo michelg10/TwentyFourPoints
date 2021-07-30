@@ -92,10 +92,6 @@ class tutorialEngine: ObservableObject, tfCallable {
         return true
     }
     
-    func getUltraCompetitive() -> Bool {
-        return true
-    }
-    
     func hapticGate(hap: haptic) {
         generateHaptic(hap: hap)
     }

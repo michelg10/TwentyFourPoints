@@ -45,7 +45,6 @@ protocol tfCallable {
     func handleNumberPress(index: Int)
     func handleOprPress(Opr:opr)
     func hapticGate(hap:haptic)
-    func getUltraCompetitive() -> Bool
     func getDoSplit() -> Bool
     func handleKeyboardNumberPress(number: Int?)
 }

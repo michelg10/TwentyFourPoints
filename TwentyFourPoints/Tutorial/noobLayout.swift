@@ -56,7 +56,6 @@ struct noobLayout: View {
                               resetActionEnabled: false,
                               resetColorEnabled: true,
                               storedExpr: tuengine.stored,
-                              ultraCompetitive: tuengine.getUltraCompetitive(),
                               doSplit: doSplit,
                               showTooltip: showTooltip
                 )
@@ -64,13 +63,11 @@ struct noobLayout: View {
                                 actionActive: tuengine.getNumbButtonsClickable(),
                                 cards: tuengine.cards,
                                 tfengine: tuengine,
-                                ultraCompetitive: tuengine.getUltraCompetitive(),
                                 doSplit: doSplit
                 )
                 BottomButtonRow(tfengine: tuengine,
                                 oprActionActive: tuengine.getOprButtonsClickable(),
                                 oprColorActive: tuengine.oprButtonsHighlighted,
-                                ultraCompetitive: tuengine.getUltraCompetitive(),
                                 doSplit: doSplit
                 )
             }.padding(.horizontal,15)

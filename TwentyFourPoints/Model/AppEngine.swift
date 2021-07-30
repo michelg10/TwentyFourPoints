@@ -160,10 +160,6 @@ class TFEngine: ObservableObject,tfCallable {
         return useSplit
     }
     
-    func getUltraCompetitive() -> Bool {
-        return true
-    }
-    
     var curQ: currentQuestion
     
     //MARK: Updaters and Updatees

@@ -41,7 +41,6 @@ struct bottomButtonView: View {
 struct bottomButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
-            .saturation(configuration.isPressed ? 0.95 : 1)
             .brightness(configuration.isPressed ? 0.03 : 0) //0.05
     }
 }
@@ -78,7 +77,7 @@ let buttonTooltipSize: Double=51
 struct imageTooltip: View {
     var name: String
     var body: some View {
-        var actualDisplay=(name == " " ? "space" : (name == "." ? "dot" : name))
+        let actualDisplay=(name == " " ? "space" : (name == "." ? "dot" : name))
         
         Text(actualDisplay)
             .foregroundColor(.secondary)
@@ -90,10 +89,10 @@ let tooltipDistance=10.0 //how far it is from the button
 let tooltipSpacing=3.0 //spacing between tooltips
 let tooltipOpacity=0.5
 
+let autocompleteTextColor=Color.init("AutocompleteText")
+let wrongNumberColor=Color.init("WrongNumber")
+let resetButtonColor=Color.init("ResetButtonColor")
 struct TopButtonsRow: View {
-    let autocompleteTextColor=Color.init("AutocompleteText")
-    let wrongNumberColor=Color.init("WrongNumber")
-    let resetButtonColor=Color.init("ResetButtonColor")
     let textInset=0.65
     var tfengine: tfCallable
     var storeActionEnabled: Bool

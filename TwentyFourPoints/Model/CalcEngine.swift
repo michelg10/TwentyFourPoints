@@ -143,7 +143,7 @@ class TFCalcEngine: ObservableObject {
         keyboardContents=""
         topCandidateMatch=nil
         incorText=""
-        tfengine!.hapticGate(hap: .light)
+        tfengine!.hapticGate(hap: .lightButton)
         
         if !cardActive[index] {
             return
@@ -209,7 +209,7 @@ class TFCalcEngine: ObservableObject {
     }
     func handleOprPress(Opr:opr) {
         incorText=""
-        tfengine!.hapticGate(hap: .light)
+        tfengine!.hapticGate(hap: .lightButton)
         // replace whatever operator is currently in use. if there's nothing in the expression right now, turn the next number negative.
         
         if topCandidateMatch != nil {
@@ -248,7 +248,7 @@ class TFCalcEngine: ObservableObject {
         
         keyboardContents=""
         topCandidateMatch=nil
-        tfengine!.hapticGate(hap: .light)
+        tfengine!.hapticGate(hap: .lightButton)
         //store can only be called if there's something in store or in the expression
         
         //handle operator selected

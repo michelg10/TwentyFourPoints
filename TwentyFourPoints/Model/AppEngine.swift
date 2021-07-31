@@ -577,7 +577,7 @@ class TFEngine: ObservableObject,tfCallable {
     
     func hapticGate(hap:haptic) {
         if useHaptics {
-            generateHaptic(hap: hap)
+            hapticGenerator.generateHaptic(hap: hap)
         }
     }
     
@@ -610,6 +610,8 @@ class TFEngine: ObservableObject,tfCallable {
     }
     
     var currentSession: String
+    
+    var hapticGenerator=HapticGenerator()
     
     init(isPreview: Bool) {
         currentSession=UUID().uuidString
@@ -770,10 +772,10 @@ class TFEngine: ObservableObject,tfCallable {
     
     func playCardsHaptic() {
         for i in 0..<viewShowOrder.count {
-            DispatchQueue.main.asyncAfter(deadline: .now()+Double(i)*viewShowDelay, execute: { [self] in
+            DispatchQueue.main.asyncAfter(deadline: .now()+(Double(i)*viewShowDelay+0.1), execute: { [self] in
                 if cardsOnScreen {
                     print("Play cards haptic")
-                    hapticGate(hap: .soft)
+                    hapticGate(hap: .cards)
                 }
             })
         }

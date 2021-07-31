@@ -49,7 +49,7 @@ struct LvlAchievementList: View {
                     }
                 }
             }
-        }.padding(.bottom,15)
+        }.padding(.bottom,50)
     }
 }
 

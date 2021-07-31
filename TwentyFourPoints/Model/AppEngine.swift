@@ -382,18 +382,19 @@ class TFEngine: ObservableObject,tfCallable {
                     }
                     let tryDeviceLevel = icloudstore.object(forKey: "dev"+devices[i]+"lvl")
                     if tryDeviceLevel != nil {
-                        let deviceLevel=tryDeviceLevel as! Int
+                        guard let deviceLevel=tryDeviceLevel as? Int else {
+                            continue
+                        }
                         let tryDeviceWeeklyLevel = icloudstore.object(forKey: "dev"+devices[i]+"wklvl")
                         let tryDeviceWeeklySave = icloudstore.object(forKey: "dev"+devices[i]+"sv")
-                        var deviceWeeklySave=Date.init(timeIntervalSinceNow: 0.0)
-                        var deviceWeeklyLevel=0
-                        if tryDeviceWeeklySave != nil && tryDeviceLevel != nil {
-                            deviceWeeklySave=tryDeviceWeeklySave as! Date
-                            deviceWeeklyLevel=tryDeviceWeeklyLevel as! Int
-                            print("Got device Weekly")
+                        guard let deviceWeeklySave=tryDeviceWeeklySave as? Date else {
+                            continue
                         }
-                        deviceData[devices[i]]=devicePersistLevelData(allTimeData: deviceLevel, weeklyData: deviceWeeklyLevel, lastSaved: deviceWeeklySave)
+                        guard let deviceWeeklyLevel=tryDeviceWeeklyLevel as? Int else {
+                            continue
+                        }
                         print("Set \(devices[i]) as \(deviceLevel), weekly \(deviceWeeklyLevel), last saved \(deviceWeeklySave)")
+                        deviceData[devices[i]]=devicePersistLevelData(allTimeData: deviceLevel, weeklyData: deviceWeeklyLevel, lastSaved: deviceWeeklySave)
                     }
                 }
             } else {

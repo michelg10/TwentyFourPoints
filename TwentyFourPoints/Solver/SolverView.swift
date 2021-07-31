@@ -87,20 +87,30 @@ struct solverNumView: View {
     var CardIcon: cardIcon
     var numberString:String
     var foregroundColor:Color
+    
+    @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .center, spacing: 0, content: {
                 HStack {
                     VStack {
-                        Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
-                            .foregroundColor(Color.white)
-                            .colorMultiply(foregroundColor)
-                            .animation(solverCardAnimation)
-                        Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
-                            .animation(nil)
-                            .foregroundColor(Color.white)
-                            .colorMultiply(foregroundColor)
-                            .animation(solverCardAnimation)
+                        if horizontalSizeClass == .regular {
+                            Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
+                                .foregroundColor(Color.white)
+                                .colorMultiply(foregroundColor)
+                                .animation(solverCardAnimation)
+                            Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
+                                .animation(nil)
+                                .foregroundColor(Color.white)
+                                .colorMultiply(foregroundColor)
+                                .animation(solverCardAnimation)
+                        } else {
+                            Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
+                                .foregroundColor(foregroundColor)
+                            Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
+                                .foregroundColor(foregroundColor)
+                        }
                     }
                     Spacer()
                 }
@@ -108,17 +118,26 @@ struct solverNumView: View {
                 HStack {
                     Spacer()
                     VStack {
-                        Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
-                            .rotationEffect(.init(degrees: 180))
-                            .animation(nil)
-                            .foregroundColor(Color.white)
-                            .colorMultiply(foregroundColor)
-                            .animation(solverCardAnimation)
-                        Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
-                            .rotationEffect(.init(degrees: 180))
-                            .foregroundColor(Color.white)
-                            .colorMultiply(foregroundColor)
-                            .animation(solverCardAnimation)
+                        if horizontalSizeClass == .regular {
+                            Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
+                                .rotationEffect(.init(degrees: 180))
+                                .animation(nil)
+                                .foregroundColor(Color.white)
+                                .colorMultiply(foregroundColor)
+                                .animation(solverCardAnimation)
+                            Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
+                                .rotationEffect(.init(degrees: 180))
+                                .foregroundColor(Color.white)
+                                .colorMultiply(foregroundColor)
+                                .animation(solverCardAnimation)
+                        } else {
+                            Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
+                                .rotationEffect(.init(degrees: 180))
+                                .foregroundColor(foregroundColor)
+                            Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
+                                .rotationEffect(.init(degrees: 180))
+                                .foregroundColor(foregroundColor)
+                        }
                     }
                 }
             }).frame(minWidth: 0,maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
@@ -134,8 +153,6 @@ struct solverCard: View {
     var index: Int
     var cardicon: cardIcon
     var solengine: solverEngine
-    var isStationary=false
-    var ultraCompetitive=false
     var active=true
     var tfengine: TFEngine
     
@@ -143,8 +160,6 @@ struct solverCard: View {
     
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
-    //todo: add a buffer feature i.e. dragging for a bit won't do anything then you feel a hard haptic
-    // then you start changing really fast
     var body: some View {
         let foregroundColor:Color=Color.init("SolverCardForeground" + (cardicon == .diamond || cardicon == .heart ? "Red" : "Black") + (active ? "Active" : "Inactive"))
         Rectangle()
@@ -153,16 +168,16 @@ struct solverCard: View {
             .overlay(
                 GeometryReader { geometry in
                     ZStack {
-                        RoundedRectangle(cornerRadius: geometry.size.width*0.1,style: .continuous)
-                            .foregroundColor(.white)
-                            .colorMultiply(Color(active ? "SolverCard-Active-Bg" : "SolverCard-Inactive-Bg"))
-                            .animation(solverCardAnimation)
-                        RoundedRectangle(cornerRadius: geometry.size.width*0.07,style: .continuous)
-                            .stroke(Color.white, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
-                            .colorMultiply(foregroundColor)
-                            .animation(solverCardAnimation)
-                            .padding(geometry.size.width*0.025)
                         if horizontalSizeClass == .regular {
+                            RoundedRectangle(cornerRadius: geometry.size.width*0.1,style: .continuous)
+                                .foregroundColor(.white)
+                                .colorMultiply(Color(active ? "SolverCard-Active-Bg" : "SolverCard-Inactive-Bg"))
+                                .animation(solverCardAnimation)
+                            RoundedRectangle(cornerRadius: geometry.size.width*0.07,style: .continuous)
+                                .stroke(Color.white, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
+                                .colorMultiply(foregroundColor)
+                                .animation(solverCardAnimation)
+                                .padding(geometry.size.width*0.025)
                             Text(numText)
                                 .font(.system(size: (geometry.size.width)*0.55, weight: .medium, design: .rounded))
                                 .animation(nil)
@@ -170,6 +185,11 @@ struct solverCard: View {
                                 .colorMultiply(foregroundColor)
                                 .animation(solverCardAnimation)
                         } else {
+                            RoundedRectangle(cornerRadius: geometry.size.width*0.1,style: .continuous)
+                                .foregroundColor(Color(active ? "SolverCard-Active-Bg" : "SolverCard-Inactive-Bg"))
+                            RoundedRectangle(cornerRadius: geometry.size.width*0.07,style: .continuous)
+                                .stroke(foregroundColor, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
+                                .padding(geometry.size.width*0.025)
                             responderTextView(text: $numText, whichResponder: $whichResponder, index: index, textSize: (geometry.size.width)*0.55, textColor: UIColor(foregroundColor))
                         }
                         solverNumView(CardIcon: cardicon, numberString: getStringNameOfNum(num: Int(numText) ?? -1), foregroundColor: foregroundColor)

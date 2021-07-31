@@ -27,9 +27,10 @@ struct ProblemView: View {
         return GeometryReader { _ in
             ZStack {
                 VStack {
-                    Spacer()
                     TopBar(lvl: tfengine.levelInfo.lvl, lvlName: tfengine.levelInfo.lvlName, konamiCheatVisible: tfengine.konamiCheatVisible, rewardVisible: tfengine.rewardScreenVisible, tfengine:tfengine, mainViewVisible: $mainViewVisible)
+                        .drawingGroup()
                         .padding(.bottom,20)
+                        .padding(.top,10)
                     ZStack {
                         if tfengine.konamiCheatVisible {
                             konamiView(tfengine: tfengine, karen: konamikaren)
@@ -64,12 +65,11 @@ struct ProblemView: View {
                                                             tfengine.cardsClickable=true
                                                         }))
                         }
-                    }
+                    }.drawingGroup()
                     bottomButtons(rotationObserver: rotationObserver, tfengine: tfengine, tfcalcengine: tfcalcengine, buttonsDisabled: tfengine.konamiCheatVisible || tfengine.rewardScreenVisible, buttonsPadding: buttonsPadding)
                         .padding(.horizontal,CGFloat(buttonsPadding))
-                        .padding(.bottom,horizontalSizeClass == .regular ? 80.0 : 50.0)
+                        .padding(.bottom,horizontalSizeClass == .regular ? 90.0 : 60.0)
                         .padding(.top,23)
-                    Spacer()
                 }
                 if confettiEnabled {
                     EmitterView()

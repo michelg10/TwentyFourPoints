@@ -44,16 +44,16 @@ func generateHaptic(hap:haptic) {
 }
 
 class HapticGenerator {
-    var engine: CHHapticEngine
+    var engine: CHHapticEngine?
     init() {
         do {
             engine = try CHHapticEngine()
         } catch let error {
-            fatalError("Engine Creation Error: \(error)")
+            return
         }
         
-        engine.playsHapticsOnly = true
-        engine.stoppedHandler = { reason in
+        engine!.playsHapticsOnly = true
+        engine!.stoppedHandler = { reason in
             print("Stop Handler: The engine stopped for reason: \(reason.rawValue)")
             switch reason {
             case .audioSessionInterrupt:
@@ -75,13 +75,13 @@ class HapticGenerator {
             }
         }
         
-        engine.resetHandler = {
+        engine!.resetHandler = {
             
             print("Reset Handler: Restarting the engine.")
             
             do {
                 // Try restarting the engine.
-                try self.engine.start()                
+                try self.engine!.start()
             } catch {
                 print("Failed to start the engine")
             }
@@ -89,7 +89,7 @@ class HapticGenerator {
         
         // Start the haptic engine for the first time.
         do {
-            try self.engine.start()
+            try self.engine!.start()
         } catch {
             print("Failed to start the engine: \(error)")
         }
@@ -109,7 +109,7 @@ class HapticGenerator {
             let pattern = try CHHapticPattern(events: [event], parameters: [])
             
             // Create a player to play the haptic pattern.
-            let player = try engine.makePlayer(with: pattern)
+            let player = try engine!.makePlayer(with: pattern)
             try player.start(atTime: CHHapticTimeImmediate) // Play now.
         } catch let error {
             print("Error creating a haptic transient pattern: \(error)")
@@ -117,6 +117,9 @@ class HapticGenerator {
     }
     
     func generateHaptic(hap:haptic) {
+        if engine == nil {
+            return
+        }
         switch hap {
         case .lightButton:
             generateHapticWithParams(intensity: 0.57, sharpness: 1.0)
@@ -145,12 +148,15 @@ class HapticGenerator {
     private var backgroundToken: NSObjectProtocol?
     
     private func addObservers() {
+        if engine == nil {
+            return
+        }
         backgroundToken = NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification,
                                                                  object: nil,
                                                                  queue: nil)
         { _ in
             // Stop the haptic engine.
-            self.engine.stop(completionHandler: { error in
+            self.engine!.stop(completionHandler: { error in
                 if let error = error {
                     print("Haptic Engine Shutdown Error: \(error)")
                     return
@@ -162,7 +168,7 @@ class HapticGenerator {
                                                                  queue: nil)
         { _ in
             // Restart the haptic engine.
-            self.engine.start(completionHandler: { error in
+            self.engine!.start(completionHandler: { error in
                 if let error = error {
                     print("Haptic Engine Startup Error: \(error)")
                     return

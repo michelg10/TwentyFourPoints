@@ -236,9 +236,7 @@ struct MiddleButtonRow: View {
                         }).buttonStyle(bottomButtonStyle())
                             .animation(nil)
                             .disabled(!actionActive[index])
-#if KONAMI
-                            .modifier(konamiLog(tfengine: tfengine,daBtn: daBtn.allCases[4+index]))
-#endif
+//                            .modifier(konamiLog(tfengine: tfengine,daBtn: daBtn.allCases[4+index]))
                     }
                 }
                 if doSplit {
@@ -253,9 +251,7 @@ struct MiddleButtonRow: View {
                         }).buttonStyle(bottomButtonStyle())
                             .animation(nil)
                             .disabled(!actionActive[index])
-#if KONAMI
-                            .modifier(konamiLog(tfengine: tfengine,daBtn: daBtn.allCases[4+index]))
-#endif
+//                            .modifier(konamiLog(tfengine: tfengine,daBtn: daBtn.allCases[4+index]))
                     }
                 }
             }.frame(maxWidth: .infinity)
@@ -303,9 +299,7 @@ struct BottomButtonRow: View {
                     }).buttonStyle(bottomButtonStyle())
                         .animation(nil)
                         .disabled(!oprActionActive[0])
-#if KONAMI
-                        .modifier(konamiLog(tfengine: tfengine,daBtn: .add))
-#endif
+//                        .modifier(konamiLog(tfengine: tfengine,daBtn: .add))
                         .keyboardShortcut(.init("="), modifiers: .init([]))
                     Button(action: {
                         tfengine.handleOprPress(Opr: .sub)
@@ -314,9 +308,7 @@ struct BottomButtonRow: View {
                     }).buttonStyle(bottomButtonStyle())
                         .animation(nil)
                         .disabled(!oprActionActive[1])
-#if KONAMI
-                        .modifier(konamiLog(tfengine: tfengine,daBtn: .sub))
-#endif
+//                        .modifier(konamiLog(tfengine: tfengine,daBtn: .sub))
                         .keyboardShortcut(.init("-"), modifiers: .init([]))
                 }
                 if doSplit {
@@ -330,9 +322,7 @@ struct BottomButtonRow: View {
                     }).buttonStyle(bottomButtonStyle())
                         .animation(nil)
                         .disabled(!oprActionActive[2])
-#if KONAMI
-                        .modifier(konamiLog(tfengine: tfengine,daBtn: .mul))
-#endif
+//                        .modifier(konamiLog(tfengine: tfengine,daBtn: .mul))
                         .keyboardShortcut(.init("8"), modifiers: .shift)
                     Button(action: {
                         tfengine.handleOprPress(Opr: .div)
@@ -341,9 +331,7 @@ struct BottomButtonRow: View {
                     }).buttonStyle(bottomButtonStyle())
                         .animation(nil)
                         .disabled(!oprActionActive[3])
-#if KONAMI
-                        .modifier(konamiLog(tfengine: tfengine,daBtn: .div))
-#endif
+//                        .modifier(konamiLog(tfengine: tfengine,daBtn: .div))
                         .keyboardShortcut(.init("/"), modifiers: .init([]))
                 }
             }

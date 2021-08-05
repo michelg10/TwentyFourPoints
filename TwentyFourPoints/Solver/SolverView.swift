@@ -227,7 +227,6 @@ struct solverCard: View {
 struct SolverTopBar: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var solengine: solverEngine
-    @Binding var mainViewVisible: Bool
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     
@@ -237,7 +236,7 @@ struct SolverTopBar: View {
             Button(action: {
                 tfengine.hapticGate(hap: .medium)
                 presentationMode.wrappedValue.dismiss()
-                mainViewVisible=true
+                tfengine.mainMenuButtonsActive=true
                 tfengine.setAccessPointVisible(visible: true)
             }, label: {
                 navBarButton(symbolName: "chevron.backward", active: true)
@@ -270,7 +269,6 @@ struct SolverTopBar: View {
 
 struct SolverView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @Binding var mainViewVisible: Bool
     @ObservedObject var solengine: solverEngine
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -280,10 +278,10 @@ struct SolverView: View {
         VStack(spacing: 0) {
             if horizontalSizeClass == .regular {
                 ZStack {
-                    SolverTopBar(solengine: solengine, mainViewVisible: $mainViewVisible, tfengine: tfengine)
+                    SolverTopBar(solengine: solengine, tfengine: tfengine)
                 }
             } else {
-                SolverTopBar(solengine: solengine, mainViewVisible: $mainViewVisible, tfengine: tfengine)
+                SolverTopBar(solengine: solengine, tfengine: tfengine)
             }
             
             Spacer()
@@ -348,14 +346,14 @@ struct SolverView: View {
         .navigationBarHidden(true)
         .onAppear {
             canNavBack=true
-            mainViewVisible=false
+            tfengine.mainMenuButtonsActive=false
             tfengine.setAccessPointVisible(visible: false)
             if horizontalSizeClass == .regular {
                 solengine.whichCardInFocus=0
             }
         }.onDisappear {
             canNavBack=false
-            mainViewVisible=true
+            tfengine.mainMenuButtonsActive=true
             tfengine.setAccessPointVisible(visible: true)
         }
     }
@@ -364,8 +362,7 @@ struct SolverView: View {
 struct SolverView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            SolverView(mainViewVisible: .constant(false), solengine: solverEngine(isPreview: true, tfEngine: TFEngine(isPreview: true)), tfengine: TFEngine(isPreview: true))
-                .previewInterfaceOrientation(.landscapeLeft)
+            SolverView(solengine: solverEngine(isPreview: true, tfEngine: TFEngine(isPreview: true)), tfengine: TFEngine(isPreview: true))
         } else {
             // Fallback on earlier versions
         }

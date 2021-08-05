@@ -72,9 +72,11 @@ struct customAchievement {
     var id: String
 }
 
-let currentVersion=46
+let currentVersion=47
 
 class TFEngine: ObservableObject,tfCallable {
+    
+    var mainMenuButtonsActive=true;
     
     // routing everything to TFCalcEngine
     var calcEngine: TFCalcEngine
@@ -687,7 +689,6 @@ class TFEngine: ObservableObject,tfCallable {
         if solengine.cards == nil {
             solengine.randomProblem(upperBound: upperBound)
         }
-        saveData()
         
         setGCAuthHandler()
         
@@ -696,8 +697,9 @@ class TFEngine: ObservableObject,tfCallable {
         if savedVersion<currentVersion {
             savedVersion=currentVersion
             showWhatsNewView=true
-            saveData()
         }
+        
+        saveData()
     }
     
     func setAccessPointVisible(visible: Bool) {

@@ -112,7 +112,6 @@ struct PreferencesView: View {
     @ObservedObject var tfengine: TFEngine
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var prefColorScheme: ColorScheme?
-    @Binding var mainViewVisible: Bool
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -122,7 +121,7 @@ struct PreferencesView: View {
                 Button(action: {
                     tfengine.hapticGate(hap: .medium)
                     presentationMode.wrappedValue.dismiss()
-                    mainViewVisible=true
+                    tfengine.mainMenuButtonsActive=true
                     tfengine.setAccessPointVisible(visible: true)
                 }, label: {
                     ZStack {
@@ -280,6 +279,6 @@ struct PreferencesView: View {
 struct PreferencesView_Previews: PreviewProvider {
     static var previews: some View {
         icon24(appearance: .dark)
-        PreferencesView(tfengine: TFEngine(isPreview: true), prefColorScheme: .constant(nil), mainViewVisible: .constant(false))
+        PreferencesView(tfengine: TFEngine(isPreview: true), prefColorScheme: .constant(nil))
     }
 }

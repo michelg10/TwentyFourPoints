@@ -139,7 +139,6 @@ struct SolverKeyboard_Previews: PreviewProvider {
                 Spacer()
                 SolverKeyboard(numbersDisabled: Array(repeating: false, count: 10), deleteDisabled: false, prevNextDisabled: true, solengine: .init(isPreview: true, tfEngine: .init(isPreview: true)))
             }.edgesIgnoringSafeArea(.bottom)
-            .previewInterfaceOrientation(.landscapeLeft)
         } else {
             // Fallback on earlier versions
         }

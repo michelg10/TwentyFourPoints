@@ -77,8 +77,8 @@ struct ProblemView: View {
                         .disabled(true)
                         .zIndex(9999)
                 }
-            }.background(Color.init("bgColor"))
-            .ignoresSafeArea(.keyboard,edges: .all)
+            }
+//            .ignoresSafeArea(.keyboard,edges: .all) // this would only be required for konami
             .navigationBarHidden(true)
         }.onAppear {
             canNavBack=true

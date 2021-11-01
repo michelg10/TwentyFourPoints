@@ -8,8 +8,6 @@
 #ifndef generator24_hpp
 #define generator24_hpp
 
-#include <stdio.h>
-
 struct myString {
     char* data;
     int sz;

@@ -230,7 +230,7 @@ struct mainView: View {
                         label: {
                             EmptyView()
                         })
-                    
+
                     Button(action: {
                         if tfengine.mainMenuButtonsActive {
                             tfengine.hapticGate(hap: .medium)
@@ -253,7 +253,7 @@ struct mainView: View {
                     })
                     .brightness(playHover ? hoverBrightness : 0)
                     .padding(.bottom,12)
-                    
+
                     Button(action: {
                         tfengine.hapticGate(hap: .medium)
                         navAction=2
@@ -273,10 +273,9 @@ struct mainView: View {
                     .brightness(solverHover ? hoverBrightness : 0)
                 }.padding(.bottom,80)
                 Spacer()
-            }.background(Color.init("bgColor"))
+            }.navigationBarTitle("")
             .navigationBarHidden(true)
         }.navigationViewStyle(StackNavigationViewStyle())
-        .navigationBarHidden(true)
         .onAppear {
             GKAccessPoint.shared.location = .topLeading
             tfengine.mainMenuButtonsActive=true

@@ -463,6 +463,7 @@ myString solve24(int a,int b,int c,int d) {
     return (myString){nosol,5};
 }
 problem24 generateProblem(int upperBound) {
+    chrono::steady_clock::time_point grs=chrono::steady_clock::now();
     auto seed = chrono::high_resolution_clock::now().time_since_epoch().count();
     auto dice_rand = bind(uniform_int_distribution<int>(1,upperBound),mt19937(seed));
     while (true) {
@@ -472,6 +473,7 @@ problem24 generateProblem(int upperBound) {
         int nxt4=dice_rand();
         myString res=solve24(nxt1, nxt2, nxt3, nxt4);
         if (strncmp(res.data, "nosol", 5)!=0) {
+            cout<<chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now() - grs).count()<<" microseconds"<<endl;
             return (problem24){nxt1,nxt2,nxt3,nxt4,res};
         }
     }

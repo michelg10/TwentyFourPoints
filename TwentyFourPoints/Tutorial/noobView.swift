@@ -49,7 +49,6 @@ struct noobView: View {
                 Spacer()
             }.navigationBarHidden(true)
         }.navigationViewStyle(StackNavigationViewStyle())
-        .background(Color.init("bgColor"))
     }
 }
 

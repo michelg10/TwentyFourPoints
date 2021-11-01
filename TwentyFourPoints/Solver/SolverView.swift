@@ -191,6 +191,7 @@ struct solverCard: View {
                                 .stroke(foregroundColor, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
                                 .padding(geometry.size.width*0.025)
                             responderTextView(text: $numText, whichResponder: $whichResponder, index: index, textSize: (geometry.size.width)*0.55, textColor: UIColor(foregroundColor))
+                                .fixedSize(horizontal: true, vertical: true)
                         }
                         solverNumView(CardIcon: cardicon, numberString: getStringNameOfNum(num: Int(numText) ?? -1), foregroundColor: foregroundColor)
                     }
@@ -342,7 +343,6 @@ struct SolverView: View {
                 SolverKeyboard(numbersDisabled: Array(repeating: false, count: 10), deleteDisabled: false, prevNextDisabled: solengine.whichCardInFocus == -1, solengine: solengine)
             }
         }.edgesIgnoringSafeArea(horizontalSizeClass == .regular ? [.bottom] : [])
-        .background(Color.init("bgColor"))
         .navigationBarHidden(true)
         .onAppear {
             canNavBack=true

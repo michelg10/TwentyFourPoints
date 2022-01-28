@@ -39,7 +39,6 @@ struct InGameRankUpView: View {
                 tfengine.dismissRank()
             }, label: {
                 navBarButton(symbolName: "chevron.forward", active: true)
-                    .animation(springAnimation)
             }).buttonStyle(topBarButtonStyle())
         }
     }

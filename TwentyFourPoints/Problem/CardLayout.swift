@@ -25,10 +25,8 @@ struct cardButtonView: View {
                 cardView(active: active, card: card, isStationary: false)
             })
             .buttonStyle(cardButtonStyle())
-            .animation(nil)
             .disabled(!active || !operational)
         }.transition(.asymmetric(insertion: .identity, removal: instantCompetitive ? .identity : .offset(x: UIScreen.main.bounds.width, y: 0)))
-        .animation(.spring())
     }
 }
 

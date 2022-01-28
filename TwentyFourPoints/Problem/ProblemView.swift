@@ -34,11 +34,11 @@ struct ProblemView: View {
                         if tfengine.konamiCheatVisible {
                             konamiView(tfengine: tfengine, karen: konamikaren)
                                 .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width, y: 0), removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
-                                .animation(springAnimation)
+                                .animation(springAnimation, value: tfengine.konamiCheatVisible)
                         } else if (tfengine.rewardScreenVisible) {
                             InGameRankUpView(tfengine: tfengine,newRank: getQuestionLvlIndex(getLvl: tfengine.levelInfo.lvl))
                                 .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width, y: 0), removal: .offset(x: UIScreen.main.bounds.width, y: 0)))
-                                .animation(springAnimation)
+                                .animation(springAnimation, value: tfengine.rewardScreenVisible)
                                 .onAppear {
                                     sID=UUID().uuidString
                                     confettiEnabled=true
@@ -46,7 +46,7 @@ struct ProblemView: View {
                         } else {
                             CardLayout(tfengine: tfengine, cA: tfcalcengine.cardActive, cs: tfengine.curQ.cs, cardsShouldVisible: tfengine.cardsShouldVisible, operational: tfengine.cardsClickable && tfengine.nxtState == .ready, primID: "CardLayoutView"+tfengine.curQuestionID.uuidString, instantCompetitive: tfengine.instantCompetitive, rotationObserver: rotationObserver)
                                 .padding(.horizontal,30)
-                                .animation(.spring())
+                                .animation(springAnimation)
                                 .offset(x: (draggedAmt.width < 0 ? -2*sqrt(-draggedAmt.width) : draggedAmt.width) + displaceDrag, y: 0)
                                 .background(Color.init(white: 0,opacity: 0.0001))
                                 .simultaneousGesture(DragGesture()

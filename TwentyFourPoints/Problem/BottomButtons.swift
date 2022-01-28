@@ -25,12 +25,10 @@ struct bottomButtonView: View {
         return ZStack {
             RoundedRectangle(cornerRadius: CGFloat(buttonHei/2.0*buttonRadius),style: .continuous)
                 .fill(fillColor)
-                .animation(nil)
                 .frame(height:CGFloat(buttonHei))
             Text(text)
                 .font(.system(size: CGFloat(buttonHei*textSize), weight: .medium, design: .rounded))
                 .foregroundColor(textColor)
-                .animation(nil)
         }.frame(maxWidth: doSplit ? CGFloat(maxButtonSize) : nil)
     }
 }
@@ -46,7 +44,7 @@ struct contrastBottomButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
             .brightness(configuration.isPressed ? 0.1 : 0) //0.05
-            .animation(.easeInOut(duration: 0.07))
+            .animation(.easeInOut(duration: 0.07), value: configuration.isPressed)
     }
 }
 
@@ -121,22 +119,20 @@ struct TopButtonsRow: View {
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: CGFloat(textInpHei/2.0*buttonRadius),style: .continuous)
                         .fill(getButtonColor(active: resetColorEnabled))
-                        .animation(nil)
                     ZStack(alignment: .leading) {
                         Text(resetColorEnabled ? (autocompleteHintExpression ?? " ") : " ")
                             .foregroundColor(autocompleteTextColor)
-                            .animation(nil)
                         Text(expr)
-                            .animation(nil)
                             .foregroundColor(getButtonTextColor(active: resetColorEnabled))
                         Text(answerText == "" ? " " : answerText)
                             .opacity(answerShowOpacity)
-                            .animation(.easeInOut(duration: 0.3))
+                            .animation(.easeInOut(duration: 0.3), value: answerShowOpacity)
+                            .animation(.easeInOut(duration: 0.3), value: answerText)
                             .foregroundColor(Color.primary)
                         Text(incorText == "" ? " " : incorText)
-                            .animation(nil)
                             .opacity(incorShowOpacity)
-                            .animation(.easeInOut(duration: 0.2))
+                            .animation(.easeInOut(duration: 0.2), value: incorShowOpacity)
+                            .animation(.easeInOut(duration: 0.2), value: incorText)
                             .foregroundColor(wrongNumberColor)
                     }.font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
                     .padding(.leading, CGFloat(textInset*textField*(textInpHei-midSpace)))
@@ -151,7 +147,6 @@ struct TopButtonsRow: View {
                                 .foregroundColor(resetButtonColor)
                                 .font(.system(size: CGFloat(textFontSize*textInpHei*0.9)))
                                 .opacity(resetActionEnabled ? 1.0 : 0)
-                                .animation(nil)
                         }).buttonStyle(contrastBottomButtonStyle())
                             .padding(.trailing,13)
                             .disabled(!resetActionEnabled)
@@ -162,7 +157,6 @@ struct TopButtonsRow: View {
                 if doSplit && showTooltip {
                     imageTooltip(name: "delete")
                         .opacity(resetActionEnabled ? 1 : tooltipOpacity)
-                        .animation(nil)
                         .padding(.leading,10)
                 }
                 Spacer()
@@ -170,7 +164,6 @@ struct TopButtonsRow: View {
                     imageTooltip(name: ".")
                         .padding(.trailing,10)
                         .opacity(storeActionEnabled ? 1 : tooltipOpacity)
-                        .animation(nil)
                 }
                 Button(action: {
                     tfengine.doStore()
@@ -178,12 +171,10 @@ struct TopButtonsRow: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: CGFloat(textInpHei/2.0*buttonRadius) ,style: .continuous)
                             .fill(getButtonColor(active: storeRectColorEnabled))
-                            .animation(nil)
                         if (storedExpr != nil) {
                             Text(storedExpr!) // important: This should and can only hold 2 decimal points
                                 .font(.system(size: CGFloat(textFontSize*textInpHei),weight: .medium,design: .rounded))
                                 .frame(height: CGFloat(textInpHei), alignment: .center)
-                                .animation(nil)
                                 .foregroundColor(getButtonTextColor(active: storeTextColorEnabled))
                         } else {
                             Image(systemName: "chevron.down.circle.fill")
@@ -193,7 +184,6 @@ struct TopButtonsRow: View {
                     }.frame(width: doSplit ? CGFloat(2*maxButtonSize+midSpace) : CGFloat((1-textField)*Double(geometry.size.width-CGFloat(midSpace))), height: CGFloat(textInpHei), alignment: .center)
                 }).keyboardShortcut(".", modifiers: .init([]))
                     .buttonStyle(bottomButtonStyle())
-                    .animation(nil)
                     .disabled(!storeActionEnabled)
                 Button(action: {tfengine.doStore()}, label: {EmptyView()}).disabled(!storeActionEnabled).keyboardShortcut("v", modifiers: .init([]))
                 Button(action: {tfengine.doStore()}, label: {EmptyView()}).disabled(!storeActionEnabled).keyboardShortcut("m", modifiers: .init([]))
@@ -234,7 +224,6 @@ struct MiddleButtonRow: View {
                         }, label: {
                             bottomButtonView(fillColor: getButtonColor(active: colorActive[index]), textColor: getButtonTextColor(active: colorActive[index]), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), doSplit: doSplit)
                         }).buttonStyle(bottomButtonStyle())
-                            .animation(nil)
                             .disabled(!actionActive[index])
 //                            .modifier(konamiLog(tfengine: tfengine,daBtn: daBtn.allCases[4+index]))
                     }
@@ -249,7 +238,6 @@ struct MiddleButtonRow: View {
                         }, label: {
                             bottomButtonView(fillColor: getButtonColor(active: colorActive[index]), textColor: getButtonTextColor(active: colorActive[index]), text: (cards[index].numb == -1 ? "" : String(cards[index].numb)), doSplit: doSplit)
                         }).buttonStyle(bottomButtonStyle())
-                            .animation(nil)
                             .disabled(!actionActive[index])
 //                            .modifier(konamiLog(tfengine: tfengine,daBtn: daBtn.allCases[4+index]))
                     }
@@ -297,7 +285,6 @@ struct BottomButtonRow: View {
                     }, label: {
                         bottomButtonView(fillColor: getButtonColor(active: oprColorActive[0]), textColor: getButtonTextColor(active: oprColorActive[0]), text: "+", doSplit: doSplit)
                     }).buttonStyle(bottomButtonStyle())
-                        .animation(nil)
                         .disabled(!oprActionActive[0])
 //                        .modifier(konamiLog(tfengine: tfengine,daBtn: .add))
                         .keyboardShortcut(.init("="), modifiers: .init([]))
@@ -306,7 +293,6 @@ struct BottomButtonRow: View {
                     }, label: {
                         bottomButtonView(fillColor: getButtonColor(active: oprColorActive[1]), textColor: getButtonTextColor(active: oprColorActive[1]), text: "-", doSplit: doSplit)
                     }).buttonStyle(bottomButtonStyle())
-                        .animation(nil)
                         .disabled(!oprActionActive[1])
 //                        .modifier(konamiLog(tfengine: tfengine,daBtn: .sub))
                         .keyboardShortcut(.init("-"), modifiers: .init([]))
@@ -320,7 +306,6 @@ struct BottomButtonRow: View {
                     }, label: {
                         bottomButtonView(fillColor: getButtonColor(active: oprColorActive[2]), textColor: getButtonTextColor(active: oprColorActive[2]), text: "×", doSplit: doSplit)
                     }).buttonStyle(bottomButtonStyle())
-                        .animation(nil)
                         .disabled(!oprActionActive[2])
 //                        .modifier(konamiLog(tfengine: tfengine,daBtn: .mul))
                         .keyboardShortcut(.init("8"), modifiers: .shift)
@@ -329,7 +314,6 @@ struct BottomButtonRow: View {
                     }, label: {
                         bottomButtonView(fillColor: getButtonColor(active: oprColorActive[3]), textColor: getButtonTextColor(active: oprColorActive[3]), text: "÷", doSplit: doSplit)
                     }).buttonStyle(bottomButtonStyle())
-                        .animation(nil)
                         .disabled(!oprActionActive[3])
 //                        .modifier(konamiLog(tfengine: tfengine,daBtn: .div))
                         .keyboardShortcut(.init("/"), modifiers: .init([]))

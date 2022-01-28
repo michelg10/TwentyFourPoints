@@ -13,7 +13,7 @@ struct konamiButtonStyle: ButtonStyle {
             .animation(springAnimation)
             .saturation(configuration.isPressed ? 0.95 : 1)
             .brightness(configuration.isPressed ? 0.03 : 0) //0.05
-            .animation(.easeInOut(duration: 0.07))
+            .animation(.easeInOut(duration: 0.07), value: configuration.isPressed)
     }
 }
 

@@ -90,7 +90,6 @@ struct colorSchemeSelector: View {
                             Circle()
                                 .foregroundColor(.init("secondary"))
                                 .padding(2)
-                                .animation(nil)
                                 .opacity(preferredColorMode == appearance || !userSelected ? 0.0 : 1.0)
                         )
                     Text(appearanceName)

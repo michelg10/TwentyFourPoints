@@ -856,7 +856,7 @@ class TFEngine: ObservableObject,tfCallable {
     
     func logButtonKonami(button:daBtn) {
         konamiLog.append(button)
-        if konamiLog.count > 11 {
+        if konamiLog.count > konamiCode.count {
             konamiLog.remove(at: 0)
         }
         if konamiLog == konamiCode {

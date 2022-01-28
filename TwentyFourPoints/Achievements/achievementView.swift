@@ -169,11 +169,11 @@ struct achievementView: View {
                     Group {
                         if tfengine.currentAchievementState == .questions {
                             levelAchView(tfengine: tfengine)
-                                .animation(springAnimation)
+                                .animation(springAnimation, value: tfengine.currentAchievementState)
                                 .transition(.offset(x: -UIScreen.main.bounds.width, y: 0))
                         } else {
                             levelAchView(tfengine: tfengine)
-                                .animation(springAnimation)
+                                .animation(springAnimation, value: tfengine.currentAchievementState)
                                 .transition(.offset(x: UIScreen.main.bounds.width, y: 0))
                         }
                     }.padding(.top,41)

@@ -49,14 +49,8 @@ struct numView: View {
                 HStack {
                     VStack {
                         Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
-                            .if (isStationary) { view in
-                                view.animation(nil)
-                            }
                             .foregroundColor(foregroundColor)
                         Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
-                            .if (isStationary) { view in
-                                view.animation(nil)
-                            }
                             .foregroundColor(foregroundColor)
                     }
                     Spacer()
@@ -66,15 +60,9 @@ struct numView: View {
                     Spacer()
                     VStack {
                         Text(numberString).font(.system(size: geometry.size.width*0.12, weight: .medium, design: .rounded))
-                            .if (isStationary) { view in
-                                view.animation(nil)
-                            }
                             .rotationEffect(.init(degrees: 180))
                             .foregroundColor(foregroundColor)
                         Image(systemName:getImageNameOfIcon(icn: CardIcon)).font(.system(size: geometry.size.width*0.12))
-                            .if (isStationary) { view in
-                                view.animation(nil)
-                            }
                             .rotationEffect(.init(degrees: 180))
                             .foregroundColor(foregroundColor)
                     }
@@ -139,15 +127,11 @@ struct cardView: View {
                             .stroke(foregroundColor, style: StrokeStyle(lineWidth: geometry.size.width*0.013, lineCap: .round, lineJoin: .round))
                             .padding(geometry.size.width*0.025)
                         Text(String(card.numb)).font(.system(size:(geometry.size.width)*0.55, weight: .medium, design: .rounded))
-                            .if (isStationary) { view in
-                                view.animation(nil)
-                            }
                             .foregroundColor(foregroundColor)
                         numView(isStationary: isStationary, CardIcon: card.CardIcon, numberString: getStringNameOfNum(num: card.numb), foregroundColor: foregroundColor)
                     }
                 }
             )
-            .animation(springAnimation)
     }
 }
 
